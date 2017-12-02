@@ -30,7 +30,10 @@ module.exports = {
       ref: 'origin/master',
       repo: 'git@github.com:jweboy/node-server.git',
       path: '/var/www/production',
-      'post-deploy': 'npm install && pm2 reload ecosystem.config.js --env production'
+      ssh_options: "StrictHostKeyChecking=no",
+      'pre-setup': "apt-get install git",
+      "pre-deploy-local": "echo 'This is a local executed command'",
+      "post-deploy": "npm install && pm2 startOrRestart ecosystem.json --env production"
     },
     dev: {
       user: 'node',
