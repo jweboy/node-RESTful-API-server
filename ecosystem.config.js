@@ -14,7 +14,7 @@ module.exports = {
         NODE_ENV: 'development'
       },
       env_production: {
-        PORT: 80, // TODO 上线改为 80
+        PORT: 4000,
         NODE_ENV: 'production'
       }
     }
@@ -25,7 +25,7 @@ module.exports = {
    */
   deploy: {
     production: {
-      user: 'node',
+      user: 'root',
       host: '165.227.6.201',
       ref: 'origin/master',
       repo: 'git@github.com:jweboy/node-server.git',
