@@ -30,10 +30,10 @@ module.exports = {
       user: 'root',
       host: '165.227.6.201',
       ref: 'origin/master',
-      repo: 'https://github.com/jweboy/node-server.git',
+      repo: 'git@github.com:jweboy/node-server.git',
       path: '/var/www/production',
-      // ssh_options: "StrictHostKeyChecking=no",
-      // 'pre-setup': "apt-get install git",
+      ssh_options: "StrictHostKeyChecking=no",
+      'pre-setup': "apt-get install git",
       "pre-deploy-local": "echo '本地发布测试'",
       "post-deploy": "npm install && pm2 startOrRestart ecosystem.config.js --env production"
     },
