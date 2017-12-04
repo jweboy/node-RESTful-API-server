@@ -30,21 +30,21 @@ module.exports = {
       ref: 'origin/master',
       repo: 'git@github.com:jweboy/node-server.git',
       path: '/var/www/production',
-      ssh_options: "StrictHostKeyChecking=no",
-      'pre-setup': "apt-get install git",
-      "pre-deploy-local": "echo 'This is a local executed command'",
-      "post-deploy": "npm install && pm2 startOrRestart ecosystem.json --env production"
+      // ssh_options: "StrictHostKeyChecking=no",
+      // 'pre-setup': "apt-get install git",
+      "pre-deploy-local": "echo '本地发布测试'",
+      "post-deploy": "npm install && pm2 startOrRestart ecosystem.config.js --env production"
     },
-    dev: {
-      user: 'node',
-      host: '212.83.163.1',
-      ref: 'origin/master',
-      repo: 'git@github.com:jweboy/node-server.git',
-      path: '/var/www/development',
-      'post-deploy': 'npm install && pm2 reload ecosystem.config.js --env dev',
-      env: {
-        NODE_ENV: 'dev'
-      }
-    }
+    // dev: {
+    //   user: 'node',
+    //   host: '212.83.163.1',
+    //   ref: 'origin/master',
+    //   repo: 'git@github.com:jweboy/node-server.git',
+    //   path: '/var/www/development',
+    //   'post-deploy': 'npm install && pm2 reload ecosystem.config.js --env dev',
+    //   env: {
+    //     NODE_ENV: 'dev'
+    //   }
+    // }
   }
 };
