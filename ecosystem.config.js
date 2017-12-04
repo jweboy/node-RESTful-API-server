@@ -11,11 +11,13 @@ module.exports = {
       watch: true,
       env: {
         PORT: 3000,
-        NODE_ENV: 'development'
+        NODE_ENV: 'development',
+        HOST: '127.0.0.1'
       },
       env_production: {
         PORT: 4000,
-        NODE_ENV: 'production'
+        NODE_ENV: 'production',
+        HOST: '165.227.6.201'
       }
     }
   ],
