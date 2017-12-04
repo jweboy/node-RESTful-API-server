@@ -9,10 +9,18 @@ module.exports = {
       name: 'node-api',
       script: 'app.js',
       watch: true,
+      "ignore_watch": [
+        "node_modules",
+        "logs"
+      ],
+      log_date_format: 'YYYY-MM-DD HH:mm Z',
+      error_file: './logs/app-err.log',
+      out_file: './logs/app-out.log',
       env: {
         PORT: 3000,
         NODE_ENV: 'development',
-        HOST: '127.0.0.1'
+        HOST: '127.0.0.1',
+        COMMON_VARIABLE: true
       },
       env_production: {
         PORT: 4000,
@@ -34,8 +42,12 @@ module.exports = {
       path: '/var/www/production',
       ssh_options: "StrictHostKeyChecking=no",
       'pre-setup': "apt-get install git",
+      "post-setup": "ls -la",
       "pre-deploy-local": "echo '本地发布测试'",
-      "post-deploy": "npm install && pm2 startOrRestart ecosystem.config.js --env production"
+      "post-deploy": "npm install && pm2 startOrRestart ecosystem.config.js --env production",
+      "env": {
+        "NODE_ENV": "production"
+      }
     },
     // dev: {
     //   user: 'node',
