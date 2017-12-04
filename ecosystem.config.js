@@ -28,7 +28,7 @@ module.exports = {
       user: 'root',
       host: '165.227.6.201',
       ref: 'origin/master',
-      repo: 'git@github.com:jweboy/node-server.git',
+      repo: 'https://github.com/jweboy/node-server.git',
       path: '/var/www/production',
       // ssh_options: "StrictHostKeyChecking=no",
       // 'pre-setup': "apt-get install git",
