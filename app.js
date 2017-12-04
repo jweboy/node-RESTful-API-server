@@ -1,7 +1,7 @@
 const Koa = require('koa')
 const router = require('./routes')
 
-async function startServer() {
+function startServer() {
   // Initial variable
   const app = new Koa()
   const isDev = process.env.NODE_ENV === 'production'
