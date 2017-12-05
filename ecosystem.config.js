@@ -11,11 +11,11 @@ module.exports = {
       watch: true,
       "ignore_watch": [
         "node_modules",
-        "logs"
+        // "logs"
       ],
-      log_date_format: 'YYYY-MM-DD HH:mm Z',
-      error_file: './logs/app-err.log',
-      out_file: './logs/app-out.log',
+      // log_date_format: 'YYYY-MM-DD HH:mm Z',
+      // error_file: './logs/app-err.log',
+      // out_file: './logs/app-out.log',
       env: {
         PORT: 3000,
         NODE_ENV: 'development',
@@ -35,11 +35,11 @@ module.exports = {
    */
   deploy: {
     production: {
-      user: 'root',
-      host: '45.55.208.33',
+      user: 'jweboy',
+      host: '138.197.120.135',
       ref: 'origin/master',
       repo: 'git@github.com:jweboy/node-server.git',
-      path: '/var/www/production',
+      path: '/home/jweboy/www/production/node-server',
       ssh_options: "StrictHostKeyChecking=no",
       'pre-setup': "apt-get install git",
       "post-setup": "ls -la",
