@@ -23,7 +23,7 @@ module.exports = {
         COMMON_VARIABLE: true
       },
       env_production: {
-        PORT: 80,
+        PORT: 3000,
         NODE_ENV: 'production',
         HOST: '138.197.120.135'
       }
@@ -44,7 +44,7 @@ module.exports = {
       'pre-setup': "apt-get install git",
       "post-setup": "ls -la",
       "pre-deploy-local": "echo '本地发布测试'",
-      "post-deploy": "sudo npm install && pm2 startOrRestart ecosystem.config.js --env production",
+      "post-deploy": "npm install && pm2 startOrRestart ecosystem.config.js --env production",
       "env": {
         "NODE_ENV": "production"
       }
