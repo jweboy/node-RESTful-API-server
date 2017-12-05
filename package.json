@@ -12,9 +12,9 @@
     "nodemon": "^1.12.1"
   },
   "scripts": {
-    "start": "nodemon ./app.js"
+    "start": "nodemon app.js"
   },
   "engines": {
-    "node": ">6.0.0"
+    "node": "8.x"
   }
 }
