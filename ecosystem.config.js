@@ -35,7 +35,7 @@ module.exports = {
    */
   deploy: {
     production: {
-      user: 'jweboy',
+      user: 'root',
       host: '138.197.120.135',
       ref: 'origin/master',
       repo: 'git@github.com:jweboy/node-server.git',
