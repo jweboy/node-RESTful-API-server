@@ -44,7 +44,7 @@ module.exports = {
       'pre-setup': "apt-get install git",
       "post-setup": "ls -la",
       "pre-deploy-local": "echo '本地发布测试'",
-      "post-deploy": "npm install && pm2 startOrRestart ecosystem.config.js --env production",
+      "post-deploy": "sudo npm install && pm2 startOrRestart ecosystem.config.js --env production",
       "env": {
         "NODE_ENV": "production"
       }
