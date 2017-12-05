@@ -39,7 +39,7 @@ module.exports = {
       host: '165.227.6.201',
       ref: 'origin/master',
       repo: 'git@github.com:jweboy/node-server.git',
-      path: '/var/www/production',
+      path: '/var/www/production/node-server',
       ssh_options: "StrictHostKeyChecking=no",
       'pre-setup': "apt-get install git",
       "post-setup": "ls -la",
