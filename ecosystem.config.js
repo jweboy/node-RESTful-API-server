@@ -35,11 +35,11 @@ module.exports = {
    */
   deploy: {
     production: {
-      user: 'root',
-      host: '45.55.208.33',
+      user: 'jweboy',
+      host: '138.197.120.135',
       ref: 'origin/master',
       repo: 'git@github.com:jweboy/node-server.git',
-      path: '/home/jweboy/www/production',
+      path: '/home/jweboy/www/production/node-server',
       ssh_options: "StrictHostKeyChecking=no",
       'pre-setup': "apt-get install git",
       "post-setup": "ls -la",
