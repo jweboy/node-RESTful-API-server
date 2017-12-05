@@ -23,7 +23,7 @@ module.exports = {
         COMMON_VARIABLE: true
       },
       env_production: {
-        PORT: 4000,
+        PORT: 80,
         NODE_ENV: 'production',
         HOST: '138.197.120.135'
       }
