@@ -26,6 +26,6 @@ module.exports = () => {
         return ctx.body = echostr
       }
     }
-    ctx.body = '微信API测试'
+    ctx.body = '微信auth api测试'
   })
 }
