@@ -1,4 +1,4 @@
-exports.NotFound = async function notFound (ctx) {
+exports.notFound = async function notFound (ctx) {
   // We need to explicitly set 404 here
   // So that koa doesn't assign 200 on body
   ctx.status = 404

@@ -9,13 +9,10 @@ module.exports = {
       name: 'node-api',
       script: 'app.js',
       watch: true,
-      "ignore_watch": [
-        "node_modules",
-        // "logs"
+      ignore_watch: [
+        'node_modules'
       ],
       log_date_format: 'YYYY-MM-DD HH:mm Z',
-      // error_file: './logs/app-err.log',
-      // out_file: './logs/app-out.log',
       env: {
         PORT: 3000,
         NODE_ENV: 'development',
@@ -40,14 +37,14 @@ module.exports = {
       ref: 'origin/master',
       repo: 'git@github.com:jweboy/node-server.git',
       path: '/home/jweboy/www/production/node-server',
-      ssh_options: "StrictHostKeyChecking=no",
-      'pre-setup': "apt-get install git",
-      "post-setup": "ls -la",
-      "pre-deploy-local": "echo 'pm2本地部署测试'",
-      "post-deploy": "npm install && pm2 startOrRestart ecosystem.config.js --env production",
-      "env": {
-        "NODE_ENV": "production"
+      ssh_options: 'StrictHostKeyChecking=no',
+      'pre-setup': 'apt-get install git',
+      'post-setup': 'ls -la',
+      'pre-deploy-local': "echo 'pm2本地部署测试'",
+      'post-deploy': 'npm install && pm2 startOrRestart ecosystem.config.js --env production',
+      'env': {
+        'NODE_ENV': 'production'
       }
     }
   }
-};
+}

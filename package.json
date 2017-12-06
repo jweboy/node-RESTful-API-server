@@ -14,7 +14,9 @@
     "koa": "^2.4.1",
     "koa-logger": "^3.1.0",
     "koa-router": "^7.3.0",
-    "request": "^2.83.0"
+    "request": "^2.83.0",
+    "snazzy": "^7.0.0",
+    "winston": "^3.0.0-rc1"
   },
   "devDependencies": {
     "babel-register": "^6.26.0",
@@ -22,9 +24,18 @@
     "standard": "^10.0.3"
   },
   "scripts": {
-    "start": "nodemon app.js"
+    "standard": "standard --verbose | snazzy",
+    "start": "npm run standard && nodemon app.js",
+    "fix": "standard --fix"
   },
   "engines": {
     "node": "8.x"
+  },
+  "standard": {
+    "ignore": [
+      ".history",
+      ".vscode",
+      "node_modules"
+    ]
   }
 }

@@ -10,14 +10,14 @@ const {
   appSecret
 } = require('../../../config/wechat')
 
-async function getAccessToken() {
+async function getAccessToken () {
   // 当前时间戳
-  const currentTime = new Date().getTime()
+  // const currentTime = new Date().getTime()
   // 格式化url
   const url = format(accessTokenApi, appDomain, appID, appSecret)
   // 当前目录的json文件
   const jsonFile = path.resolve(__dirname, '../accessToken.json')
-  return await _request('GET', url)
+  const res = await _request('GET', url)
     .then(async ({ errcode, data }) => {
       if (errcode === 0) { // success
         await fs.writeFileSync(jsonFile, JSON.stringify(data, null, 4))
@@ -26,6 +26,8 @@ async function getAccessToken() {
       // access_token过期 // TODO 这里需要refresh token 等两个小时之后遇到再加 => {"errcode":40013,"errmsg":"invalid appid"}
       return data
     })
+
+  return res
 }
 
 module.exports = () => {

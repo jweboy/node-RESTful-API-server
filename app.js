@@ -1,8 +1,9 @@
 const Koa = require('koa')
-const logger = require('koa-logger')
+const koaLogger = require('koa-logger')
 const router = require('./routes')
 const { notFound } = require('./middleware/not-found')
 const { errorHandler } = require('./middleware/error-handler')
+const { logger } = require('./util/logger')
 
 function startServer () {
   // Initial variable
@@ -16,15 +17,14 @@ function startServer () {
     ctx.body = 'Node Koa API开发测试'
   })
   app
-    .use(logger())
+    .use(errorHandler)
+    .use(koaLogger())
     .use(router.routes())
     .use(router.allowedMethods())
     .use(notFound)
-    .use(errorHandler)
-    .on('error', (err) => { //! add this to test
+    .on('error', (err) => {
       if (process.env.NODE_ENV !== 'test') {
-        console.log('sent error %s to the cloud', err.message)
-        console.log(err)
+        logger.error(err.message)
       }
     })
 
