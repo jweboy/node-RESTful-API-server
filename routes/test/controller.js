@@ -1,7 +1,7 @@
-async function _get(ctx) {
+async function _get (ctx) {
   ctx.body = 'hello world'
 }
 
 module.exports = {
-  _get,
+  _get
 }

@@ -1,29 +1,33 @@
 const Koa = require('koa')
+const koaLogger = require('koa-logger')
 const router = require('./routes')
+const { notFound } = require('./middleware/not-found')
+const { errorHandler } = require('./middleware/error-handler')
+const { logger } = require('./util/logger')
 
-function startApp() {
+function startServer () {
   // Initial variable
-  const app = new Koa()
-  const isDev = process.env.NODE_ENV === 'production'
+  const app = module.exports = new Koa()
+  // const isDev = process.env.NODE_ENV === 'production'
   const port = process.env.PORT || 3000
   const host = process.env.HOST || '127.0.0.1'
 
   // Set koa router
   app
+    .use(errorHandler)
+    .use(koaLogger())
     .use(router.routes())
     .use(router.allowedMethods())
-
-  app.use(async (ctx, next) => {
-    const start = Date.now();
-    await next();
-    const ms = Date.now() - start;
-    console.log(`${ctx.method} ${ctx.url} - ${ms}`);
-  });
-
+    .use(notFound)
+    .on('error', (err) => {
+      if (process.env.NODE_ENV !== 'test') {
+        logger.error(err.message)
+      }
+    })
 
   // Listen the server
   app.listen(port, host)
   console.log(`Server listening on port ${host}:${port}!`)
 }
 
-startApp()
+startServer()
