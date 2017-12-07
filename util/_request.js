@@ -12,10 +12,10 @@ const _cb = (option) => {
       if (body.errcode === 0) { // success => post
         return resolve({
           errcode: 0,
-          errmsg: body.errmsg,
+          errmsg: body.errmsg
         })
       } else if (body.errcode > 0) { // fail => post
-        return reject({
+        return reject({ // eslint-disable-line 
           errcode: body.errcode,
           errmsg: `${method}请求出错 => ${body.errmsg}`
         })
@@ -23,7 +23,7 @@ const _cb = (option) => {
         return resolve({
           errcode: 0,
           errmsg: 'ok',
-          data: body,
+          data: body
         })
       }
     })
@@ -34,12 +34,12 @@ exports._request = (method, url, data) => {
   const option = {
     method: 'GET',
     json: true,
-    url: urlUtil.parse(url),
+    url: urlUtil.parse(url)
   }
   if (method === 'POST') {
     Object.assign(option, {
       method,
-      body: data,
+      body: data
     })
   }
   return _cb(option)
