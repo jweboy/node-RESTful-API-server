@@ -16,17 +16,20 @@
     "koa-router": "^7.3.0",
     "request": "^2.83.0",
     "snazzy": "^7.0.0",
+    "supertest": "^3.0.0",
     "winston": "^3.0.0-rc1"
   },
   "devDependencies": {
     "babel-register": "^6.26.0",
+    "mocha": "^4.0.1",
     "nodemon": "^1.12.1",
     "standard": "^10.0.3"
   },
   "scripts": {
     "standard": "standard --verbose | snazzy",
     "start": "npm run standard && nodemon app.js",
-    "fix": "standard --fix"
+    "fix": "standard --fix",
+    "test": "make test"
   },
   "engines": {
     "node": "8.x"
