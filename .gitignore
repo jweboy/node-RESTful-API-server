@@ -2,6 +2,8 @@
 
 .vscode
 
+.nyc_output
+
 logs
 
 node_modules

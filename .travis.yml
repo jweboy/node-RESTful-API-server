@@ -1,6 +1,7 @@
 sudo: false
 language: node_js
 node_js:
+  - "stable"
   - "8"
   - "9"
 cache:
@@ -8,3 +9,6 @@ cache:
     - node_modules
 script:
  - make test
+
+after_success:
+ - npm run coverage
