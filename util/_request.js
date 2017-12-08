@@ -7,8 +7,8 @@ const _cb = (option) => {
   const method = _getMethod(option)
   return new Promise((resolve, reject) => {
     return request[method](option, (err, res, body) => {
-      console.log(`${method}返回错误:${err}`)
-      console.log(`${method}返回body:`, body)
+      // console.log(`${method}返回错误:${err}`)
+      // console.log(`${method}返回body:`, body)
       if (body.errcode === 0) { // success => post
         return resolve({
           errcode: 0,
