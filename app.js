@@ -13,9 +13,6 @@ function startServer () {
   const host = process.env.HOST || '127.0.0.1'
 
   // Set koa router
-  router.get('/', (ctx) => {
-    ctx.body = 'Node Koa API开发测试'
-  })
   app
     .use(errorHandler)
     .use(koaLogger())
