@@ -54,12 +54,27 @@ describe('Wechat', () => {
     it('should create delete', done => {
       request
         .delete('/wechat/customMenu')
-        .expect(200)
-        .end(() => {
-          // done()
-          process.exit(0)
-        })
+        .expect(200, done)
     })
-  })  
+  }) 
 })
 
+describe('Goods', () => {
+  // const router = new Koa()()
+  // app.use(router.routes)
+  it('should get all goods', done => {
+    request
+    .get('/goods')
+    .expect(200, done)
+  })
+  
+  it('should get goods by pagination', done => {
+    request
+      .get('/goods?page=1')
+      .expect(200)
+      .end(() => {
+        // done()
+        process.exit(0)
+      })
+  })
+})
