@@ -1,5 +1,6 @@
 const Koa = require('koa')
 const koaLogger = require('koa-logger')
+const koaBody = require('koa-body')
 const router = require('./routes')
 const { notFound } = require('./middleware/not-found')
 const { errorHandler } = require('./middleware/error-handler')
@@ -14,6 +15,7 @@ function startServer () {
 
   // Set koa router
   app
+    .use(koaBody())
     .use(errorHandler)
     .use(koaLogger())
     .use(router.routes())
