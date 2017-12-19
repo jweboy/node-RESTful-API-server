@@ -1,13 +1,13 @@
-const { User } = require('../lib/mongodb')
+const { Users } = require('../lib/mongodb')
 
 const findOne = () => {
-  return User
+  return Users
     .find()
     .exec()
 }
 
 const insertOne = (user) => {
-  return user
+  return Users
   // return User
   //   .insertOne(user)
   //   .exec()
