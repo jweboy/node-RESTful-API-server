@@ -18,7 +18,7 @@ function startServer () {
   // Set koa router
   app
     .use(requestId())
-    .use(reponseHandler())
+    .use(reponseHandler)
     .use(koaBody())
     .use(errorHandler)
     .use(koaLogger())
