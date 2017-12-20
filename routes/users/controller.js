@@ -1,7 +1,9 @@
 const { insertOne } = require('../../models/users')
+const crypto = require('crypto')
 
-// TODO token 生成 => 注入到每个用户
-// TODO 权限验证
+const hash = crypto.createHash('md5')
+
+// TODO status 状态码需要自定义
 
 // 注册
 async function signin (ctx) {
@@ -9,8 +11,12 @@ async function signin (ctx) {
   if (!user.username || !user.password) {
     ctx.res.error({}, '请输入您的账号密码')
   } else {
-    const result = await insertOne(user)
+    let result = null
+    hash.update(user.password) // 密码加密
+    user.password = hash.digest('hex')
+    result = await insertOne(user)
     if (!result) {
+      // ctx.status = 401
       return ctx.res.success({}, '当前用户已存在')
     }
     ctx.res.success({}, '成功创建新用户')

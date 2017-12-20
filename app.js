@@ -1,6 +1,7 @@
 const Koa = require('koa')
 const koaLogger = require('koa-logger')
 const koaBody = require('koa-body')
+const jwt = require('koa-jwt')
 const router = require('./routes')
 const { notFound } = require('./middleware/not-found')
 const { errorHandler } = require('./middleware/error-handler')
@@ -19,6 +20,11 @@ function startServer () {
   app
     .use(requestId())
     .use(reponseHandler)
+    .use(jwt({
+      secret: 'jwt-secret'
+    }).unless({
+      path: [/\/signin/, /\/goods/]
+    }))
     .use(koaBody())
     .use(errorHandler)
     .use(koaLogger())
