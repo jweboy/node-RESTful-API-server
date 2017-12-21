@@ -23,6 +23,13 @@ async function signup (ctx) {
   }
 }
 
+// 登陆
+async function signin (ctx) {
+  const user = ctx.request.body
+  console.warn(user)
+}
+
 module.exports = {
-  signup
+  signup,
+  signin
 }
