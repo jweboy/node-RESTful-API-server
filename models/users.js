@@ -1,9 +1,9 @@
 const { Users } = require('../lib/mongodb')
 
-const findOne = (user) => {
+const findOne = async (user) => {
   return Users
-  .findOne(user)
-  .exec()
+    .findOne(user)
+    .exec()
 }
 const insertOne = async (user) => {
   const _user = await findOne(user)
