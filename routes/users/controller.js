@@ -14,19 +14,26 @@ const encryptPassword = (text) => {
 // debug signin {}
 // signin 通过密码比对 没有密码字段 500 需要捕获处理
 // jwt 需要在get user info 做处理
+// 密码比对 是否已经存在
 
 // 注册
 async function signup (ctx) {
   const body = ctx.request.body
   let result = null
-  if (!body.username || !body.password) {
-    ctx.res.error({}, '请输入您的账号密码')
+  let { username, password, ...other } = body
+  if (!username || !password) {
+    ctx.status = 401
+    ctx.res.fail({}, '参数不正确,请检查请求参数是否完整!')
   } else {
-    body.password = encryptPassword(body.password)
-    result = await insertOne(body)
+    password = encryptPassword(password)
+    result = await insertOne({
+      username,
+      password,
+      ...other
+    })
     if (!result) {
-      // ctx.status = 401
-      return ctx.res.ok({}, '当前用户已存在')
+      ctx.status = 401
+      return ctx.res.fail({}, '当前用户已存在')
     }
     ctx.res.ok({}, '成功创建新用户')
   }
