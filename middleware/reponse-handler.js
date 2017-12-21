@@ -7,7 +7,9 @@ const {
   INTERNAL_SERVER_ERROR
 } = require('../config/resStatus')
 
-exports.reponseHandler = async(ctx, next) => {
+exports.reponseHandler = async (ctx, next) => {
+  console.log('状态码 => for test:', ctx.status)
+
   ctx.res.success = (data, message) => {
     ctx.status = ctx.status < 400 ? ctx.status : OK // koa默认是404 / 404 => 200
 
