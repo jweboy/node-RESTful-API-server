@@ -6,7 +6,7 @@ const hash = crypto.createHash('md5')
 // TODO status 状态码需要自定义
 
 // 注册
-async function signin (ctx) {
+async function signup (ctx) {
   const user = ctx.request.body
   if (!user.username || !user.password) {
     ctx.res.error({}, '请输入您的账号密码')
@@ -24,5 +24,5 @@ async function signin (ctx) {
 }
 
 module.exports = {
-  signin
+  signup
 }

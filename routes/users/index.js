@@ -1,10 +1,10 @@
 const router = require('koa-router')()
-const { signin } = require('./controller')
+const { signup } = require('./controller')
 
 router.get('/', (ctx) => {
   ctx.body = 'user api test'
 })
 
-router.post('/signin', signin)
+router.post('/signup', signup)
 
 module.exports = router
