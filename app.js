@@ -23,7 +23,11 @@ function startServer () {
     .use(jwt({
       secret: 'jwt-secret'
     }).unless({
-      path: [/\/signin/, /\/goods/]
+      path: [
+        /\/signup/,
+        /\/signin/,
+        /\/goods/
+      ]
     }))
     .use(koaBody())
     .use(errorHandler)
