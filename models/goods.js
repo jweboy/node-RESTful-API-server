@@ -30,7 +30,6 @@ Goods.plugin('findAll', {
     total: all.length
   })
 })
-
 Goods.plugin('findByPagination', {
   afterFind: (goods, count) => {
     goods = reduceGoods(goods)

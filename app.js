@@ -26,7 +26,8 @@ function startServer () {
       path: [
         /\/signup/,
         /\/signin/,
-        /\/goods/
+        /\/goods/,
+        /\//
       ]
     }))
     .use(koaBody())
