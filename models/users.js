@@ -18,12 +18,17 @@ const insertOne = async (user) => {
       return responseHandler(err, res)
     })
   }
-
   // 存在user => return result
   return responseHandler(true, '用户已存在')
 }
 
+const comparePassword = async (existPwd, IncomingPwd) => {
+  const users = new Users()
+  return users.comparePassword(existPwd, IncomingPwd)
+}
+
 module.exports = {
   findOne,
-  insertOne
+  insertOne,
+  comparePassword
 }

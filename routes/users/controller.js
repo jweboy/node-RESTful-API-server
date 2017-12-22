@@ -1,14 +1,6 @@
-const { insertOne, findOne } = require('../../models/users')
-// const { secret, expiresIn } = require('../../config/json-web-token')
-// const jwt = require('jsonwebtoken')
-const crypto = require('crypto')
-
-// 密码加密
-const encryptPassword = (text) => {
-  const hash = crypto.createHash('md5')
-  hash.update(text) // 密码加密
-  return hash.digest('hex')
-}
+const jwt = require('jsonwebtoken')
+const { insertOne, findOne, comparePassword } = require('../../models/users')
+const { secret, expiresIn } = require('../../config/json-web-token')
 
 // TODO 500 status 需要处理
 // debug signin {}
@@ -40,35 +32,37 @@ async function signup (ctx) {
   }
 }
 
-// 登陆
+/**
+ * 用户登陆
+ */
 async function signin (ctx) {
   const body = ctx.request.body
   let { username, password } = body
-  password = encryptPassword(password)
 
   if (!username || !password) {
     ctx.status = 401
     ctx.res.ok({}, '参数不正确,请检查请求参数是否完整!')
   } else {
-    const err = await findOne(username)
-    // console.log(1, err)
+    const user = await findOne(username)
     // 未注册 => return json
-    if (!err) {
+    if (!user) {
       return ctx.res.unauthorized({}, '此账号未注册')
     }
-    // 已注册 => login
-
-    // const token = jwt.sign({
-    //   name: username
-    // }, secret, {
-    //   expiresIn
-    // })
+    // 已注册 => login => 匹配密码
+    const isPwdMatch = await comparePassword(user.password, password)
+    if (!isPwdMatch) {
+      return ctx.res.unauthorized({}, '密码错误,登陆失败!')
+    }
+    const token = jwt.sign({
+      name: username
+    }, secret, {
+      expiresIn
+    })
     // ctx.state.authToken = token
-    // // console.log(token)
-    // ctx.res.ok({
-    //   accessToken: token,
-    //   expiresIn
-    // }, '登陆成功')
+    ctx.res.ok({
+      accessToken: token,
+      expiresIn
+    }, '登陆成功')
   }
 }
 
