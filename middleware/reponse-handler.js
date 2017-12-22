@@ -4,6 +4,7 @@ const {
   BAD_REQUEST,
   FORBIDDEN,
   NOTFOUND,
+  UNAUTHORIZED,
   INTERNAL_SERVER_ERROR
 } = require('../config/resStatus')
 
@@ -11,7 +12,7 @@ exports.reponseHandler = async (ctx, next) => {
   console.log('状态码 => for test:', ctx.status)
 
   ctx.res.success = (data, message) => {
-    ctx.status = ctx.status < 400 ? ctx.status : OK // koa默认是404 / 404 => 200
+    ctx.status = ctx.status === 404 ? OK : ctx.status // koa默认是404 / 404 => 200
 
     ctx.body = {
       status: 'success',
@@ -54,6 +55,12 @@ exports.reponseHandler = async (ctx, next) => {
     // noContent
   ctx.res.noContent = (data, message) => {
     ctx.status = NO_CONTENT
+    ctx.res.success(data, message)
+  }
+
+  // unauthorized
+  ctx.res.unauthorized = (data, message) => {
+    ctx.status = UNAUTHORIZED
     ctx.res.success(data, message)
   }
     // badRequest
