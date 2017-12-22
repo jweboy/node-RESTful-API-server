@@ -16,22 +16,23 @@ const encryptPassword = (text) => {
 // jwt 需要在get user info 做处理
 // 密码比对 是否已经存在
 
-// 注册
+/**
+ * 用户注册
+ * info => 几点考虑
+ * 1.目前通过用户名的唯一性查询数据库,后期如果需要绑定手机号码、邮箱之类的操作,需要调整唯一性的逻辑点
+ */
 async function signup (ctx) {
   const body = ctx.request.body
   let result = null
   let { username, password, ...other } = body
   if (!username || !password) {
-    ctx.status = 401
-    ctx.res.fail({}, '参数不正确,请检查请求参数是否完整!')
+    ctx.res.unauthorized({}, '参数不正确,请检查请求参数是否完整!')
   } else {
-    // password = encryptPassword(password)
     result = await insertOne({
       username,
       password,
       ...other
     })
-    console.log('res', result)
     if (result.err) { // 数据库已存在当前用户
       return ctx.res.unauthorized({}, result.data)
     }
