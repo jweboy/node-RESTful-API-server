@@ -1,6 +1,6 @@
 const { insertOne, findOne } = require('../../models/users')
-const { secret, expiresIn } = require('../../config/json-web-token')
-const jwt = require('jsonwebtoken')
+// const { secret, expiresIn } = require('../../config/json-web-token')
+// const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
 
 // 密码加密
@@ -25,15 +25,15 @@ async function signup (ctx) {
     ctx.status = 401
     ctx.res.fail({}, '参数不正确,请检查请求参数是否完整!')
   } else {
-    password = encryptPassword(password)
+    // password = encryptPassword(password)
     result = await insertOne({
       username,
       password,
       ...other
     })
-    if (!result) {
-      ctx.status = 401
-      return ctx.res.fail({}, '当前用户已存在')
+    console.log('res', result)
+    if (result.err) { // 数据库已存在当前用户
+      return ctx.res.unauthorized({}, result.data)
     }
     ctx.res.ok({}, '成功创建新用户')
   }
@@ -47,24 +47,27 @@ async function signin (ctx) {
 
   if (!username || !password) {
     ctx.status = 401
-    ctx.res.fail({}, '参数不正确,请检查请求参数是否完整!')
+    ctx.res.ok({}, '参数不正确,请检查请求参数是否完整!')
   } else {
-    const result = await findOne({
-      username,
-      password
-    })
-    console.log(2, result)
-    if (!result) { // 该用户未注册
-      return ctx.res.ok({}, '当时账号尚未注册')
+    const err = await findOne(username)
+    // console.log(1, err)
+    // 未注册 => return json
+    if (!err) {
+      return ctx.res.unauthorized({}, '此账号未注册')
     }
-    const token = jwt.sign({
-      name: username
-    }, secret, {
-      expiresIn
-    })
-    ctx.state.authToken = token
-    // console.log(token)
-    ctx.res.ok(result, '登陆成功')
+    // 已注册 => login
+
+    // const token = jwt.sign({
+    //   name: username
+    // }, secret, {
+    //   expiresIn
+    // })
+    // ctx.state.authToken = token
+    // // console.log(token)
+    // ctx.res.ok({
+    //   accessToken: token,
+    //   expiresIn
+    // }, '登陆成功')
   }
 }
 

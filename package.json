@@ -11,6 +11,7 @@
     "url": "https://github.com/jweboy/node-server/issues"
   },
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "bcryptjs": "^2.4.3",
     "chai": "^4.1.2",
     "jsonwebtoken": "^8.1.0",
