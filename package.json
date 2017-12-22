@@ -11,6 +11,7 @@
     "url": "https://github.com/jweboy/node-server/issues"
   },
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "bcryptjs": "^2.4.3",
     "chai": "^4.1.2",
     "jsonwebtoken": "^8.1.0",
@@ -20,6 +21,7 @@
     "koa-logger": "^3.1.0",
     "koa-router": "^7.3.0",
     "mongolass": "^3.1.5",
+    "mongoose": "^4.13.7",
     "request": "^2.83.0",
     "shortid": "^2.2.8",
     "snazzy": "^7.0.0",

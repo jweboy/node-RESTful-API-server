@@ -1,22 +1,34 @@
 const { Users } = require('../lib/mongodb')
 
-const findOne = async (user) => {
+const responseHandler = (err = null, data = {}) => ({
+  err,
+  data
+})
+
+const findOne = (username) => {
   return Users
-    .findOne(user)
-    .exec()
+    .findOne({ username })
+    .exec((err, user) => responseHandler(err, user))
 }
+
 const insertOne = async (user) => {
-  const _user = await findOne(user)
-  if (!_user) { // 数据库不存在user => insert
-    const result = await Users
-      .insertOne(user)
-      .exec()
-    return result.ops[0]
+  const _user = await findOne(user.username)
+  if (!_user) { // 不存在user => insert one
+    return Users.create(user, (err, res) => {
+      return responseHandler(err, res)
+    })
   }
-  return null
+  // 存在user => return result
+  return responseHandler(true, '用户已存在')
+}
+
+const comparePassword = async (existPwd, IncomingPwd) => {
+  const users = new Users()
+  return users.comparePassword(existPwd, IncomingPwd)
 }
 
 module.exports = {
   findOne,
-  insertOne
+  insertOne,
+  comparePassword
 }

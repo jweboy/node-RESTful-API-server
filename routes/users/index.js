@@ -1,5 +1,5 @@
 const router = require('koa-router')()
-const { signup, signin } = require('./controller')
+const { signin, signup } = require('./controller')
 
 router.get('/', (ctx) => {
   ctx.body = 'user api test'

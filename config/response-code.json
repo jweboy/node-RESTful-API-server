@@ -21,7 +21,7 @@
   "temporary redirect": 307,
   "permanent redirect": 308,
   "for": 400,
-  "unauthorized": 401,
+  "UNAUTHORIZED": 401,
   "payment required": 402,
   "FORBIDDEN": 403,
   "NOTFOUND": 404,

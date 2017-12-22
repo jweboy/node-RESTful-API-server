@@ -13,6 +13,7 @@ function getData (ctx) {
     return getDataByPage(ctx)
   }
   return getAllData(ctx)
+  // ctx.body =
 }
 
 module.exports = {
