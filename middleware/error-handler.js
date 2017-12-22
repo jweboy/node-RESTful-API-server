@@ -1,4 +1,4 @@
-const { error } = require('../config/resStatus')
+const { error } = require('../config/response-code')
 
 exports.errorHandler = async function errorHandler (ctx, next) {
   try {

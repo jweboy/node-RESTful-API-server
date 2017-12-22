@@ -6,7 +6,7 @@ const {
   NOTFOUND,
   UNAUTHORIZED,
   INTERNAL_SERVER_ERROR
-} = require('../config/resStatus')
+} = require('../config/response-code')
 
 exports.reponseHandler = async (ctx, next) => {
   console.log('状态码 => for test:', ctx.status)
