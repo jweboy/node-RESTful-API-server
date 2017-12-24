@@ -2,11 +2,9 @@ const jwt = require('jsonwebtoken')
 const { insertOne, findOne, comparePassword } = require('../../models/users')
 const { secret, expiresIn } = require('../../config/json-web-token')
 
-// TODO 500 status 需要处理
-// debug signin {}
-// signin 通过密码比对 没有密码字段 500 需要捕获处理
-// jwt 需要在get user info 做处理
-// 密码比对 是否已经存在
+// TODO 增加一个get user info 接口
+// TODO 如何保证其他接口可以都拿到token => 考虑ctx.state
+// info => 接口需要接上去做调试
 
 /**
  * 用户注册
@@ -65,6 +63,13 @@ async function signin (ctx) {
     }, '登陆成功')
   }
 }
+
+/**
+ * 用户个人资料
+ */
+// async function  (params) {
+  
+// }
 
 module.exports = {
   signup,
