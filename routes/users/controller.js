@@ -56,7 +56,7 @@ async function signin (ctx) {
     }, secret, {
       expiresIn
     })
-    // ctx.state.authToken = token
+    ctx.req.authToken = token
     ctx.res.ok({
       accessToken: token,
       expiresIn
