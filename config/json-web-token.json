@@ -1,4 +1,4 @@
 {
   "secret":"api-secret",
-  "expiresIn": 60
+  "expiresIn": "10h"
 }
