@@ -68,7 +68,6 @@ async function signin (ctx) {
  * 用户个人资料
  */
 // async function  (params) {
-  
 // }
 
 module.exports = {
