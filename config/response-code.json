@@ -20,7 +20,7 @@
   "use proxy": 305,
   "temporary redirect": 307,
   "permanent redirect": 308,
-  "for": 400,
+  "FOR": 400,
   "UNAUTHORIZED": 401,
   "payment required": 402,
   "FORBIDDEN": 403,

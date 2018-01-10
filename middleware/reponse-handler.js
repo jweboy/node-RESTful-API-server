@@ -5,7 +5,8 @@ const {
   FORBIDDEN,
   NOTFOUND,
   UNAUTHORIZED,
-  INTERNAL_SERVER_ERROR
+  INTERNAL_SERVER_ERROR,
+  FOR,
 } = require('../config/response-code')
 
 exports.reponseHandler = async (ctx, next) => {
@@ -56,6 +57,11 @@ exports.reponseHandler = async (ctx, next) => {
   ctx.res.noContent = (data, message) => {
     ctx.status = NO_CONTENT
     ctx.res.success(data, message)
+  }
+  // 400 => 参数不正确
+  ctx.res.paramIncorrect = (data, msg) => {
+    ctx.status = FOR
+    ctx.res.fail(data, msg)
   }
 
   // unauthorized
