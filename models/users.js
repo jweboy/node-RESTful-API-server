@@ -22,9 +22,9 @@ const insertOne = async (user) => {
   return responseHandler(true, '用户已存在')
 }
 
-const comparePassword = async (existPwd, IncomingPwd) => {
+const comparePassword = async (existPwd, incomingPwd) => {
   const users = new Users()
-  return users.comparePassword(existPwd, IncomingPwd)
+  return users.comparePassword(existPwd, incomingPwd)
 }
 
 module.exports = {

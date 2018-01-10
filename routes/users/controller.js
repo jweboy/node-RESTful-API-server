@@ -5,6 +5,7 @@ const { secret, expiresIn } = require('../../config/json-web-token')
 // TODO 增加一个get user info 接口
 // TODO 如何保证其他接口可以都拿到token => 考虑ctx.state
 // info => 接口需要接上去做调试
+// comparePassword函数逻辑有问题
 
 /**
  * 用户注册
@@ -38,25 +39,25 @@ async function signin (ctx) {
   let { username, password } = body
 
   if (!username || !password) {
-    ctx.status = 401
-    ctx.res.ok({}, '参数不正确,请检查请求参数是否完整!')
+    ctx.res.paramIncorrect({}, '参数不正确,请检查请求参数是否完整!')
   } else {
     const user = await findOne(username)
     // 未注册 => return json
     if (!user) {
-      return ctx.res.unauthorized({}, '此账号未注册')
+      return ctx.res.paramIncorrect({}, '此账号未注册')
     }
     // 已注册 => login => 匹配密码
     const isPwdMatch = await comparePassword(user.password, password)
     if (!isPwdMatch) {
-      return ctx.res.unauthorized({}, '密码错误,登陆失败!')
+      return ctx.res.paramIncorrect({}, '密码错误,登陆失败!')
     }
+    // success
     const token = jwt.sign({
       name: username
     }, secret, {
       expiresIn
     })
-    ctx.req.authToken = token
+    // ctx.req.authToken = token
     ctx.res.ok({
       accessToken: token,
       expiresIn
