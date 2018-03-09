@@ -14,6 +14,7 @@
     "bcrypt": "^1.0.3",
     "bcryptjs": "^2.4.3",
     "chai": "^4.1.2",
+    "fastify": "^1.1.1",
     "jsonwebtoken": "^8.1.0",
     "koa": "^2.4.1",
     "koa-body": "^2.5.0",
@@ -25,6 +26,7 @@
     "request": "^2.83.0",
     "shortid": "^2.2.8",
     "snazzy": "^7.0.0",
+    "split2": "^2.2.0",
     "supertest": "^3.0.0",
     "uuid": "^3.1.0",
     "winston": "^3.0.0-rc1"
@@ -42,7 +44,7 @@
     "standard": "^10.0.3"
   },
   "scripts": {
-    "standard": "standard --verbose | snazzy",
+    "standard": "standard --fix --verbose | snazzy",
     "start": "npm run standard && nodemon app.js",
     "fix": "standard --fix",
     "test": "make test",
