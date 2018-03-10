@@ -35,9 +35,9 @@ const reduceResult = ({
 const pagination = async ({ page }) => {
   const { total } = await all()
   const goods = await Goods
-  .find()
-  .skip(SIZE * (page - 1)) //* skip在数据量大的时候会有性能问题
-  .limit(SIZE)
+    .find()
+    .skip(SIZE * (page - 1)) //* skip在数据量大的时候会有性能问题
+    .limit(SIZE)
     .exec()
 
   return reduceResult({

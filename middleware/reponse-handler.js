@@ -6,7 +6,7 @@ const {
   NOTFOUND,
   UNAUTHORIZED,
   INTERNAL_SERVER_ERROR,
-  FOR,
+  FOR
 } = require('../config/response-code')
 
 exports.reponseHandler = async (ctx, next) => {
@@ -25,8 +25,8 @@ exports.reponseHandler = async (ctx, next) => {
 
   ctx.res.fail = (data, message) => {
     ctx.status = ctx.status >= 400 && ctx.status < 500
-        ? ctx.status
-        : BAD_REQUEST
+      ? ctx.status
+      : BAD_REQUEST
 
     ctx.body = {
       status: 'fail',
@@ -38,8 +38,8 @@ exports.reponseHandler = async (ctx, next) => {
 
   ctx.res.error = (data, message) => {
     ctx.status = ctx.status >= 500
-        ? INTERNAL_SERVER_ERROR
-        : ctx.status
+      ? INTERNAL_SERVER_ERROR
+      : ctx.status
 
     ctx.body = {
       status: 'error',
@@ -48,12 +48,12 @@ exports.reponseHandler = async (ctx, next) => {
       message
     }
   }
-    // ok
+  // ok
   ctx.res.ok = (data, message) => {
     ctx.status = OK
     ctx.res.success(data, message)
   }
-    // noContent
+  // noContent
   ctx.res.noContent = (data, message) => {
     ctx.status = NO_CONTENT
     ctx.res.success(data, message)
@@ -69,22 +69,22 @@ exports.reponseHandler = async (ctx, next) => {
     ctx.status = UNAUTHORIZED
     ctx.res.success(data, message)
   }
-    // badRequest
+  // badRequest
   ctx.res.badRequest = (data, message) => {
     ctx.status = BAD_REQUEST
     ctx.res.fail(data, message)
   }
-    // forbidden
+  // forbidden
   ctx.res.forbidden = (data, message) => {
     ctx.status = FORBIDDEN
     ctx.res.fail(data, message)
   }
-    // notFound
+  // notFound
   ctx.res.notFound = (data, message) => {
     ctx.status = NOTFOUND
     ctx.res.fail(data, message)
   }
-    // internalServerError
+  // internalServerError
   ctx.res.internalServerError = (data, message) => {
     ctx.status = INTERNAL_SERVER_ERROR
     ctx.res.error(data, message)
