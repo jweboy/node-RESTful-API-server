@@ -1,9 +1,15 @@
 const fastify = require('fastify')({
   logger: true
 })
+const mongodb = require('fastify-mongodb')
 const {
   goodsRoute
 } = require('./route')
+
+// mongodb register
+fastify.register(mongodb, {
+  url: ''
+})
 
 // routes register
 fastify.register(goodsRoute)
@@ -21,9 +27,10 @@ fastify.setNotFoundHandler((request, reply) => {
 })
 
 // start server
-fastify.listen(4001)
+fastify.listen(4000)
   .then(() => {
-    console.log('server is running')
+    const { address, port } = fastify.server.address()
+    console.log(`server is running at ${address}${port}`)
   })
   .catch(err => {
     fastify.log.error(err)
