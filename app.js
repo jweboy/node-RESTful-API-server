@@ -41,6 +41,14 @@ fastify.setNotFoundHandler((request, reply) => {
   })
 })
 
+// fastify
+  // .addHook('onRequest', function (instance) {
+  //   console.log('request', this.mongo)
+  // })
+  // .addHook('onClose', function () {
+  //   console.log('close')
+  // })
+
 // start server
 fastify.listen(4000)
   .then(() => {
@@ -51,3 +59,5 @@ fastify.listen(4000)
     fastify.log.error(err)
     process.exit(1)
   })
+
+  // module.exports = fastify
