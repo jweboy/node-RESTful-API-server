@@ -1,7 +1,7 @@
 const fastify = require('fastify')({
   // logger: true
 })
-// const jwt = require('fastify-jwt')
+const jwt = require('fastify-jwt')
 const routes = require('./route')
 const mongodb = require('./middleware/mongodb')
 
@@ -9,6 +9,11 @@ const mongodb = require('./middleware/mongodb')
 //   fastify.util(request, 'timestamp', new Date())
 //   done()
 // })
+
+// hooks 
+fastify.addHook('onClose', function (fastify, done) { 
+  fastify.mongodb.disconnect()
+})
 
 // mongodb register
 fastify.register(mongodb)
@@ -21,9 +26,9 @@ fastify.register(mongodb)
 
 // routes register
 fastify
-  // .register(jwt, {
-  //   secret: 'node-server'
-  // })
+  .register(jwt, {
+    secret: 'node-server'
+  })
   .register(routes)
   .after(err => {
     if (err) {
