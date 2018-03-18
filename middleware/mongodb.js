@@ -10,21 +10,11 @@ const mongoUrl = util.format(
 )
 
 function connectMongodb (fastify, option, next) {
-  mongoose.connect(mongoUrl)
-    .then(client => {
-      // console.log(client)
-      // const db = client.db('goods').find()
-      // fastify.register(require('fastify-mongodb'), { client: client })
-      // .register(function (fastify, opts, next) {
-      console.log(client)
-      //   })
-      //   next()
-      // })
-      next()
-    })
-    .catch(err => { 
-      console.log('db connect error:', err);
-    })
+  mongoose.connect(mongoUrl).then((db) => {
+    fastify.decorate('dbUser', db.model('user', {}))
+    fastify.decorate('dbGoods', db.model('goods', {}))
+    next()
+  })
 }
 
 module.exports = plugin(connectMongodb)

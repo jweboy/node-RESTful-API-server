@@ -1,44 +1,23 @@
 const fastify = require('fastify')({
   // logger: true
 })
-// const mongodb = require('mongodb')
-// mongodb.MongoClient.connect('mongodb://jweboy:jl940630@ds149743.mlab.com:49743/myapp')
-//   .then(client => {
-//     const fastify = require('fastify')()
-//     fastify.register(goodsRoute)
-//     fastify.register(
-//       require('fastify-mongodb'),
-//       { client }
-//     )
-//   })
-// const util = require('util')
-// const mongodb = require('fastify-mongodb')
 // const jwt = require('fastify-jwt')
-// const mongoConfig = require('./config/mongodb.json')
 const routes = require('./route')
 const mongodb = require('./middleware/mongodb')
-
-// mongodb register
-// const mongoUrl = util.format(
-//   mongoConfig.url,
-//   mongoConfig.username,
-//   mongoConfig.password
-// )
-
-// fastify.decorate('util', (request, key, value) => {
-//   request.key = value
-// })
 
 // fastify.addHook('preHandler', function (request, reply, done) {
 //   fastify.util(request, 'timestamp', new Date())
 //   done()
 // })
 
-// fastify.register(mongodb, {
-//   url: mongoUrl
-// }).after(err => {
-//   console.log(err);
-// })
+// mongodb register
+fastify.register(mongodb)
+  .after(err => {
+    if (err) {
+      throw err
+    }
+    console.log('db connect success!');
+  })
 
 // routes register
 fastify
@@ -46,17 +25,12 @@ fastify
   //   secret: 'node-server'
   // })
   .register(routes)
-  // .register(usersRoute)
-
-fastify
-  .register(mongodb)
   .after(err => {
-    // console.log(err)
+    if (err) {
+      throw err
+    }
+    console.log('routes register success!');
   })
-
-fastify.get('/', function (request, reply) {
-  reply.send('fastify restful api')
-})
 
 // 404 handler
 fastify.setNotFoundHandler((request, reply) => {
