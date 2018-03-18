@@ -21,12 +21,14 @@ module.exports = function (fastify, opts, next) {
       if (!Object.keys(query).length) { 
         const allData = await db.find()
         return reply.send({
+          code: 200,
           count: totalCount,
           data: allData
         }).code(200)
       }
       const pageData = await db.page(query)
       reply.send({
+          code: 200,
           count: totalCount,
           data: pageData
       }).code(200)

@@ -48,6 +48,18 @@ class Mongodb {
         resolve(data)
       }))
   }
+  findOne(body) { 
+    return new Promise((resolve, reject) => this.db.findOne(body, function (err, data) {
+      if (err) reject(new Error(err))
+      resolve(data)
+    }))
+  }
+  insertOne(body) { 
+    return new Promise(async (resolve, reject) => this.db.create(body, (err, data) => { 
+      if (err) reject(new Error(err))
+      resolve(data)
+    }))
+  }
 }
 
 module.exports = Mongodb

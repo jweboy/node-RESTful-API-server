@@ -12,7 +12,10 @@ const mongoUrl = util.format(
 function connectMongodb (fastify, option, next) {
   fastify.decorate('mongodb', mongoose)
   mongoose.connect(mongoUrl).then((db) => {
-    fastify.decorate('dbUser', db.model('user', {}))
+    fastify.decorate('dbUser', db.model('users', {
+      username: { type: String },
+      password: { type: String },
+    }))
     fastify.decorate('dbGoods', db.model('goods', {}))
     next()
   })

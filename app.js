@@ -2,6 +2,7 @@ const fastify = require('fastify')({
   // logger: true
 })
 const jwt = require('fastify-jwt')
+const formbody = require('fastify-formbody')
 const routes = require('./route')
 const mongodb = require('./middleware/mongodb')
 
@@ -15,6 +16,8 @@ fastify.addHook('onClose', function (fastify, done) {
   fastify.mongodb.disconnect()
 })
 
+fastify.register(formbody)
+
 // mongodb register
 fastify.register(mongodb)
   .after(err => {
@@ -27,7 +30,7 @@ fastify.register(mongodb)
 // routes register
 fastify
   .register(jwt, {
-    secret: 'node-server'
+    secret: 'node-server-secret'
   })
   .register(routes)
   .after(err => {

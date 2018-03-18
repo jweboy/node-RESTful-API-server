@@ -15,6 +15,7 @@
     "bcryptjs": "^2.4.3",
     "chai": "^4.1.2",
     "fastify": "^1.1.1",
+    "fastify-formbody": "^2.0.0",
     "fastify-jwt": "^0.2.1",
     "fastify-mongodb": "^0.5.0",
     "fastify-plugin": "^0.2.2",
