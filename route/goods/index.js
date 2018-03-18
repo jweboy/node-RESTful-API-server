@@ -1,4 +1,4 @@
-const Mongodb = require('../../lib/mongodb')
+const Mongodb = require('../../util/mongodb')
 
 // TODO
 // error response 可以提取到公用的
@@ -12,25 +12,11 @@ const schema = {
 }
 
 module.exports = function (fastify, opts, next) {
-  fastify.get('/goods', { schema }, async function (req, reply) {
-    if (!req.query.page || !req.query.size) { 
-      const err = new Error()
-      err.statusCode = 400
-      err.message = '请求参数存在错误'
-      throw err
-    }
+  fastify.get('/goods', async function (request, reply) {
     const db = new Mongodb('goods', this.mongo)
     try {
-      // const collection = this.mongo.db.collection('goods')
-      const count = await db.count()
-      // const allData = await db.find()
-      const pageData = await db.page(Object.create(req.query))
-      reply
-        .send({
-          count,
-          data: pageData
-        })
-        .code(200)
+      const data = await db.find()
+      reply.send(data)
     } catch (err) {
       throw err
     }

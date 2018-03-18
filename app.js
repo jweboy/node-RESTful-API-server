@@ -1,38 +1,44 @@
 const fastify = require('fastify')({
   // logger: true
 })
-// const mongodb = require('mongodb')
-// mongodb.MongoClient.connect('mongodb://jweboy:jl940630@ds149743.mlab.com:49743/myapp')
-//   .then(client => {
-//     const fastify = require('fastify')()
-//     fastify.register(goodsRoute)
-//     fastify.register(
-//       require('fastify-mongodb'),
-//       { client }
-//     )
-//   })
-const util = require('util')
-const mongodb = require('fastify-mongodb')
-const mongoConfig = require('./config/mongodb.json')
-const {
-  goodsRoute
-} = require('./route')
+const jwt = require('fastify-jwt')
+const formbody = require('fastify-formbody')
+const routes = require('./route')
+const mongodb = require('./middleware/mongodb')
+
+// fastify.addHook('preHandler', function (request, reply, done) {
+//   fastify.util(request, 'timestamp', new Date())
+//   done()
+// })
+
+// hooks 
+fastify.addHook('onClose', function (fastify, done) { 
+  fastify.mongodb.disconnect()
+})
+
+fastify.register(formbody)
 
 // mongodb register
-const mongoUrl = util.format(
-  mongoConfig.url,
-  mongoConfig.username,
-  mongoConfig.password
-)
-fastify.register(mongodb, {
-  url: mongoUrl
-})
+fastify.register(mongodb)
+  .after(err => {
+    if (err) {
+      throw err
+    }
+    console.log('db connect success!');
+  })
 
 // routes register
-fastify.register(goodsRoute)
-fastify.get('/', function (request, reply) {
-  reply.send('fastify restful api')
-})
+fastify
+  .register(jwt, {
+    secret: 'node-server-secret'
+  })
+  .register(routes)
+  .after(err => {
+    if (err) {
+      throw err
+    }
+    console.log('routes register success!');
+  })
 
 // 404 handler
 fastify.setNotFoundHandler((request, reply) => {
@@ -40,6 +46,14 @@ fastify.setNotFoundHandler((request, reply) => {
     404: true
   })
 })
+
+// fastify
+  // .addHook('onRequest', function (instance) {
+  //   console.log('request', this.mongo)
+  // })
+  // .addHook('onClose', function () {
+  //   console.log('close')
+  // })
 
 // start server
 fastify.listen(4000)
@@ -51,3 +65,5 @@ fastify.listen(4000)
     fastify.log.error(err)
     process.exit(1)
   })
+
+  // module.exports = fastify
