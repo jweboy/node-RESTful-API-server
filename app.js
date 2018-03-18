@@ -11,25 +11,49 @@ const fastify = require('fastify')({
 //       { client }
 //     )
 //   })
-const util = require('util')
-const mongodb = require('fastify-mongodb')
-const mongoConfig = require('./config/mongodb.json')
-const {
-  goodsRoute
-} = require('./route')
+// const util = require('util')
+// const mongodb = require('fastify-mongodb')
+// const jwt = require('fastify-jwt')
+// const mongoConfig = require('./config/mongodb.json')
+const routes = require('./route')
+const mongodb = require('./middleware/mongodb')
 
 // mongodb register
-const mongoUrl = util.format(
-  mongoConfig.url,
-  mongoConfig.username,
-  mongoConfig.password
-)
-fastify.register(mongodb, {
-  url: mongoUrl
-})
+// const mongoUrl = util.format(
+//   mongoConfig.url,
+//   mongoConfig.username,
+//   mongoConfig.password
+// )
+
+// fastify.decorate('util', (request, key, value) => {
+//   request.key = value
+// })
+
+// fastify.addHook('preHandler', function (request, reply, done) {
+//   fastify.util(request, 'timestamp', new Date())
+//   done()
+// })
+
+// fastify.register(mongodb, {
+//   url: mongoUrl
+// }).after(err => {
+//   console.log(err);
+// })
 
 // routes register
-fastify.register(goodsRoute)
+fastify
+  // .register(jwt, {
+  //   secret: 'node-server'
+  // })
+  .register(routes)
+  // .register(usersRoute)
+
+fastify
+  .register(mongodb)
+  .after(err => {
+    // console.log(err)
+  })
+
 fastify.get('/', function (request, reply) {
   reply.send('fastify restful api')
 })

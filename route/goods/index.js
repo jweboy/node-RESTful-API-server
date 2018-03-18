@@ -20,9 +20,18 @@ module.exports = function (fastify, opts, next) {
       throw err
     }
     const db = new Mongodb('goods', this.mongo)
+    const count = await db.count()
+    console.log(2, count)
     try {
-      const data = await db.find()
-      reply.send(data)
+      // const collection = this.mongo.db.collection('goods')
+      // const allData = await db.find()
+      const pageData = await db.page(Object.create(req.query))
+      reply
+        .send({
+          count,
+          data: pageData
+        })
+        .code(200)
     } catch (err) {
       throw err
     }
