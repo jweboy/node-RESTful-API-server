@@ -3,19 +3,28 @@ const fastify = require('fastify')({
 })
 const jwt = require('fastify-jwt')
 const formbody = require('fastify-formbody')
+const leveldb = require('fastify-leveldb')
+const auth = require('fastify-auth')
 const routes = require('./route')
 const mongodb = require('./middleware/mongodb')
+const authCfg = require('./config/auth')
+const authUtil = require('./util/auth')
 
 // fastify.addHook('preHandler', function (request, reply, done) {
 //   fastify.util(request, 'timestamp', new Date())
 //   done()
 // })
 
+// decorate
+fastify.decorate('verifyJWTandLevel', authUtil.verifyJWTandLevel)
+// fastify.decorate('verifyUserAndPassword', verifyUserAndPassword)
+
 // hooks 
 fastify.addHook('onClose', function (fastify, done) { 
   fastify.mongodb.disconnect()
 })
 
+// form body register
 fastify.register(formbody)
 
 // mongodb register
@@ -30,8 +39,12 @@ fastify.register(mongodb)
 // routes register
 fastify
   .register(jwt, {
-    secret: 'node-server-secret'
+    secret: authCfg.jwtSecret
   })
+  .register(leveldb, {
+    name: authCfg.leveldbName
+  })
+  .register(auth)
   .register(routes)
   .after(err => {
     if (err) {
@@ -47,14 +60,6 @@ fastify.setNotFoundHandler((request, reply) => {
   })
 })
 
-// fastify
-  // .addHook('onRequest', function (instance) {
-  //   console.log('request', this.mongo)
-  // })
-  // .addHook('onClose', function () {
-  //   console.log('close')
-  // })
-
 // start server
 fastify.listen(4000)
   .then(() => {
@@ -66,4 +71,4 @@ fastify.listen(4000)
     process.exit(1)
   })
 
-  // module.exports = fastify
+// module.exports = fastify
