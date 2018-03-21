@@ -15,6 +15,7 @@ function connectMongodb (fastify, option, next) {
     fastify.decorate('dbUser', db.model('users', {
       username: { type: String },
       password: { type: String },
+      token: { type: String }
     }))
     fastify.decorate('dbGoods', db.model('goods', {}))
     next()
