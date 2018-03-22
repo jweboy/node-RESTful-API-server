@@ -1,5 +1,11 @@
 const Mongodb = require('../../util/mongodb')
 
+/**
+ * 注册
+ * @param {*} fastify 
+ * @param {*} request 
+ * @param {*} reply 
+ */
 async function signup(fastify, request, reply) {
   const body = request.body
   // if (!body.username || !body.password) {
@@ -46,6 +52,11 @@ async function signup(fastify, request, reply) {
   }
 }
 
+async function signin(fastify, request, reply) { 
+
+}
+
 module.exports = {
-  signup
+  signup,
+  signin
 }

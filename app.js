@@ -17,7 +17,7 @@ const authUtil = require('./util/auth')
 
 // decorate
 fastify.decorate('verifyJWTandLevel', authUtil.verifyJWTandLevel)
-// fastify.decorate('verifyUserAndPassword', verifyUserAndPassword)
+fastify.decorate('verifyUserAndPassword', authUtil.verifyUserAndPassword)
 
 // hooks 
 fastify.addHook('onClose', function (fastify, done) { 
