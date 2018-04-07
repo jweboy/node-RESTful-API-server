@@ -18,25 +18,25 @@ module.exports = function (fastify, opts, next) {
       fastify.verifyJWTandLevel
     ])
   }, async function (request, reply) {
-    const db = new Mongodb(fastify.dbGoods) 
-    const query = request.query 
-    const totalCount = await db.count() 
-    try { 
-      if (!Object.keys(query).length) {  
-        const allData = await db.find() 
-        return reply.send({ 
-          count: totalCount, 
-          data: allData 
+    const db = new Mongodb(fastify.dbGoods)
+    const query = request.query
+    const totalCount = await db.count()
+    try {
+      if (!Object.keys(query).length) {
+        const allData = await db.find()
+        return reply.send({
+          count: totalCount,
+          data: allData
         })
-      } 
-      const pageData = await db.page(query) 
+      }
+      const pageData = await db.page(query)
       reply.send({
         count: totalCount,
         data: pageData
       })
-    } catch (err) { 
-      throw err 
-    } 
+    } catch (err) {
+      throw err
+    }
   })
   next()
 }
