@@ -2,11 +2,11 @@ const Mongodb = require('../../util/mongodb')
 
 /**
  * 注册
- * @param {*} fastify 
- * @param {*} request 
- * @param {*} reply 
+ * @param {*} fastify
+ * @param {*} request
+ * @param {*} reply
  */
-async function signup(fastify, request, reply) {
+async function signup (fastify, request, reply) {
   const body = request.body
   // if (!body.username || !body.password) {
   //   const err = new Error()
@@ -17,9 +17,9 @@ async function signup(fastify, request, reply) {
   // error just break next step
   const db = new Mongodb(fastify.dbUser)
   const { username, password } = body
-  try { 
+  try {
     const person = await db.findOne({ username })
-    if (person) { 
+    if (person) {
       const err = new Error()
       err.statusCode = 400
       err.message = '用户已存在!'
@@ -28,7 +28,7 @@ async function signup(fastify, request, reply) {
     // put user into level
     fastify.level.put(username, password, onPut)
 
-    function onPut(err) { 
+    function onPut (err) {
       if (err) {
         throw err
       }
@@ -36,14 +36,14 @@ async function signup(fastify, request, reply) {
       fastify.jwt.sign(body, onToken)
     }
 
-    async function onToken(err, token) {
+    async function onToken (err, token) {
       if (err) {
         throw err
       }
       // insert user into db
       const result = await db.insertOne({
         ...body,
-        token,
+        token
       })
       return result
     }
@@ -52,7 +52,7 @@ async function signup(fastify, request, reply) {
   }
 }
 
-async function signin(fastify, request, reply) { 
+async function signin (fastify, request, reply) {
 
 }
 

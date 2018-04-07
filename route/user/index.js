@@ -5,7 +5,7 @@ const schema = {
     type: 'object',
     properties: {
       username: { type: 'string' },
-      password: { type: 'string' },
+      password: { type: 'string' }
     },
     required: ['username', 'password']
   },
@@ -14,14 +14,14 @@ const schema = {
       type: 'object',
       properties: {
         code: { type: 'number' },
-        message: { type: 'string' },
+        message: { type: 'string' }
         // data: {
         //   username: { type: 'string' },
         //   password: { type: 'string' },
         //   token: { type: 'string' },
         // }
       }
-    },
+    }
   }
 }
 
@@ -30,11 +30,11 @@ const signinSchema = {
     type: 'object',
     properties: {
       username: { type: 'string' },
-      password: { type: 'string' },
+      password: { type: 'string' }
     },
     required: ['username', 'password']
   }
-}  
+}
 
 module.exports = function (fastify, option, next) {
   fastify
@@ -42,8 +42,8 @@ module.exports = function (fastify, option, next) {
       const result = await signup(fastify, request, reply)
       reply.send({
         code: 201,
-        message: '成功创建新用户!',
-        data: result,
+        message: '成功创建新用户',
+        data: result
       })
       next()
     })
@@ -52,14 +52,14 @@ module.exports = function (fastify, option, next) {
       reply.send('用户注册接口只有POST方法')
       next()
     })
-  
+
   fastify
     .post('/signin', {
       signinSchema,
       beforeHandler: fastify.auth([
         fastify.verifyUserAndPassword
       ])
-    } ,async function (request, reply) { 
+    }, async function (request, reply) {
       reply.send('ok')
     })
     .get('/signin', function (request, reply) {
