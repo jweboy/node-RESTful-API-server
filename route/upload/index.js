@@ -1,10 +1,19 @@
+const path = require('path')
 const upload = require('./controller')
-const Qiniu = require('../../util/qiniu')
 
 module.exports = function (fastify, opts, next) {
-  fastify.get('/upload', function (request, reply) { 
-    const qiniu = new Qiniu()
-    const uoloadToken = qiniu.generateToken()
-    reply.send(uoloadToken)
-  })
+  fastify
+    .post('/upload', async function (request, reply) {
+      const file = path.resolve('static/nodejs.png')
+      const { respBody, respInfo } = await upload(file)
+      reply.send({
+        code: respInfo.statusCode,
+        message: '文件上传成功',
+        data: respBody
+      })
+      next()
+    })
+    .get('/upload', function (request, reply) { 
+      reply.send('upload')
+    })
 }
