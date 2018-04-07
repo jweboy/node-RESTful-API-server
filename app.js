@@ -3,6 +3,7 @@ const fastify = require('fastify')({
 })
 const jwt = require('fastify-jwt')
 const formbody = require('fastify-formbody')
+const multipart = require('fastify-multipart')
 const leveldb = require('fastify-leveldb')
 const auth = require('fastify-auth')
 const routes = require('./route')
@@ -19,13 +20,15 @@ const authUtil = require('./util/auth')
 fastify.decorate('verifyJWTandLevel', authUtil.verifyJWTandLevel)
 fastify.decorate('verifyUserAndPassword', authUtil.verifyUserAndPassword)
 
-// hooks 
-fastify.addHook('onClose', function (fastify, done) { 
+// hooks
+fastify.addHook('onClose', function (fastify, done) {
   fastify.mongodb.disconnect()
 })
 
-// form body register
+// form body register => parse x-www-form-urlencoded bodies
 fastify.register(formbody)
+// any body register
+fastify.register(multipart)
 
 // mongodb register
 fastify.register(mongodb)
@@ -33,7 +36,7 @@ fastify.register(mongodb)
     if (err) {
       throw err
     }
-    console.log('db connect success!');
+    console.log('db connect success!')
   })
 
 // routes register
@@ -50,7 +53,7 @@ fastify
     if (err) {
       throw err
     }
-    console.log('routes register success!');
+    console.log('routes register success!')
   })
 
 // 404 handler

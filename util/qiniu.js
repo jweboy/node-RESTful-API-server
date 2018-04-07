@@ -12,6 +12,8 @@ module.exports = class Qiniu {
 
     // 上传的空间
     this.bucket = bucket
+    // 文件过期时间
+    this.deadline = parseInt(Date.now() / 1000) + 3600 // 一小时过期
   }
   // 生成上传的token
   generateToken (bucket) {
@@ -34,9 +36,9 @@ module.exports = class Qiniu {
   }
   uploadFile (localFile) {
     return new Promise((resolve, reject) => {
-      const _localFile = path.resolve(localFile)
+      // const _localFile = path.resolve(localFile)
       const bucket = this.bucket
-      const key = _localFile
+      const key = localFile
 
       // 获取基础配置
       const config = this.generateConfig()
@@ -46,16 +48,28 @@ module.exports = class Qiniu {
       const putExtra = new qiniu.form_up.PutExtra()
       /**
        * @param token {String}
-       * @param _localFile {String} 上传的文件路径
+       * @param localFile {String} 上传的文件路径
        * @param key {String} 保存到七牛云之后的文件名
        * @param putExtra
        */
-      formUploader.putFile(token, _localFile, key, putExtra, function (respError, respBody, respInfo) {
+      formUploader.putFile(token, localFile, key, putExtra, function (respError, respBody, respInfo) {
         if (respError) {
           reject(respError)
         }
         resolve({ respBody, respInfo })
       })
     })
+  }
+  downloadFile (localFile) {
+    const config = this.generateConfig()
+    const publicBucketDomain = 'owxxrple2.bkt.clouddn.com'
+    const mac = new qiniu.auth.digest.Mac(this.accessKey, this.secretKey)
+    const bucketManager = new qiniu.rs.BucketManager(mac, config)
+
+    return bucketManager.publicDownloadUrl(
+      publicBucketDomain,
+      localFile,
+      this.deadline
+    )
   }
 }

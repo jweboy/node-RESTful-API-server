@@ -1,8 +1,9 @@
 const Qiniu = require('../../util/qiniu')
 
-async function upload () {
-  const qiniu = new Qiniu()
-  const file = 'static/nodejs.png'
+const qiniu = new Qiniu()
+
+async function upload (file) {
+  // const file = 'static/nodejs.png'
   try {
     const upload = await qiniu.uploadFile(file)
     return upload
@@ -11,8 +12,9 @@ async function upload () {
   }
 }
 
-async function download () {
-
+function download (filePath) {
+  const url = qiniu.downloadFile(filePath)
+  return url
 }
 
 module.exports = {
