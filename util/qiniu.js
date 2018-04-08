@@ -1,4 +1,3 @@
-const path = require('path')
 const qiniu = require('qiniu')
 const { accessKey, secretKey } = require('../config/qiniu')
 
@@ -34,25 +33,23 @@ module.exports = class Qiniu {
 
     return config
   }
-  uploadFile (localFile) {
+  /**
+   * 文件数据流上传
+   * @param {Object} readableStream 可读取的文件流
+   * @param {String} fileKey 上传到七牛云之后的文件名,默认原文件名
+   */
+  uploadFile (readableStream, fileKey) {
     return new Promise((resolve, reject) => {
-      // const _localFile = path.resolve(localFile)
+      // 获取存储空间名
       const bucket = this.bucket
-      const key = localFile
-
       // 获取基础配置
       const config = this.generateConfig()
       const token = this.generateToken(bucket)
       // 获取上传method
       const formUploader = new qiniu.form_up.FormUploader(config)
       const putExtra = new qiniu.form_up.PutExtra()
-      /**
-       * @param token {String}
-       * @param localFile {String} 上传的文件路径
-       * @param key {String} 保存到七牛云之后的文件名
-       * @param putExtra
-       */
-      formUploader.putFile(token, localFile, key, putExtra, function (respError, respBody, respInfo) {
+
+      formUploader.putStream(token, fileKey, readableStream, putExtra, function (respError, respBody, respInfo) {
         if (respError) {
           reject(respError)
         }
@@ -68,8 +65,8 @@ module.exports = class Qiniu {
 
     return bucketManager.publicDownloadUrl(
       publicBucketDomain,
-      localFile,
-      this.deadline
+      localFile
+      // this.deadline
     )
   }
 }
