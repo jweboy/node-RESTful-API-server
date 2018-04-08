@@ -2,10 +2,10 @@ const Qiniu = require('../../util/qiniu')
 
 const qiniu = new Qiniu()
 
-async function upload (file) {
+async function upload (...args) {
   // const file = 'static/nodejs.png'
   try {
-    const upload = await qiniu.uploadFile(file)
+    const upload = await qiniu.uploadFile(...args)
     return upload
   } catch (err) {
     throw err
