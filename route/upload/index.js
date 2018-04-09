@@ -1,4 +1,4 @@
-const { upload, download } = require('./controller')
+const { upload, getBucketList } = require('./controller')
 
 module.exports = function (fastify, opts, next) {
   fastify
@@ -21,18 +21,28 @@ module.exports = function (fastify, opts, next) {
       }
       request.multipart(handler, (err) => { if (err) throw err })
     })
-    .get('/upload/:fid', function (request, reply) {
-      const { fid } = request.params
-      console.log(request.params)
-      // const testPath = '/Users/jweboy/GitRepo/node-server/static/nodejs.png'
-      const downloadUrl = download(fid)
+    .get('/upload/list', async function (request, reply) {
+      const { respBody, respInfo } = await getBucketList()
       reply.send({
-        code: 200,
-        message: '成功获取文件内容',
-        data: {
-          url: downloadUrl
-        }
+        code: respInfo.statusCode,
+        message: '文件列表获取成功',
+        data: respBody
       })
       next()
     })
+    // 暂时不用
+    // .get('/upload/:fid', function (request, reply) {
+    //   const { fid } = request.params
+    //   console.log(request.params)
+    //   // const testPath = '/Users/jweboy/GitRepo/node-server/static/nodejs.png'
+    //   const downloadUrl = download(fid)
+    //   reply.send({
+    //     code: 200,
+    //     message: '成功获取文件内容',
+    //     data: {
+    //       url: downloadUrl
+    //     }
+    //   })
+    //   next()
+    // })
 }
