@@ -4,7 +4,7 @@ const fastify = require('fastify')({
 const jwt = require('fastify-jwt')
 const formbody = require('fastify-formbody')
 const multipart = require('fastify-multipart')
-const leveldb = require('fastify-leveldb')
+// const leveldb = require('fastify-leveldb')
 const auth = require('fastify-auth')
 const routes = require('./route')
 // const mongodb = require('./middleware/mongodb')
@@ -44,9 +44,9 @@ fastify
   .register(jwt, {
     secret: authCfg.jwtSecret
   })
-  .register(leveldb, {
-    name: authCfg.leveldbName
-  })
+  // .register(leveldb, {
+  //   name: authCfg.leveldbName
+  // })
   .register(auth)
   .register(routes)
   .after(err => {
