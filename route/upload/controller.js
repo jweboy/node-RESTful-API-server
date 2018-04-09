@@ -17,7 +17,16 @@ function download (filePath) {
   return url
 }
 
+async function getBucketList () {
+  try {
+    return await qiniu.getBucketList()
+  } catch (err) {
+    throw err
+  }
+}
+
 module.exports = {
   upload,
-  download
+  download,
+  getBucketList
 }
