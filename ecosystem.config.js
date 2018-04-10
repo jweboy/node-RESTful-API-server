@@ -36,7 +36,7 @@ module.exports = {
       host: '118.24.155.105',
       ref: 'origin/master',
       repo: 'git@github.com:jweboy/node-resful-server.git',
-      path: '/home/www/service/node-resful-server/source',
+      path: '/home/www/service/node-resful-server',
       ssh_options: 'StrictHostKeyChecking=no',
       'pre-deploy-local': "echo 'pm2部署测试'",
       'post-deploy': 'yarn && yarn run pm2:pro',
