@@ -48,7 +48,7 @@ fastify
   //   name: authCfg.leveldbName
   // })
   .register(auth)
-  .register(routes)
+  .register(routes, {prefix: '/api'})
   .after(err => {
     if (err) {
       throw err
@@ -64,7 +64,7 @@ fastify.setNotFoundHandler((request, reply) => {
 })
 
 // start server
-fastify.listen(4000)
+fastify.listen(process.env.PORT)
   .then(() => {
     const { address, port } = fastify.server.address()
     console.log(`server is running at ${address}:${port}`)

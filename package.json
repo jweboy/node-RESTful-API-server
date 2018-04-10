@@ -56,6 +56,8 @@
     "standard": "^10.0.3"
   },
   "scripts": {
+    "pm2:dev": "pm2 start ecosystem.config.js --env development",
+    "pm2:pro": "pm2 startOrRestart ecosystem.config.js --env production",
     "pandora:dev": "pandora dev",
     "pandora:start": "pandora start",
     "standard": "standard --fix --verbose | snazzy",
