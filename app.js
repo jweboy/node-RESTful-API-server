@@ -48,7 +48,7 @@ fastify
   //   name: authCfg.leveldbName
   // })
   .register(auth)
-  .register(routes)
+  .register(routes, {prefix: '/api'})
   .after(err => {
     if (err) {
       throw err

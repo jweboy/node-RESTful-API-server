@@ -9,7 +9,7 @@ const upload = require('./upload')
 module.exports = function (fastify, opts, next) {
   // index route
   fastify.get('/', function (request, reply) {
-    reply.send('fastify re/stful api')
+    reply.send('fastify resful api')
   })
   // fastify.register(users, { prefix: 'users'})
   goods(fastify, opts, next)
