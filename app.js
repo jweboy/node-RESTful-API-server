@@ -1,4 +1,7 @@
 const fastify = require('fastify')({
+  // http2目前还没有完全支持
+  // issue https://github.com/fastify/fastify/issues/181
+  // http2: true
   // logger: true
 })
 const jwt = require('fastify-jwt')

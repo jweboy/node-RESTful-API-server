@@ -11,6 +11,8 @@ module.exports = {
       ignore_watch: [
         'node_modules'
       ],
+      exec_mode: 'cluster',
+      instances: 2,
       // out_file: './logs/out.log',
       // log_date_format: 'YYYY-MM-DD HH:mm Z',
       env: {

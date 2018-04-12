@@ -22,6 +22,7 @@
     "fastify-mongodb": "^0.5.0",
     "fastify-multipart": "^0.5.0",
     "fastify-plugin": "^0.2.2",
+    "fastify-swagger": "^0.8.3",
     "formidable": "^1.2.1",
     "jsonwebtoken": "^8.1.0",
     "koa": "^2.4.1",
@@ -70,7 +71,7 @@
     "coveralls": "npm run coverage && cat ./coverage/lcov.info | coveralls"
   },
   "engines": {
-    "node": "8.x"
+    "node": ">=8.8.1"
   },
   "standard": {
     "ignore": [
