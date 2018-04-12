@@ -4,6 +4,6 @@
 
 .nyc_output
 
-logs
+*.log
 
 node_modules
