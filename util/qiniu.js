@@ -31,7 +31,11 @@ module.exports = class Qiniu {
   generateToken (bucket) {
     // 配置项目
     const option = {
-      scope: bucket || this.bucket
+      scope: bucket || this.bucket,
+      returnBody: `{
+        "name":"$(key)",
+        "id": "$(etag)"
+      }`
     }
     const putPolicy = new qiniu.rs.PutPolicy(option)
     // 生成token
@@ -59,7 +63,9 @@ module.exports = class Qiniu {
       })
     })
   }
-  getBucketList (opts = {}) {
+  getBucketList (opts = {
+    limit: 100
+  }) {
     return new Promise((resolve, reject) => {
       // 获取bucket method
       const bucketManager = new qiniu.rs.BucketManager(this.mac, this.config)

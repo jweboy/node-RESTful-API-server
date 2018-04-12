@@ -23,10 +23,21 @@ module.exports = function (fastify, opts, next) {
     })
     .get('/upload/list', async function (request, reply) {
       const { respBody, respInfo } = await getBucketList()
+      const finalData = respBody.items.reduce(function (arr, { key, hash, putTime }) {
+        arr.push({
+          name: key,
+          id: hash,
+          putTime
+        })
+        return arr
+      }, [])
       reply.send({
         code: respInfo.statusCode,
         message: '文件列表获取成功',
-        data: respBody
+        data: {
+          items: finalData,
+          total: finalData.length
+        }
       })
       next()
     })
