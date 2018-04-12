@@ -64,7 +64,7 @@ fastify.setNotFoundHandler((request, reply) => {
 })
 
 // start server
-fastify.listen(3000)
+fastify.listen(process.env.PORT)
   .then(() => {
     const { address, port } = fastify.server.address()
     console.log(`server is running at ${address}:${port}`)

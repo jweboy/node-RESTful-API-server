@@ -4,15 +4,15 @@ module.exports = {
    * http://pm2.keymetrics.io/docs/usage/application-declaration/
    */
   apps: [
-    // My application
     {
-      name: 'node-api',
+      name: 'node-fastify-resful-api',
       script: 'app.js',
       watch: true,
       ignore_watch: [
         'node_modules'
       ],
-      log_date_format: 'YYYY-MM-DD HH:mm Z',
+      // out_file: './logs/out.log',
+      // log_date_format: 'YYYY-MM-DD HH:mm Z',
       env: {
         PORT: 3000,
         NODE_ENV: 'development',
@@ -20,9 +20,9 @@ module.exports = {
         COMMON_VARIABLE: true
       },
       env_production: {
-        PORT: 4000,
+        PORT: 3001,
         NODE_ENV: 'production',
-        HOST: '138.197.120.135'
+        HOST: '118.24.155.105'
       }
     }
   ],
@@ -33,15 +33,13 @@ module.exports = {
   deploy: {
     production: {
       user: 'root',
-      host: '138.197.120.135',
+      host: '118.24.155.105',
       ref: 'origin/master',
-      repo: 'git@github.com:jweboy/node-server.git',
-      path: '/home/jweboy/www/production/node-server',
+      repo: 'git@github.com:jweboy/node-resful-server.git',
+      path: '/home/www/service/node-resful-server',
       ssh_options: 'StrictHostKeyChecking=no',
-      'pre-setup': 'apt-get install git',
-      'post-setup': 'ls -la',
-      'pre-deploy-local': "echo 'pm2本地部署测试'",
-      'post-deploy': 'npm install && pm2 startOrRestart ecosystem.config.js --env production',
+      'pre-deploy-local': "echo 'pm2部署测试'",
+      'post-deploy': 'yarn && yarn run pm2:pro',
       'env': {
         'NODE_ENV': 'production'
       }
