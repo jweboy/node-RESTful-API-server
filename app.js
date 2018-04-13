@@ -19,6 +19,14 @@ const authUtil = require('./util/auth')
 //   done()
 // })
 
+// notFound handler
+fastify.setNotFoundHandler(function (req, reply) {
+  reply.header('Access-Control-Allow-Origin', '*')
+  reply.send({
+    404: true
+  })
+})
+
 // decorate
 fastify.decorate('verifyJWTandLevel', authUtil.verifyJWTandLevel)
 fastify.decorate('verifyUserAndPassword', authUtil.verifyUserAndPassword)
@@ -59,15 +67,8 @@ fastify
     console.log('routes register success!')
   })
 
-// 404 handler
-fastify.setNotFoundHandler((request, reply) => {
-  reply.send({
-    404: true
-  })
-})
-
 // start server
-fastify.listen(process.env.PORT)
+fastify.listen(process.env.PORT || 3000)
   .then(() => {
     const { address, port } = fastify.server.address()
     console.log(`server is running at ${address}:${port}`)
