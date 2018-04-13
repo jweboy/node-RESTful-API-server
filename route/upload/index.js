@@ -31,14 +31,16 @@ module.exports = function (fastify, opts, next) {
         })
         return arr
       }, [])
-      reply.send({
-        code: respInfo.statusCode,
-        message: '文件列表获取成功',
-        data: {
-          items: finalData,
-          total: finalData.length
-        }
-      })
+      reply
+        .header('Access-Control-Allow-Origin', '*')
+        .send({
+          code: respInfo.statusCode,
+          message: '文件列表获取成功',
+          data: {
+            items: finalData,
+            total: finalData.length
+          }
+        })
       next()
     })
     // 暂时不用
