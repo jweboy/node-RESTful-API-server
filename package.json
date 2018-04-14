@@ -61,7 +61,7 @@
   "scripts": {
     "pm2:dev": "pm2 start ecosystem.config.js --env development",
     "pm2:pro": "pm2 startOrRestart ecosystem.config.js --env production",
-    "pm2:deploy": "pm2 deploy ecosystem.config.js production steup",
+    "pm2:deploy": "pm2 deploy ecosystem.config.js production",
     "pandora:dev": "pandora dev",
     "pandora:start": "pandora start",
     "standard": "standard --fix --verbose | snazzy",
