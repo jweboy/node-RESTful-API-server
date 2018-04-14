@@ -1,3 +1,5 @@
+// const stringify = require('fast-json-stringify')
+
 exports.postUploadPictureSuccess = {
   $id: 'uploadPictureSuccess',
   type: 'object',
