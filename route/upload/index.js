@@ -2,7 +2,14 @@ const { upload, getBucketList } = require('./controller')
 
 module.exports = function (fastify, opts, next) {
   fastify
-    .post('/upload/picture', async function (req, reply) {
+    .post('/upload/picture', {
+      schema: {
+        response: {
+          200: 'uploadPictureSuccess#',
+          400: 'uploadPictureError#'
+        }
+      }
+    }, async function (req, reply) {
       /**
        * @param {String} field 文件字段
        * @param {Object} file 可读文件流
@@ -31,7 +38,13 @@ module.exports = function (fastify, opts, next) {
       }
       req.multipart(handler, (err) => { if (err) throw err })
     })
-    .get('/upload/picture/list', async function (req, reply) {
+    .get('/upload/picture/list', {
+      schema: {
+        response: {
+          200: 'pictureListSuccess#'
+        }
+      }
+    }, async function (req, reply) {
       const { respBody, respInfo } = await getBucketList()
       const finalData = respBody.items.reduce(function (arr, { key, hash, putTime }) {
         arr.push({

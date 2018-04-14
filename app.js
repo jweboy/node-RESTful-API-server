@@ -15,6 +15,7 @@ const routes = require('./route')
 // const mongodb = require('./middleware/mongodb')
 const authCfg = require('./config/auth')
 const authUtil = require('./util/auth')
+const schema = require('./plugin/schema')
 
 // hooks
 fastify.addHook('preHandler', function (req, reply, next) {
@@ -62,6 +63,7 @@ fastify
   //   name: authCfg.leveldbName
   // })
   .register(auth)
+  .register(schema)
   .register(routes)
   .after(err => {
     if (err) {
