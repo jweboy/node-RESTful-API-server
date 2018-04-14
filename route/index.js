@@ -13,6 +13,6 @@ module.exports = function (fastify, ...args) {
   })
   // fastify.register(users, { prefix: 'users'})
   goods(fastify, ...args)
-  user(fastify, ...args)
   upload(fastify, ...args)
+  // fastify.register(upload)
 }

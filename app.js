@@ -1,5 +1,5 @@
 const fastify = require('fastify')({
-  // http2目前还没有完全支持
+  // http2目前还没有完全支持 node >= 8.8.1
   // issue https://github.com/fastify/fastify/issues/181
   // http2: true
   // logger: true
@@ -9,19 +9,28 @@ const formbody = require('fastify-formbody')
 const multipart = require('fastify-multipart')
 // const leveldb = require('fastify-leveldb')
 const auth = require('fastify-auth')
+const accepts = require('fastify-accepts')
+
 const routes = require('./route')
 // const mongodb = require('./middleware/mongodb')
 const authCfg = require('./config/auth')
 const authUtil = require('./util/auth')
+const schema = require('./plugin/schema')
 
-// fastify.addHook('preHandler', function (request, reply, done) {
-//   fastify.util(request, 'timestamp', new Date())
-//   done()
+// hooks
+fastify.addHook('preHandler', function (req, reply, next) {
+  // fastify.util(req, 'timestamp', new Date())
+  // 设置cors,支持跨域
+  reply.header('Access-Control-Allow-Origin', '*')
+  next()
+})
+// fastify.addHook('onClose', function (fastify, done) {
+//   fastify.mongodb.disconnect()
 // })
 
 // notFound handler
 fastify.setNotFoundHandler(function (req, reply) {
-  reply.header('Access-Control-Allow-Origin', '*')
+  // reply.header('Access-Control-Allow-Origin', '*')
   reply.send({
     404: true
   })
@@ -31,16 +40,12 @@ fastify.setNotFoundHandler(function (req, reply) {
 fastify.decorate('verifyJWTandLevel', authUtil.verifyJWTandLevel)
 fastify.decorate('verifyUserAndPassword', authUtil.verifyUserAndPassword)
 
-// hooks
-// fastify.addHook('onClose', function (fastify, done) {
-//   fastify.mongodb.disconnect()
-// })
-
+// accepts register
+fastify.register(accepts)
 // form body register => parse x-www-form-urlencoded bodies
 fastify.register(formbody)
 // any body register
 fastify.register(multipart)
-
 // mongodb register
 // fastify.register(mongodb)
 //   .after(err => {
@@ -49,7 +54,6 @@ fastify.register(multipart)
 //     }
 //     console.log('db connect success!')
 //   })
-
 // routes register
 fastify
   .register(jwt, {
@@ -59,7 +63,8 @@ fastify
   //   name: authCfg.leveldbName
   // })
   .register(auth)
-  .register(routes, {prefix: '/api'})
+  .register(schema)
+  .register(routes)
   .after(err => {
     if (err) {
       throw err

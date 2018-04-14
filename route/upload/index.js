@@ -2,7 +2,14 @@ const { upload, getBucketList } = require('./controller')
 
 module.exports = function (fastify, opts, next) {
   fastify
-    .post('/upload', async function (request, reply) {
+    .post('/upload/picture', {
+      schema: {
+        response: {
+          200: 'uploadPictureSuccess#',
+          400: 'uploadPictureError#'
+        }
+      }
+    }, async function (req, reply) {
       /**
        * @param {String} field 文件字段
        * @param {Object} file 可读文件流
@@ -11,17 +18,33 @@ module.exports = function (fastify, opts, next) {
        * @param {String} mimetype 文件类型
        */
       async function handler (field, file, filename, encoding, mimetype) {
+        // 只接收图片类型
+        if (!/image\//.test(mimetype)) {
+          return reply.send({
+            code: 400,
+            message: '图片格式错误',
+            data: {}
+          })
+        }
+        // 图片上传并返回
         const { respBody, respInfo } = await upload(file, filename)
-        reply.send({
-          code: respInfo.statusCode,
-          message: '文件上传成功',
-          data: respBody
-        })
+        reply
+          .send({
+            code: respInfo.statusCode,
+            message: '文件上传成功',
+            data: respBody
+          })
         next()
       }
-      request.multipart(handler, (err) => { if (err) throw err })
+      req.multipart(handler, (err) => { if (err) throw err })
     })
-    .get('/upload/list', async function (request, reply) {
+    .get('/upload/picture/list', {
+      schema: {
+        response: {
+          200: 'pictureListSuccess#'
+        }
+      }
+    }, async function (req, reply) {
       const { respBody, respInfo } = await getBucketList()
       const finalData = respBody.items.reduce(function (arr, { key, hash, putTime }) {
         arr.push({
@@ -32,7 +55,6 @@ module.exports = function (fastify, opts, next) {
         return arr
       }, [])
       reply
-        .header('Access-Control-Allow-Origin', '*')
         .send({
           code: respInfo.statusCode,
           message: '文件列表获取成功',
