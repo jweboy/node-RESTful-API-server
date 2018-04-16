@@ -64,7 +64,7 @@ fastify
   // })
   .register(auth)
   .register(schema)
-  .register(routes)
+  .register(routes, { prefix: 'api' })
   .after(err => {
     if (err) {
       throw err
