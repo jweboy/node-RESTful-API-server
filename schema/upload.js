@@ -26,6 +26,34 @@ exports.postUploadPictureError = {
   }
 }
 
+exports.deletePictureBody = {
+  $id: 'deletePictureBody',
+  type: 'object',
+  properties: {
+    fileKey: { type: 'string' }
+  }
+}
+
+exports.deletePictureSuccess = {
+  $id: 'deletePictureSuccess',
+  type: 'object',
+  properties: {
+    code: { type: 'number' },
+    message: { type: 'string' },
+    data: { type: 'object' }
+  }
+}
+
+exports.deletePictureError = {
+  $id: 'deletePictureError',
+  type: 'object',
+  properties: {
+    code: { type: 'number' },
+    message: { type: 'string' },
+    data: { type: 'object' }
+  }
+}
+
 exports.getPictureList = {
   $id: 'pictureListSuccess',
   type: 'object',

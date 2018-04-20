@@ -1,4 +1,4 @@
-const { upload, getBucketList } = require('./controller')
+const { upload, getBucketList, deleteFile } = require('./controller')
 
 module.exports = function (fastify, opts, next) {
   fastify
@@ -37,6 +37,32 @@ module.exports = function (fastify, opts, next) {
         next()
       }
       req.multipart(handler, (err) => { if (err) throw err })
+    })
+    .delete('/upload/picture', {
+      // params: 'deletePictureBody#',
+      // body: 'deletePictureError#',
+      schema: {
+        response: {
+          200: 'deletePictureSuccess#',
+          400: 'deletePictureError#'
+        }
+      }
+    }, async function (req, reply) {
+      const { fileKey } = req.body
+      // schema不验证DELETE的body
+      if (!fileKey) {
+        return reply.send({
+          code: 400,
+          message: '请求参数存在错误',
+          data: null
+        })
+      }
+      const { respBody, respInfo } = await deleteFile(fileKey)
+      reply.send({
+        code: respInfo.statusCode,
+        message: '文件删除成功',
+        data: respBody
+      })
     })
     .get('/upload/picture/list', {
       schema: {
