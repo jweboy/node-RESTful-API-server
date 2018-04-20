@@ -25,8 +25,17 @@ async function getBucketList () {
   }
 }
 
+async function deleteFile (fileKey) {
+  try {
+    return await qiniu.deleteFile(fileKey)
+  } catch (err) {
+    throw err
+  }
+}
+
 module.exports = {
   upload,
   download,
-  getBucketList
+  getBucketList,
+  deleteFile
 }

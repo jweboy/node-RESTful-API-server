@@ -41,8 +41,8 @@ module.exports = {
       path: '/home/www/service/node-resful-server',
       ssh_options: 'StrictHostKeyChecking=no',
       'pre-deploy-local': "echo 'pm2部署测试'",
-      'pre-deploy': 'git fetch',
-      'post-deploy': 'git pull origin master && yarn && yarn run pm2:pro',
+      'pre-deploy': 'git fetch && git pull origin master',
+      'post-deploy': 'yarn && yarn run pm2:pro',
       'env': {
         'NODE_ENV': 'production'
       }

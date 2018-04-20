@@ -63,6 +63,14 @@ module.exports = class Qiniu {
       })
     })
   }
+  /**
+   * 获取指定空间的文件列表
+   *
+   * @param {Object} [opts={
+  *     limit: 100 // 指定列表数量
+  *   }]
+   * @returns {Promise}
+   */
   getBucketList (opts = {
     limit: 100
   }) {
@@ -78,15 +86,26 @@ module.exports = class Qiniu {
       })
     })
   }
-  // downloadFile (localFile) {
-  //   const config = this.generateConfig()
-  //   const publicBucketDomain = 'owxxrple2.bkt.clouddn.com'
-  //   const mac = new qiniu.auth.digest.Mac(this.accessKey, this.secretKey)
-  //   const bucketManager = new qiniu.rs.BucketManager(mac, config)
-  //   return bucketManager.publicDownloadUrl(
-  //     publicBucketDomain,
-  //     localFile
-  //     // this.deadline
-  //   )
-  // }
+  /**
+   * 删除指定空间的文件
+   *
+   * @param {String} fileKey 文件名
+   * @returns {Promise}
+   */
+  deleteFile (fileKey) {
+    return new Promise((resolve, reject) => {
+      // 获取bucket method
+      const bucketManager = new qiniu.rs.BucketManager(this.mac, this.config)
+      // 删除指定bucket的文件
+      bucketManager.delete(this.bucket, fileKey, function (respError, respBody, respInfo) {
+        if (respError) {
+          reject(respError)
+        }
+        if (respInfo.status === 200) {
+          resolve({ respBody, respInfo })
+        }
+        reject(new Error(respBody.error))
+      })
+    })
+  }
 }
