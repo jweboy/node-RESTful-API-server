@@ -104,7 +104,9 @@ module.exports = class Qiniu {
         if (respInfo.status === 200) {
           resolve({ respBody, respInfo })
         }
-        reject(new Error(respBody.error))
+        if (respBody && respBody.error) {
+          reject(new Error(respBody.error))
+        }
       })
     })
   }
