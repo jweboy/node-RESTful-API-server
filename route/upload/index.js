@@ -38,25 +38,19 @@ module.exports = function (fastify, opts, next) {
       }
       req.multipart(handler, (err) => { if (err) throw err })
     })
-    .delete('/upload/picture', {
-      // params: 'deletePictureBody#',
-      // body: 'deletePictureError#',
-      schema: {
-        response: {
-          200: 'deletePictureSuccess#',
-          400: 'deletePictureError#'
-        }
-      }
-    }, async function (req, reply) {
-      const { fileKey } = req.body
+    .delete('/upload/picture/:fileKey', {}, async function (req, reply) {
+      const { fileKey } = req.params
+      
+      // TODO: 这里上传文件ID,然后我先去查询一遍bucket是否存在文件再决定删除操作
+      console.log(req.params)
       // schema不验证DELETE的body
-      if (!fileKey) {
-        return reply.send({
-          code: 400,
-          message: '请求参数存在错误',
-          data: null
-        })
-      }
+      // if (!fileKey) {
+      //   return reply.send({
+      //     code: 400,
+      //     message: '请求参数存在错误',
+      //     data: null
+      //   })
+      // }
       const { respBody, respInfo } = await deleteFile(fileKey)
       reply.send({
         code: respInfo.statusCode,
