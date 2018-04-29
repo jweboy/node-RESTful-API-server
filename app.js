@@ -2,7 +2,7 @@ const fastify = require('fastify')({
   // http2目前还没有完全支持 node >= 8.8.1
   // issue https://github.com/fastify/fastify/issues/181
   // http2: true
-  // logger: true
+  logger: require('./config/logger')
 })
 const jwt = require('fastify-jwt')
 const formbody = require('fastify-formbody')
