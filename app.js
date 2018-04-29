@@ -18,6 +18,10 @@ const authCfg = require('./config/auth')
 const authUtil = require('./util/auth')
 const schema = require('./plugin/schema')
 
+const PORT = process.env.PORT || 3000
+const HOST = process.env.HOST || '127.0.0.1'
+const PROTOCOL = 'http'
+
 // hooks
 fastify.addHook('preHandler', function (req, reply, next) {
   // fastify.util(req, 'timestamp', new Date())
@@ -43,7 +47,7 @@ fastify.decorate('verifyUserAndPassword', authUtil.verifyUserAndPassword)
 fastify.register(accepts)
 // form body register => parse x-www-form-urlencoded bodies
 fastify.register(formbody)
-// any body register
+// form-data register
 fastify.register(multipart)
 // mongodb register
 // fastify.register(mongodb)
@@ -72,13 +76,13 @@ fastify
   })
 
 // start server
-fastify.listen(process.env.PORT || 3000)
+fastify.listen(PORT)
   .then(() => {
-    const { address, port } = fastify.server.address()
-    console.log(`server is running at ${address}:${port}`)
+    // const { address } = fastify.server.address()
+    console.log(`Server is running at ${PROTOCOL}://${HOST}:${PORT}`)
   })
   .catch(err => {
-    fastify.log.error(err)
+    console.log(`Error starting server:${err}`)
     process.exit(1)
   })
 
