@@ -10,6 +10,7 @@ const multipart = require('fastify-multipart')
 // const leveldb = require('fastify-leveldb')
 const auth = require('fastify-auth')
 const accepts = require('fastify-accepts')
+const createError = require('http-errors')
 
 const routes = require('./route')
 // const mongodb = require('./middleware/mongodb')
@@ -31,10 +32,7 @@ fastify.addHook('preHandler', function (req, reply, next) {
 
 // notFound handler
 fastify.setNotFoundHandler(function (req, reply) {
-  // reply.header('Access-Control-Allow-Origin', '*')
-  reply.send({
-    404: true
-  })
+  reply.code(404).send(new createError.NotFound())
 })
 
 // decorate
