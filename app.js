@@ -10,7 +10,7 @@ const multipart = require('fastify-multipart')
 // const leveldb = require('fastify-leveldb')
 const auth = require('fastify-auth')
 const accepts = require('fastify-accepts')
-const createError = require('http-errors')
+const CreateError = require('http-errors')
 
 const routes = require('./route')
 // const mongodb = require('./middleware/mongodb')
@@ -34,9 +34,13 @@ fastify.addHook('preHandler', function (req, reply, next) {
 //   fastify.mongodb.disconnect()
 // })
 
-// notFound handler
+// notFoundHandler
 fastify.setNotFoundHandler(function (req, reply) {
-  reply.code(404).send(new createError.NotFound())
+  reply.send(new CreateError.NotFound())
+})
+// errorHandler
+fastify.setErrorHandler(function (err, req, reply) {
+  reply.send(new CreateError(500, err))
 })
 
 // decorate
