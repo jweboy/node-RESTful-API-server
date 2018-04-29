@@ -25,9 +25,18 @@ async function getBucketList () {
   }
 }
 
-async function deleteFile (fileKey) {
+// FIXME: 请求的时候fileKey需要encode
+async function deleteFile (req, reply) {
+  const { fileKey } = req.params
   try {
-    return await qiniu.deleteFile(fileKey)
+    const result = await qiniu.deleteFile(decodeURI(fileKey))
+    if (result.statusCode === 200) {
+      return reply.code(200).send({
+        ...result,
+        message: '文件删除成功'
+      })
+    }
+    reply.code(result.statusCode).send(result)
   } catch (err) {
     throw err
   }

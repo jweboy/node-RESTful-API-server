@@ -1,4 +1,5 @@
 const qiniu = require('qiniu')
+const CreateErrors = require('http-errors')
 const { accessKey, secretKey } = require('../config/qiniu')
 
 module.exports = class Qiniu {
@@ -26,6 +27,10 @@ module.exports = class Qiniu {
     config.useCdnDomain = true
 
     return config
+  }
+  static getBucketManager () {
+    const bucketManager = new qiniu.rs.BucketManager(this.mac, this.config)
+    return bucketManager
   }
   // 生成上传的token
   generateToken (bucket) {
@@ -94,20 +99,23 @@ module.exports = class Qiniu {
    */
   deleteFile (fileKey) {
     return new Promise((resolve, reject) => {
-      // 获取bucket method
-      const bucketManager = new qiniu.rs.BucketManager(this.mac, this.config)
+      // 获取bucket
+      const bucketManager = Qiniu.getBucketManager()
       // 删除指定bucket的文件
       bucketManager.delete(this.bucket, fileKey, function (respError, respBody, respInfo) {
+        // console.log(respError, respInfo, respBody)
         if (respError) {
           reject(respError)
         }
-        if (respInfo.status === 200) {
-          resolve({ respBody, respInfo })
-        }
-        if (respBody && respBody.error) {
-          reject(new Error(respBody.error))
-        }
+        resolve({
+          statusCode: respInfo.statusCode,
+          error: respBody ? respBody.error : null
+        })
       })
     })
   }
+  // getFileMsg (fileKey) {
+  //   const bkt = this.generateBucketManager()
+  //   console.log(bkt)
+  // }
 }
