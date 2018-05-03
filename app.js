@@ -11,6 +11,7 @@ const multipart = require('fastify-multipart')
 const auth = require('fastify-auth')
 const accepts = require('fastify-accepts')
 const CreateError = require('http-errors')
+const Logrocket = require('logrocket')
 
 const routes = require('./route')
 // const mongodb = require('./middleware/mongodb')
@@ -18,9 +19,12 @@ const authCfg = require('./config/auth')
 const authUtil = require('./util/auth')
 const schema = require('./plugin/schema')
 
-const PORT = process.env.PORT || 3000
-const HOST = process.env.HOST || '127.0.0.1'
-const PROTOCOL = 'http'
+const port = process.env.PORT || 3000
+const host = process.env.HOST || '127.0.0.1'
+const protocol = 'http'
+
+// enable logrocket
+Logrocket.init('7okis8/log-test')
 
 // hooks
 fastify.addHook('preHandler', function (req, reply, next) {
@@ -80,10 +84,10 @@ fastify
   })
 
 // start server
-fastify.listen(PORT)
+fastify.listen(port)
   .then(() => {
     // const { address } = fastify.server.address()
-    console.log(`Server is running at ${PROTOCOL}://${HOST}:${PORT}`)
+    console.log(`Server is running at ${protocol}://${host}:${port}`)
   })
   .catch(err => {
     console.log(`Error starting server:${err}`)
