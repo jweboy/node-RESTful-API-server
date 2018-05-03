@@ -1,4 +1,5 @@
 const qiniu = require('qiniu')
+const CreateErrors = require('http-errors')
 const { accessKey, secretKey } = require('../config/qiniu')
 
 module.exports = class Qiniu {
@@ -27,11 +28,19 @@ module.exports = class Qiniu {
 
     return config
   }
+  static getBucketManager () {
+    const bucketManager = new qiniu.rs.BucketManager(this.mac, this.config)
+    return bucketManager
+  }
   // 生成上传的token
   generateToken (bucket) {
     // 配置项目
     const option = {
-      scope: bucket || this.bucket
+      scope: bucket || this.bucket,
+      returnBody: `{
+        "name":"$(key)",
+        "id": "$(etag)"
+      }`
     }
     const putPolicy = new qiniu.rs.PutPolicy(option)
     // 生成token
@@ -59,7 +68,17 @@ module.exports = class Qiniu {
       })
     })
   }
-  getBucketList (opts = {}) {
+  /**
+   * 获取指定空间的文件列表
+   *
+   * @param {Object} [opts={
+  *     limit: 100 // 指定列表数量
+  *   }]
+   * @returns {Promise}
+   */
+  getBucketList (opts = {
+    limit: 100
+  }) {
     return new Promise((resolve, reject) => {
       // 获取bucket method
       const bucketManager = new qiniu.rs.BucketManager(this.mac, this.config)
@@ -72,15 +91,31 @@ module.exports = class Qiniu {
       })
     })
   }
-  // downloadFile (localFile) {
-  //   const config = this.generateConfig()
-  //   const publicBucketDomain = 'owxxrple2.bkt.clouddn.com'
-  //   const mac = new qiniu.auth.digest.Mac(this.accessKey, this.secretKey)
-  //   const bucketManager = new qiniu.rs.BucketManager(mac, config)
-  //   return bucketManager.publicDownloadUrl(
-  //     publicBucketDomain,
-  //     localFile
-  //     // this.deadline
-  //   )
+  /**
+   * 删除指定空间的文件
+   *
+   * @param {String} fileKey 文件名
+   * @returns {Promise}
+   */
+  deleteFile (fileKey) {
+    return new Promise((resolve, reject) => {
+      // 获取bucket
+      const bucketManager = Qiniu.getBucketManager()
+      // 删除指定bucket的文件
+      bucketManager.delete(this.bucket, fileKey, function (respError, respBody, respInfo) {
+        // console.log(respError, respInfo, respBody)
+        if (respError) {
+          reject(respError)
+        }
+        resolve({
+          statusCode: respInfo.statusCode,
+          error: respBody ? respBody.error : null
+        })
+      })
+    })
+  }
+  // getFileMsg (fileKey) {
+  //   const bkt = this.generateBucketManager()
+  //   console.log(bkt)
   // }
 }

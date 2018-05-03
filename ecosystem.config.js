@@ -11,6 +11,8 @@ module.exports = {
       ignore_watch: [
         'node_modules'
       ],
+      exec_mode: 'cluster',
+      instances: 2,
       // out_file: './logs/out.log',
       // log_date_format: 'YYYY-MM-DD HH:mm Z',
       env: {
@@ -36,9 +38,10 @@ module.exports = {
       host: '118.24.155.105',
       ref: 'origin/master',
       repo: 'git@github.com:jweboy/node-resful-server.git',
-      path: '/home/www/service/node-server',
+      path: '/home/www/service/node-resful-server',
       ssh_options: 'StrictHostKeyChecking=no',
       'pre-deploy-local': "echo 'pm2部署测试'",
+      'pre-deploy': 'git fetch && git pull origin master',
       'post-deploy': 'yarn && yarn run pm2:pro',
       'env': {
         'NODE_ENV': 'production'
