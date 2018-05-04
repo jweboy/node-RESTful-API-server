@@ -5,6 +5,10 @@ async function getDataByPage (ctx) {
 }
 
 async function getAllData (ctx) {
+  // if (!result.length) {
+  //   ctx.status = 403
+  //   return ctx.res.fail({}, '查询失败')
+  // }
   ctx.body = await all()
 }
 

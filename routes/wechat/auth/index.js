@@ -1,6 +1,5 @@
 const router = require('koa-router')()
 const crypto = require('crypto') // 加密模块
-const accessToken = require('../accessToken')
 
 module.exports = () => {
   return router.get('/', (ctx) => {
@@ -12,7 +11,7 @@ module.exports = () => {
      */
     if (ctx.req.query) { // wechat env
       const { query: { signature, timestamp, nonce, echostr } } = ctx.req
-      const token = accessToken.access_token
+      const token = ctx.cookies.get('accessToken')
       // 字典序排序
       const ary = [ token, timestamp, nonce ]
       ary.sort()
