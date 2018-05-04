@@ -5,3 +5,4 @@
 - API接口增加 /api 前缀标示
 - PORT需要提取到process里面
 - 七牛状态码的判断
+- es6语法转译es5或者加babel-register
