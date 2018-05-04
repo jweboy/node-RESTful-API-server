@@ -94,4 +94,4 @@ fastify.listen(port)
     process.exit(1)
   })
 
-// module.exports = fastify
+module.exports = fastify.server

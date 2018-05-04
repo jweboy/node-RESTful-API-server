@@ -4,6 +4,7 @@ node_js:
   - "stable"
   - "8"
   - "9"
+  - "10"
 cache:
   directories:
     - node_modules
