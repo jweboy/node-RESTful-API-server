@@ -16,7 +16,7 @@ describe('Node Resful API', () => {
         .end((err, res) => {
           expect(err).to.be.null
           expect(res).to.have.status(200)
-          expect(res).to.have.header('content-type', 'text/plain')
+          expect(res).to.have.header('content-type', /^text/)
           expect(res).to.be.text
           done()
         })
