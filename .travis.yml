@@ -10,7 +10,6 @@ script:
  - make test
 
 after_success:
- - npm run coverage
  - npm run coveralls
 
 notifications:
