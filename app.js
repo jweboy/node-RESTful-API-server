@@ -10,6 +10,7 @@ const multipart = require('fastify-multipart')
 // const leveldb = require('fastify-leveldb')
 const auth = require('fastify-auth')
 const accepts = require('fastify-accepts')
+const CreateError = require('http-errors')
 
 const routes = require('./route')
 // const mongodb = require('./middleware/mongodb')

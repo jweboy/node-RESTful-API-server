@@ -1,16 +1,16 @@
-function verifyJWTandLevel(request, reply, done) { 
+function verifyJWTandLevel (request, reply, done) {
   const jwt = this.jwt
   const level = this.level
-  
+
   // missing token header
-  if (!request.req.headers['token']) { 
+  if (!request.req.headers['token']) {
     return done(new Error('该请求缺少token'))
   }
 
   // verify token
   jwt.verify(request.req.headers['token'], onVerify)
 
-  function onVerify(err, decoded) { 
+  function onVerify (err, decoded) {
     // valid token
     if (err || !decoded.username || !decoded.password) {
       console.error(err.message)
@@ -19,10 +19,10 @@ function verifyJWTandLevel(request, reply, done) {
 
     level.get(decoded.username, onUser)
 
-    function onUser(err, password) { 
-      if (err) { 
+    function onUser (err, password) {
+      if (err) {
         console.error(err.message)
-        if (err.notFound) { 
+        if (err.notFound) {
           return done(new Error('无效的token'))
         }
         return done(err)
@@ -35,16 +35,16 @@ function verifyJWTandLevel(request, reply, done) {
   }
 }
 
-function verifyUserAndPassword(request, reply, done) { 
+function verifyUserAndPassword (request, reply, done) {
   const level = this.level
 
   level.get(request.body.username, onUser)
 
-  function onUser(err, password) {
+  function onUser (err, password) {
     // valid password
-    if (err) { 
+    if (err) {
       console.error(err.message)
-      if (err.notFound) { 
+      if (err.notFound) {
         return done(new Error('该用户未注册'))
       }
       return done(err)
