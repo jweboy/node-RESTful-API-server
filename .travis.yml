@@ -1,4 +1,4 @@
-sudo: false
+sudo: enable
 language: node_js
 node_js:
   - "8"
@@ -12,3 +12,10 @@ script:
 after_success:
  - npm run coverage
  - npm run coveralls
+
+notifications:
+  email:
+    recipients:
+      - jweboy0630@gmail.com
+    on_success: never
+    on_failure: always
