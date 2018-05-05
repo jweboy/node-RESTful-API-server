@@ -1,4 +1,4 @@
 module.exports = {
   leveldbName: 'node-server-authdb',
-  jwtSecret: 'node-server-secret',
+  jwtSecret: 'node-server-secret'
 }
