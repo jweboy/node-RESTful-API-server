@@ -19,3 +19,9 @@ notifications:
       - jweboy0630@gmail.com
     on_success: never
     on_failure: always
+  slack: 
+    rooms:
+      - jweboytm:woLS6D9oasTaWyC1Ks4zqCne
+    on_success: change
+    on_failure: always
+    on_pull_requests: false
