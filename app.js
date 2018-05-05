@@ -10,17 +10,12 @@ const multipart = require('fastify-multipart')
 // const leveldb = require('fastify-leveldb')
 const auth = require('fastify-auth')
 const accepts = require('fastify-accepts')
-const CreateError = require('http-errors')
 
 const routes = require('./route')
 // const mongodb = require('./middleware/mongodb')
 const authCfg = require('./config/auth')
 const authUtil = require('./util/auth')
 const schema = require('./plugin/schema')
-
-const PORT = process.env.PORT || 3000
-const HOST = process.env.HOST || '127.0.0.1'
-const PROTOCOL = 'http'
 
 // hooks
 fastify.addHook('preHandler', function (req, reply, next) {
@@ -80,14 +75,14 @@ fastify
   })
 
 // start server
-fastify.listen(PORT)
+fastify.listen(process.env.PORT || 3000)
   .then(() => {
-    // const { address } = fastify.server.address()
-    console.log(`Server is running at ${PROTOCOL}://${HOST}:${PORT}`)
+    const { address, port } = fastify.server.address()
+    console.log(`server is running at ${address}:${port}`)
   })
   .catch(err => {
     console.log(`Error starting server:${err}`)
     process.exit(1)
   })
 
-// module.exports = fastify
+module.exports = fastify.server

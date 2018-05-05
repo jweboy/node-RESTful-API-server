@@ -1,80 +1,25 @@
-// const app = require('../app')
-// const supertest = require('supertest')
-// // const { assert, expect } = require('chai')
+const chai = require('chai')
+const chaiHttp = require('chai-http')
 
-// let request = null
+const app = require('../app')
 
-// describe('Server', () => {
-//   it('should listen on 3000', (done) => {
-//     request = supertest(app.listen())
-//     done()
-//   })
-// })
+const expect = chai.expect
 
-// describe('Basic', () => {
-//   it('should see "Node Koa API Develop Test"', (done) => {
-//     request
-//       .get('/')
-//       // .set('Accept', 'application/text')
-//       // .expect('Content-Type','text')
-//       .expect(200)
-//       .end(done)
-//   })
+chai.use(chaiHttp)
 
-//   it('should see "WeChat API Test"', done => {
-//     request
-//       .get('/wechat')
-//       .expect(200)
-//       .end(done)
-//   })
-// })
-
-// describe('Wechat', () => {
-//   describe('AccessToken', () => {
-//     it('should get access_token', done => {
-//       request
-//         .get('/wechat/accessToken')
-//         .expect(200, done)
-//     })
-//   })
-
-//   describe('CustomMenu', () => {
-//     it('should get menu', done => {
-//       request
-//         .get('/wechat/customMenu')
-//         .expect(200, done)
-//     })
-    
-//     it('should create post', done => {
-//         request
-//           .post('/wechat/customMenu')
-//           .expect(200, done)
-//     })
-    
-//     it('should create delete', done => {
-//       request
-//         .delete('/wechat/customMenu')
-//         .expect(200, done)
-//     })
-//   }) 
-// })
-
-// describe('Goods', () => {
-//   // const router = new Koa()()
-//   // app.use(router.routes)
-//   it('should get all goods', done => {
-//     request
-//     .get('/goods')
-//     .expect(200, done)
-//   })
-  
-//   it('should get goods by pagination', done => {
-//     request
-//       .get('/goods?page=1')
-//       .expect(200)
-//       .end(() => {
-//         // done()
-//         process.exit(0)
-//       })
-//   })
-// })
+let fastify = null
+describe('Node Resful API', () => {
+  describe('/api', () => {
+    it('should see fastify resful api', (done) => {
+      chai.request(app)
+        .get('/api')
+        .end((err, res) => {
+          expect(err).to.be.null
+          expect(res).to.have.status(200)
+          expect(res).to.have.header('content-type', /^text/)
+          expect(res).to.be.text
+          done()
+        })
+    })
+  })
+})

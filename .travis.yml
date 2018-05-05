@@ -1,7 +1,6 @@
-sudo: false
+sudo: enable
 language: node_js
 node_js:
-  - "stable"
   - "8"
   - "9"
 cache:
@@ -11,5 +10,17 @@ script:
  - make test
 
 after_success:
- - npm run coverage
  - npm run coveralls
+
+notifications:
+  email:
+    recipients:
+      - jweboy0630@gmail.com
+    on_success: never
+    on_failure: always
+  slack: 
+    rooms:
+      - jweboytm:woLS6D9oasTaWyC1Ks4zqCne
+    on_success: change
+    on_failure: always
+    on_pull_requests: false
