@@ -21,6 +21,8 @@ async function getFiles (req, reply) {
     }, [])
     reply
       .code(result.statusCode)
+      // TODO: 这里需要对header进行正确的处理
+      .header('Content-type', 'application/json; charset=utf-8')
       .send({
         code: result.statusCode,
         message: '文件列表获取成功',
