@@ -2,6 +2,8 @@ const qiniu = require('qiniu')
 // const CreateErrors = require('http-errors')
 const { accessKey, secretKey } = require('../config/qiniu')
 
+// TODO: Promise部分可以提取出一个共用函数
+
 module.exports = class Qiniu {
   constructor (
     bucket = 'our-future'
@@ -76,18 +78,22 @@ module.exports = class Qiniu {
   *   }]
    * @returns {Promise}
    */
-  getBucketList (opts = {
+  getFiles (opts = {
     limit: 100
   }) {
     return new Promise((resolve, reject) => {
-      // 获取bucket method
-      const bucketManager = new qiniu.rs.BucketManager(this.mac, this.config)
+      // 获取bucket
+      const bucketManager = Qiniu.getBucketManager()
       // 获取指定bucket里的所有文件
       bucketManager.listPrefix(this.bucket, opts, function (respError, respBody, respInfo) {
         if (respError) {
           reject(respError)
         }
-        resolve({ respBody, respInfo })
+        resolve({
+          statusCode: respInfo.statusCode,
+          error: (respBody && respBody.error) ? respBody.error : null,
+          respBody
+        })
       })
     })
   }
@@ -109,13 +115,9 @@ module.exports = class Qiniu {
         }
         resolve({
           statusCode: respInfo.statusCode,
-          error: respBody ? respBody.error : null
+          error: (respBody && respBody.error) ? respBody.error : null
         })
       })
     })
   }
-  // getFileMsg (fileKey) {
-  //   const bkt = this.generateBucketManager()
-  //   console.log(bkt)
-  // }
 }
