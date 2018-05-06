@@ -1,5 +1,5 @@
 const qiniu = require('qiniu')
-const CreateErrors = require('http-errors')
+// const CreateErrors = require('http-errors')
 const { accessKey, secretKey } = require('../config/qiniu')
 
 module.exports = class Qiniu {
