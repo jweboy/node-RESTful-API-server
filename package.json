@@ -72,7 +72,7 @@
     "linter": "standard --fix --verbose | snazzy",
     "start": "nodemon app.js",
     "start:debug": "nodemon --inspect app.js",
-    "test": "make test",
+    "test": "nodemon --exec make test",
     "coverage": "istanbul cover --report lcovonly ./node_modules/mocha/bin/_mocha  test/*.spec.js -- -R spec",
     "coveralls": "npm run coverage && cat ./coverage/lcov.info | coveralls"
   },
