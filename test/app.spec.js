@@ -30,7 +30,7 @@ describe('Node Resful API', () => {
           // TODO: 后面考虑增加Schema部分
           // const jsonSchema = {
           //   title: 'schema-test',
-          //   type: 'object',
+          //   type: 'array',
           //   properties: {
           //     code: {
           //       type: 'string'
@@ -39,7 +39,7 @@ describe('Node Resful API', () => {
           // }
           expect(err).to.be.null
           expect(res).to.have.status(200)
-          // expect(res).to.have.header('content-type', 'application/json')
+          expect(res).to.have.header('content-type', /application\/json/)
           expect(res).to.be.json
           done()
         })
