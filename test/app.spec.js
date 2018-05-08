@@ -44,5 +44,16 @@ describe('Node Resful API', () => {
           done()
         })
     })
+    it('should delete picture with fileKey', (done) => { 
+      chai.request(app)
+        .delete('/api/upload/picture/:fileKey')
+        .end((err, res) => {
+          expect(err).to.be.null
+          expect(res).to.have.status(612)
+          expect(res).to.have.header('content-type', /application\/json/)
+          expect(res).to.be.json
+          done()
+        })
+    })  
   })
 })
