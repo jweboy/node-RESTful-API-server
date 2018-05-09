@@ -1,5 +1,6 @@
 const chai = require('chai')
 const chaiHttp = require('chai-http')
+const fs = require('fs')
 // const jsonSchema = require('chai-json-schema')
 
 const app = require('../app')
@@ -55,5 +56,17 @@ describe('Node Resful API', () => {
           done()
         })
     })  
+    it('should post pitcure for images', (done) => {
+      chai.request(app)
+        .post('/api/upload/picture')
+        .attach('imageField', fs.readFileSync('static/nodejs.png'), 'nodejs.png')
+        .end((err, res) => { 
+          expect(err).to.be.null
+          expect(res).to.have.status(200)
+          expect(res).to.have.header('content-type', /application\/json/)
+          expect(res).to.be.json
+          done()
+        })
+    })
   })
 })
