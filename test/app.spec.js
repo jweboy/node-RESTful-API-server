@@ -11,7 +11,7 @@ chai.use(chaiHttp)
 // chai.use(jsonSchema)
 
 let fastify = null
-describe('Node Resful API', () => {
+describe('Node RESTful API', () => {
   describe('/api', () => {
     it('should see fastify resful api', (done) => {
       chai.request(app)
@@ -62,7 +62,7 @@ describe('Node Resful API', () => {
         .attach('imageField', fs.readFileSync('static/nodejs.png'), 'nodejs.png')
         .end((err, res) => { 
           expect(err).to.be.null
-          expect(res).to.have.status(200)
+          expect(res).to.have.status(201)
           expect(res).to.have.header('content-type', /application\/json/)
           expect(res).to.be.json
           done()
