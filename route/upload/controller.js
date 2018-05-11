@@ -12,14 +12,25 @@ async function upload (...args) {
   }
 }
 
-function download (filePath) {
-  const url = qiniu.downloadFile(filePath)
-  return url
-}
-
-async function getBucketList () {
+async function getFiles (req, reply) {
   try {
-    return await qiniu.getBucketList()
+    const result = await qiniu.getFiles()
+    const finalData = result.respBody.items.reduce(function (arr, { key, hash, putTime }) {
+      arr.push({ name: key, id: hash, putTime })
+      return arr
+    }, [])
+    reply
+      .code(result.statusCode)
+      // TODO: 这里需要对header进行正确的处理
+      // .header('Content-type', 'application/json; charset=utf-8')
+      .send({
+        code: result.statusCode,
+        message: '文件列表获取成功',
+        data: {
+          items: finalData,
+          total: finalData.length
+        }
+      })
   } catch (err) {
     throw err
   }
@@ -30,13 +41,14 @@ async function deleteFile (req, reply) {
   const { fileKey } = req.params
   try {
     const result = await qiniu.deleteFile(decodeURI(fileKey))
-    if (result.statusCode === 200) {
-      return reply.code(200).send({
-        ...result,
-        message: '文件删除成功'
-      })
-    }
-    reply.code(result.statusCode).send(result)
+    reply
+      .code(result.statusCode)
+      .send(Object.assign(
+        result,
+        result.statusCode === 200 && {
+          message: '文件删除成功'
+        }
+      ))
   } catch (err) {
     throw err
   }
@@ -44,7 +56,6 @@ async function deleteFile (req, reply) {
 
 module.exports = {
   upload,
-  download,
-  getBucketList,
+  getFiles,
   deleteFile
 }
