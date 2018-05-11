@@ -1,15 +1,46 @@
 const Qiniu = require('../../util/qiniu')
 
 const qiniu = new Qiniu()
+const imgReg = /image\//
 
-async function upload (...args) {
-  // const file = 'static/nodejs.png'
-  try {
-    const upload = await qiniu.uploadFile(...args)
-    return upload
-  } catch (err) {
-    throw err
+// TODO: 文件上传方式优化
+
+function uploadFiles (req, reply) {
+  /**
+   * @param {String} field 文件字段
+   * @param {Object} file 可读文件流
+   * @param {String} filename 文件名
+   * @param {String} encoding 文件编码
+   * @param {String} mimetype 文件类型
+   */
+  async function handler (field, file, filename, encoding, mimetype) {
+    try {
+      // 只接收图片类型
+      if (imgReg.test(mimetype)) {
+        const { respBody } = await qiniu.uploadFile(file, filename)
+        reply
+          .code(201)
+          .send({
+            code: 201,
+            message: '文件上传成功',
+            data: respBody
+          })
+      } else {
+        reply
+        .code(400)
+          .send({
+            code: 400,
+            message: '图片格式错误',
+            data: null
+          })
+      }
+    } catch (err) {
+      throw err
+    }
   }
+  req.multipart(handler, (err) => {
+    if (err) { throw err }
+  })
 }
 
 async function getFiles (req, reply) {
@@ -55,7 +86,7 @@ async function deleteFile (req, reply) {
 }
 
 module.exports = {
-  upload,
+  uploadFiles,
   getFiles,
   deleteFile
 }
