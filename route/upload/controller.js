@@ -44,12 +44,14 @@ function uploadFiles (req, reply) {
 }
 
 async function getFiles (req, reply) {
+  console.log(req.query)
   try {
     const result = await qiniu.getFiles()
     const finalData = result.respBody.items.reduce(function (arr, { key, hash, putTime }) {
       arr.push({ name: key, id: hash, putTime })
       return arr
     }, [])
+    console.log(result.respBody.marker)
     reply
       .code(result.statusCode)
       // TODO: 这里需要对header进行正确的处理

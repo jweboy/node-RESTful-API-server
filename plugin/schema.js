@@ -5,6 +5,9 @@ module.exports = function schma (fastify, opts, next) {
   fastify.addSchema(require('../schema/upload').deletePictureSuccess)
   fastify.addSchema(require('../schema/upload').deletePictureError)
   fastify.addSchema(require('../schema/upload').deletePictureBody)
-  fastify.addSchema(require('../schema/upload').getPictureList)
+
+  // new
+  fastify.addSchema(require('../schema/upload/getFiles').getFilesQuery)
+  fastify.addSchema(require('../schema/upload/getFiles').getFilesSuccess)
   next()
 }

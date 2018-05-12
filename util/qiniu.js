@@ -3,6 +3,7 @@ const qiniu = require('qiniu')
 const { accessKey, secretKey } = require('../config/qiniu')
 
 // TODO: Promise部分可以提取出一个共用函数
+let _nextMarker = null
 
 module.exports = class Qiniu {
   constructor (
@@ -74,20 +75,27 @@ module.exports = class Qiniu {
    * 获取指定空间的文件列表
    *
    * @param {Object} [opts={
-  *     limit: 100 // 指定列表数量
+  *     limit: 100 // 返回的最大列举文件数量
   *   }]
    * @returns {Promise}
    */
   getFiles (opts = {
-    limit: 100
+    limit: 5
   }) {
     return new Promise((resolve, reject) => {
       // 获取bucket
       const bucketManager = Qiniu.getBucketManager()
       // 获取指定bucket里的所有文件
-      bucketManager.listPrefix(this.bucket, opts, function (respError, respBody, respInfo) {
+      bucketManager.listPrefix(this.bucket, {
+        ...opts,
+        marker: _nextMarker
+      }, function (respError, respBody, respInfo) {
         if (respError) {
           reject(respError)
+        }
+        const nextMarker = respBody.marker
+        if (nextMarker) {
+          _nextMarker = nextMarker
         }
         resolve({
           statusCode: respInfo.statusCode,
