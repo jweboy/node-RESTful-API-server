@@ -18,6 +18,10 @@ const authCfg = require('./config/auth')
 const authUtil = require('./util/auth')
 const schema = require('./plugin/schema')
 
+const port = process.env.PORT || 3000
+const host = process.env.HOST || '127.0.0.1'
+const protocol = process.env.PROTOCOL || 'http'
+
 // hooks
 fastify.addHook('preHandler', function (req, reply, next) {
   // fastify.util(req, 'timestamp', new Date())
@@ -72,14 +76,14 @@ fastify
     if (err) {
       throw err
     }
-    console.log('routes register success!')
+    console.log('Routes register success!')
   })
 
 // start server
 fastify.listen(process.env.PORT || 3000)
   .then(() => {
-    const { address, port } = fastify.server.address()
-    console.log(`server is running at ${address}:${port}`)
+    // const { address, port } = fastify.server.address()
+    console.log(`server is running at ${protocol}:${host}:${port}`)
   })
   .catch(err => {
     console.log(`Error starting server:${err}`)
