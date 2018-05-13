@@ -2,7 +2,7 @@ exports.getFilesSuccess = {
   $id: 'getFilesSuccess',
   type: 'object',
   properties: {
-    code: { type: 'number' },
+    statusCode: { type: 'number' },
     message: { type: 'string' },
     data: {
       type: 'object',
