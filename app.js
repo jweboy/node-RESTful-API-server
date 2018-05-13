@@ -83,7 +83,7 @@ fastify
 fastify.listen(process.env.PORT || 3000)
   .then(() => {
     // const { address, port } = fastify.server.address()
-    console.log(`server is running at ${protocol}:${host}:${port}`)
+    console.log(`Server is running at ${protocol}:${host}:${port}`)
   })
   .catch(err => {
     console.log(`Error starting server:${err}`)
