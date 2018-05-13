@@ -1,11 +1,27 @@
+const CreateError = require('http-errors')
 const Qiniu = require('../../util/qiniu')
 
 const qiniu = new Qiniu()
-const imgReg = /image\//
 
-// TODO: 文件上传方式优化
+function putFile (req, reply) {
+  // FIXME:目前不做bucket限制,提供默认值
+  const bucket = req.query.bucket || 'our-future'
 
-function uploadFiles (req, reply) {
+  // 过滤空form提交
+  const headerContentLength = +req.headers['content-length']
+  if (!headerContentLength) {
+    return reply.send(new CreateError(400, '请至少选择需要上传的文件'))
+  }
+
+  // mp is an instance of
+  // https://www.npmjs.com/package/busboy
+  req.multipart(handler, (err) => {
+    if (err) {
+      reply.send(err)
+    }
+    console.log('upload completed')
+  })
+
   /**
    * @param {String} field 文件字段
    * @param {Object} file 可读文件流
@@ -13,51 +29,45 @@ function uploadFiles (req, reply) {
    * @param {String} encoding 文件编码
    * @param {String} mimetype 文件类型
    */
-  async function handler (field, file, filename, encoding, mimetype) {
-    try {
-      // 只接收图片类型
-      if (imgReg.test(mimetype)) {
-        const { respBody } = await qiniu.uploadFile(file, filename)
+  function handler (fieldName, fileStream, fileName, encoding, mimetype) {
+    qiniu
+      .uploadFile(fileStream, fileName, { bucket })
+      .then(res => {
         reply
-          .code(201)
-          .send({
-            code: 201,
-            message: '文件上传成功',
-            data: respBody
-          })
-      } else {
+          .code(200)
+          // TODO: 实际返回的data是 {}, JSON Schema 导致的差异,需要优化
+          // FIXME: 成功情况不返回message 没啥用处
+          .send({ statusCode: 200, data: null })
+
+        // TODO: 数据库保存操作
+      })
+      .catch(err => {
+        // 提交不存在bucket
+        // 文件可能已经存在
         reply
-        .code(400)
-          .send({
-            code: 400,
-            message: '图片格式错误',
-            data: null
-          })
-      }
-    } catch (err) {
-      throw err
-    }
+          .code(err.statusCode)
+          // FIXME: 这里需要拷贝一份error,因为全局error托管与 http-errors,它不支持七牛云这类500以上的状态码
+          .send({ ...err })
+      })
   }
-  req.multipart(handler, (err) => {
-    if (err) { throw err }
-  })
 }
 
 async function getFiles (req, reply) {
   console.log(req.query)
   try {
-    const result = await qiniu.getFiles()
+    const query = { ...req.query }
+    const result = await qiniu.getFiles(query)
     const finalData = result.respBody.items.reduce(function (arr, { key, hash, putTime }) {
       arr.push({ name: key, id: hash, putTime })
       return arr
     }, [])
-    console.log(result.respBody.marker)
+    // console.log(result.respBody.marker)
     reply
       .code(result.statusCode)
       // TODO: 这里需要对header进行正确的处理
       // .header('Content-type', 'application/json; charset=utf-8')
       .send({
-        code: result.statusCode,
+        statusCode: result.statusCode,
         message: '文件列表获取成功',
         data: {
           items: finalData,
@@ -88,7 +98,7 @@ async function deleteFile (req, reply) {
 }
 
 module.exports = {
-  uploadFiles,
+  putFile,
   getFiles,
   deleteFile
 }

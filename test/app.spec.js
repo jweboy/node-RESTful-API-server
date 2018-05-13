@@ -27,6 +27,7 @@ describe('Node RESTful API', () => {
     it('should see picture list json', (done) => {
       chai.request(app)
         .get('/api/upload/picture/list')
+        .query({ page: 1, size: 10 })
         .end((err, res) => {
           // TODO: 后面考虑增加Schema部分
           // const jsonSchema = {
@@ -58,11 +59,11 @@ describe('Node RESTful API', () => {
     })  
     it('should post pitcure for images', (done) => {
       chai.request(app)
-        .post('/api/upload/picture')
+        .put('/api/upload/picture')
         .attach('imageField', fs.readFileSync('static/nodejs.png'), 'nodejs.png')
         .end((err, res) => { 
           expect(err).to.be.null
-          expect(res).to.have.status(201)
+          expect(res).to.have.status(200)
           expect(res).to.have.header('content-type', /application\/json/)
           expect(res).to.be.json
           done()
