@@ -1,9 +1,11 @@
 const qiniu = require('qiniu')
 // const CreateErrors = require('http-errors')
 const { accessKey, secretKey } = require('../config/qiniu')
+const statusCode = require('../config/statusCode')
 
 // TODO: Promise部分可以提取出一个共用函数
-let _nextMarker = null
+
+const tempMap = Symbol('tempMap')
 
 module.exports = class Qiniu {
   constructor (
@@ -20,6 +22,8 @@ module.exports = class Qiniu {
     this.deadline = parseInt(Date.now() / 1000) + 3600 // 一小时过期
     // 基础配置项
     this.config = Qiniu.generateConfig()
+    // 存储临时变量
+    this[tempMap] = new Map()
   }
   // 生成基础配置项
   static generateConfig () {
@@ -36,16 +40,17 @@ module.exports = class Qiniu {
     return bucketManager
   }
   // 生成上传的token
-  generateToken (bucket) {
+  static generateToken (bucket) {
     // 配置项目
-    const option = {
-      scope: bucket || this.bucket,
+    const options = {
+      scope: bucket,
       returnBody: `{
         "name":"$(key)",
-        "id": "$(etag)"
+        "id": "$(etag)",
+        "bucket":"$(bucket)"
       }`
     }
-    const putPolicy = new qiniu.rs.PutPolicy(option)
+    const putPolicy = new qiniu.rs.PutPolicy(options)
     // 生成token
     return putPolicy.uploadToken()
   }
@@ -54,20 +59,35 @@ module.exports = class Qiniu {
    * @param {Object} readableStream 可读取的文件流
    * @param {String} fileKey 上传到七牛云之后的文件名,默认原文件名
    */
-  uploadFile (readableStream, fileKey) {
+  uploadFile (readableStream, fileKey, opts) {
     return new Promise((resolve, reject) => {
       // 获取存储空间名
-      const bucket = this.bucket
-      const token = this.generateToken(bucket)
+      const getBucketName = opts.bucket
+
+      // 生成空间对应token
+      const getBucketToken = Qiniu.generateToken(getBucketName)
+
       // 获取上传method
       const formUploader = new qiniu.form_up.FormUploader(this.config)
       const putExtra = new qiniu.form_up.PutExtra()
 
-      formUploader.putStream(token, fileKey, readableStream, putExtra, function (respError, respBody, respInfo) {
+      formUploader.putStream(getBucketToken, fileKey, readableStream, putExtra, function (respError, respBody, respInfo) {
+        const { statusCode: status, data } = respInfo
         if (respError) {
           reject(respError)
         }
-        resolve({ respBody, respInfo })
+        if (status !== 200) {
+          const error = new Error()
+          error.error = data.error
+          error.statusCode = status
+          error.message = statusCode[status]
+          reject(error)
+        }
+        // console.log('upload respBody', respError, respBody, respInfo)
+        resolve({
+          statusCode: respInfo.statusCode,
+          data: respBody
+        })
       })
     })
   }
@@ -79,24 +99,42 @@ module.exports = class Qiniu {
   *   }]
    * @returns {Promise}
    */
-  getFiles (opts = {
-    limit: 5
-  }) {
+  getFiles ({ page, size, prefix }) {
     return new Promise((resolve, reject) => {
+      const opts = {
+        limit: size,
+        prefix: prefix || '',
+        marker: this[tempMap].get('marker')
+      }
+      if (!this[tempMap].has('page')) {
+        this[tempMap].set('page', {
+          prev: 1,
+          next: page
+        })
+      } else {
+        const currPos = this[tempMap].get('page')
+        currPos.prev = currPos.next
+        currPos.next = page
+        this[tempMap].set('page', currPos)
+      }
       // 获取bucket
       const bucketManager = Qiniu.getBucketManager()
       // 获取指定bucket里的所有文件
-      bucketManager.listPrefix(this.bucket, {
-        ...opts,
-        marker: _nextMarker
-      }, function (respError, respBody, respInfo) {
+      bucketManager.listPrefix(this.bucket, opts, (respError, respBody, respInfo) => {
         if (respError) {
           reject(respError)
         }
         const nextMarker = respBody.marker
-        if (nextMarker) {
-          _nextMarker = nextMarker
+        const pagePos = this[tempMap].get('page')
+        console.log('pagePos', nextMarker, pagePos.prev !== pagePos.next)
+        if (nextMarker && (pagePos.prev !== pagePos.next)) {
+          this[tempMap].set('marker', nextMarker)
+          console.log(this[tempMap])
         }
+        // else {
+        //   const currMarker = this[tempMap].get('marker')
+        //   this[tempMap].set('marker', currMarker)
+        // }
         resolve({
           statusCode: respInfo.statusCode,
           error: (respBody && respBody.error) ? respBody.error : null,
