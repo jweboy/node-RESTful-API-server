@@ -1,9 +1,10 @@
 const CreateError = require('http-errors')
 const Qiniu = require('../../util/qiniu')
+// const Mongodb = require('../../util/mongodb')
 
 const qiniu = new Qiniu()
 
-function putFile (req, reply) {
+const putFile = (fastify) => (req, reply) => {
   // FIXME:目前不做bucket限制,提供默认值
   const bucket = req.query.bucket || 'our-future'
 
@@ -31,15 +32,22 @@ function putFile (req, reply) {
    */
   function handler (fieldName, fileStream, fileName, encoding, mimetype) {
     qiniu
-      .uploadFile(fileStream, fileName, { bucket })
-      .then(res => {
-        reply
-          .code(200)
-          // TODO: 实际返回的data是 {}, JSON Schema 导致的差异,需要优化
-          // FIXME: 成功情况不返回message 没啥用处
-          .send({ statusCode: 200, data: null })
-
-        // TODO: 数据库保存操作
+    .uploadFile(fileStream, fileName, { bucket })
+      .then(async ({ data }) => {
+        const UploadModal = fastify.uploadModel
+        const file = new UploadModal(data)
+        file.save((err) => {
+          console.log('err', err)
+          if (!!err) { // eslint-disable-line
+            reply.send(new CreateError(500, err))
+          } else {
+            reply
+              .code(200)
+              // TODO: 实际返回的data是 {}, JSON Schema 导致的差异,需要优化
+              // FIXME: 成功情况不返回message 没啥用处
+              .send({ statusCode: 200, data: null })
+          }
+        })
       })
       .catch(err => {
         // 提交不存在bucket

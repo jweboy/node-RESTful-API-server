@@ -7,7 +7,7 @@ module.exports = function (fastify, opts, next) {
         querystring: 'putFileQuery#',
         response: { 200: 'putFileSuccess#' }
       }
-    }, putFile)
+    }, putFile(fastify))
     .delete('/upload/picture/:fileKey', deleteFile)
     .get('/upload/picture/list', {
       schema: {

@@ -13,7 +13,7 @@ const accepts = require('fastify-accepts')
 const CreateError = require('http-errors')
 
 const routes = require('./route')
-// const mongodb = require('./middleware/mongodb')
+const mongodb = require('./middleware/mongodb')
 const authCfg = require('./config/auth')
 const authUtil = require('./util/auth')
 const schema = require('./plugin/schema')
@@ -21,6 +21,8 @@ const schema = require('./plugin/schema')
 const port = process.env.PORT || 3000
 const host = process.env.HOST || '127.0.0.1'
 const protocol = process.env.PROTOCOL || 'http'
+
+// process.env.NODE_ENV = 'development'
 
 // hooks
 fastify.addHook('preHandler', function (req, reply, next) {
@@ -30,9 +32,9 @@ fastify.addHook('preHandler', function (req, reply, next) {
   reply.header('Access-Control-Allow-Methods', 'GET,POST,DELETE')
   next()
 })
-// fastify.addHook('onClose', function (fastify, done) {
-//   fastify.mongodb.disconnect()
-// })
+fastify.addHook('onClose', function (fastify, done) {
+  fastify.mongodb.disconnect()
+})
 
 // notFoundHandler
 fastify.setNotFoundHandler(function (req, reply) {
@@ -54,13 +56,11 @@ fastify.register(formbody)
 // form-data register
 fastify.register(multipart)
 // mongodb register
-// fastify.register(mongodb)
-//   .after(err => {
-//     if (err) {
-//       throw err
-//     }
-//     console.log('db connect success!')
-//   })
+fastify.register(mongodb)
+  .after(err => {
+    if (err) { throw err }
+    console.log('Mongodb connect success!')
+  })
 // routes register
 fastify
   .register(jwt, {
@@ -73,9 +73,7 @@ fastify
   .register(schema)
   .register(routes, { prefix: 'api' })
   .after(err => {
-    if (err) {
-      throw err
-    }
+    if (err) { throw err }
     console.log('Routes register success!')
   })
 

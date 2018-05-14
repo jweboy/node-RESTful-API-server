@@ -46,7 +46,7 @@ module.exports = class Qiniu {
       scope: bucket,
       returnBody: `{
         "name":"$(key)",
-        "id": "$(etag)",
+        "hash": "$(etag)",
         "bucket":"$(bucket)"
       }`
     }
