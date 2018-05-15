@@ -1,6 +1,6 @@
 const CreateError = require('http-errors')
 const Qiniu = require('../../util/qiniu')
-// const Mongodb = require('../../util/mongodb')
+const Mongodb = require('../../util/mongodb')
 
 const qiniu = new Qiniu()
 
@@ -34,20 +34,26 @@ const putFile = (fastify) => (req, reply) => {
     qiniu
     .uploadFile(fileStream, fileName, { bucket })
       .then(async ({ data }) => {
-        const UploadModal = fastify.uploadModel
-        const file = new UploadModal(data)
-        file.save((err) => {
-          console.log('err', err)
-          if (!!err) { // eslint-disable-line
-            reply.send(new CreateError(500, err))
-          } else {
-            reply
-              .code(200)
-              // TODO: 实际返回的data是 {}, JSON Schema 导致的差异,需要优化
-              // FIXME: 成功情况不返回message 没啥用处
-              .send({ statusCode: 200, data: null })
-          }
-        })
+        try {
+          const db = new Mongodb(fastify.dbUpload)
+          await db.insertOne({ hash: data.hash }, data)
+        } catch (err) {
+          reply.send(err)
+        }
+        // const UploadModal = fastify.uploadModel
+        // const file = new UploadModal(data)
+        // file.save((err) => {
+        //   console.log('err', err)
+        //   if (!!err) { // eslint-disable-line
+        //     reply.send(new CreateError(500, err))
+        //   } else {
+        //     reply
+        //       .code(200)
+        //       // TODO: 实际返回的data是 {}, JSON Schema 导致的差异,需要优化
+        //       // FIXME: 成功情况不返回message 没啥用处
+        //       .send({ statusCode: 200, data: null })
+        //   }
+        // })
       })
       .catch(err => {
         // 提交不存在bucket

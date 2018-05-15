@@ -1,3 +1,6 @@
+const CreateErrors = require('http-errors')
+const statusCode = require('../config/statusCode')
+
 /**
  * @class Mongodb
  */
@@ -5,21 +8,13 @@ class Mongodb {
   constructor (db) {
     this.db = db
   }
-  find () {
+  find (obj, limit = null) {
     return new Promise((resolve, reject) => {
-      try {
-        this.db.find()
-          .then(data => resolve(data))
-          .catch(err => reject(new Error(err)))
-        // .exec((err, data) => {
-        //   if (err) {
-        //     reject(new Error(err))
-        //   }
-        //   resolve(data)
-        // })
-      } catch (err) {
-        reject(new Error(err))
-      }
+      this.db
+        .find(obj)
+        .limit(limit)
+        .then(data => resolve(data))
+        .catch(err => reject(new Error(err)))
     })
   }
   count () {
@@ -54,11 +49,22 @@ class Mongodb {
       resolve(data)
     }))
   }
-  insertOne (body) {
-    return new Promise(async (resolve, reject) => this.db.create(body, (err, data) => {
-      if (err) reject(new Error(err))
-      resolve(data)
-    }))
+  async insertOne (insertObj, body) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const findResult = await this.find(insertObj, 1)
+        // 数据库已经存在
+        if (!!findResult.length) { // eslint-disable-line 
+          reject(new CreateErrors(409, statusCode['409']))
+        }
+      } catch (err) {
+        reject(err)
+      }
+    })
+    // return new Promise(async (resolve, reject) => this.db.create(body, (err, data) => {
+    //   if (err) reject(new Error(err))
+    //   resolve(data)
+    // }))
   }
 }
 
