@@ -1,3 +1,6 @@
+const CreateErrors = require('http-errors')
+const statusCode = require('../config/statusCode')
+
 /**
  * @class Mongodb
  */
@@ -5,21 +8,13 @@ class Mongodb {
   constructor (db) {
     this.db = db
   }
-  find () {
+  find (obj, limit = null) {
     return new Promise((resolve, reject) => {
-      try {
-        this.db.find()
-          .then(data => resolve(data))
-          .catch(err => reject(new Error(err)))
-        // .exec((err, data) => {
-        //   if (err) {
-        //     reject(new Error(err))
-        //   }
-        //   resolve(data)
-        // })
-      } catch (err) {
-        reject(new Error(err))
-      }
+      this.db
+        .find(obj)
+        .limit(limit)
+        .then(data => resolve(data))
+        .catch(err => reject(new Error(err)))
     })
   }
   count () {
@@ -48,17 +43,44 @@ class Mongodb {
         resolve(data)
       }))
   }
+  /**
+   * 数据库中查找对应项
+   *
+   * @param {Object} body 查找对象
+   * @returns {Promise}
+   * @memberof Mongodb
+   */
   findOne (body) {
-    return new Promise((resolve, reject) => this.db.findOne(body, function (err, data) {
-      if (err) reject(new Error(err))
-      resolve(data)
-    }))
+    return new Promise((resolve, reject) => this.db
+      .findOne(body, function (err, data) {
+        if (err) {
+          return reject(new CreateErrors(500, err))
+        }
+        resolve(data)
+      }))
   }
-  insertOne (body) {
-    return new Promise(async (resolve, reject) => this.db.create(body, (err, data) => {
-      if (err) reject(new Error(err))
-      resolve(data)
-    }))
+  /**
+   * 数据库插入对应项
+   *
+   * @param {Object} body 插入对象
+   * @returns {Promise}
+   * @memberof Mongodb
+   */
+  async insertOne (body) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const findResult = await this.findOne(body)
+        // 数据库已经存在
+        if (!!findResult) { // eslint-disable-line 
+          reject(new CreateErrors(409, statusCode['409']))
+        } else {
+          const insertResult = await this.db.create(body)
+          resolve(insertResult._doc)
+        }
+      } catch (err) {
+        reject(new CreateErrors(500, err))
+      }
+    })
   }
 }
 

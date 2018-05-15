@@ -1,21 +1,20 @@
 const plugin = require('fastify-plugin')
 const mongoose = require('mongoose')
 const util = require('util')
-const { url, username, password } = require('../config/mongodb')
+const { devUrl, proUrl, username, password } = require('../config/mongodb')
 
 mongoose.Promise = global.Promise
+const isDev = process.env.NODE_ENV === 'development'
 
 function connectMongodb (fastify, option, next) {
-  console.log(process.env.NODE_ENV)
-  // const isDev = process.env.NODE_ENV === 'development'
-  const mongoUrl = util.format(url, username, password)
+  const mongoUrl = util.format(proUrl, username, password)
 
   fastify.decorate('mongodb', mongoose)
 
   mongoose
-    .connect(mongoUrl)
+    .connect(isDev ? devUrl : mongoUrl)
     .then((db) => {
-      console.log('😁 数据库链接成功')
+      console.log('😁 数据库连接成功')
     // fastify.decorate('dbUser', db.model('users', {
     //   username: { type: String },
     //   password: { type: String },
@@ -24,19 +23,20 @@ function connectMongodb (fastify, option, next) {
     // fastify.decorate('dbGoods', db.model('goods', {}))
 
     // new
-      fastify.decorate('uploadModel', db.model('upload', {
-        name: { type: String },
-        hash: {
-          type: String,
-          index: true
-        // unique: true
-        },
-        bucket: { type: String }
+      fastify.decorate('dbUpload', db.model('upload', {
+        name: String,
+        hash: String,
+        bucket: String,
+        createTime: {
+          type: Date,
+          default: new Date().getTime()
+        }
       }, 'Upload'))
 
       next()
     })
     .catch(err => {
+      console.log('😿 数据库连接失败')
       throw err
     })
 }
