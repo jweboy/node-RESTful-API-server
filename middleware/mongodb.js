@@ -1,22 +1,18 @@
 const plugin = require('fastify-plugin')
 const mongoose = require('mongoose')
-// const util = require('util')
-const {
-  url
-  // username, password
-} = require('../config/mongodb')
+const util = require('util')
+const { devUrl, proUrl, username, password } = require('../config/mongodb')
 
 mongoose.Promise = global.Promise
+const isDev = process.env.NODE_ENV === 'development'
 
 function connectMongodb (fastify, option, next) {
-  console.log(process.env.NODE_ENV)
-  // const isDev = process.env.NODE_ENV === 'development'
-  // const mongoUrl = util.format(url, username, password)
+  const mongoUrl = util.format(proUrl, username, password)
 
   fastify.decorate('mongodb', mongoose)
 
   mongoose
-    .connect(url)
+    .connect(isDev ? devUrl : mongoUrl)
     .then((db) => {
       console.log('😁 数据库连接成功')
     // fastify.decorate('dbUser', db.model('users', {
