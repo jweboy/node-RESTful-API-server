@@ -20,7 +20,7 @@ const putFile = (fastify) => (req, reply) => {
     if (err) {
       reply.send(err)
     }
-    console.log('upload completed')
+    console.log('🙈 Upload completed!')
   })
 
   /**
@@ -36,24 +36,17 @@ const putFile = (fastify) => (req, reply) => {
       .then(async ({ data }) => {
         try {
           const db = new Mongodb(fastify.dbUpload)
-          await db.insertOne({ hash: data.hash }, data)
+          const result = await db.insertOne(data)
+
+          // TODO: 如果data是null, 实际返回的data是 {}, JSON Schema 导致的差异,需要优化
+          reply.send({
+            statusCode: 200,
+            message: '文件上传成功',
+            data: result
+          })
         } catch (err) {
-          reply.send(err)
+          reply.send(new CreateError(500, err))
         }
-        // const UploadModal = fastify.uploadModel
-        // const file = new UploadModal(data)
-        // file.save((err) => {
-        //   console.log('err', err)
-        //   if (!!err) { // eslint-disable-line
-        //     reply.send(new CreateError(500, err))
-        //   } else {
-        //     reply
-        //       .code(200)
-        //       // TODO: 实际返回的data是 {}, JSON Schema 导致的差异,需要优化
-        //       // FIXME: 成功情况不返回message 没啥用处
-        //       .send({ statusCode: 200, data: null })
-        //   }
-        // })
       })
       .catch(err => {
         // 提交不存在bucket

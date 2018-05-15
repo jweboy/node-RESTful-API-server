@@ -33,7 +33,7 @@ function connectMongodb (fastify, option, next) {
         bucket: String,
         createTime: {
           type: Date,
-          default: Date.now
+          default: new Date().getTime()
         }
       }, 'Upload'))
 

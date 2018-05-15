@@ -52,19 +52,18 @@ class Mongodb {
   async insertOne (insertObj, body) {
     return new Promise(async (resolve, reject) => {
       try {
-        const findResult = await this.find(insertObj, 1)
+        const findResult = await this.findOne(insertObj)
         // 数据库已经存在
-        if (!!findResult.length) { // eslint-disable-line 
+        if (!!findResult) { // eslint-disable-line 
           reject(new CreateErrors(409, statusCode['409']))
+        } else {
+          const insertResult = await this.db.create(insertObj)
+          resolve(insertResult._doc)
         }
       } catch (err) {
-        reject(err)
+        reject(new CreateErrors(500, err))
       }
     })
-    // return new Promise(async (resolve, reject) => this.db.create(body, (err, data) => {
-    //   if (err) reject(new Error(err))
-    //   resolve(data)
-    // }))
   }
 }
 
