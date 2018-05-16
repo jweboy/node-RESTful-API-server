@@ -88,4 +88,4 @@ fastify.listen(process.env.PORT || 3000)
     process.exit(1)
   })
 
-module.exports = fastify.server
+module.exports = fastify

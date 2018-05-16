@@ -4,7 +4,7 @@ const util = require('util')
 const { devUrl, proUrl, username, password } = require('../config/mongodb')
 const { putFileSchema } = require('../models/upload')
 
-const isDev = process.env.NODE_ENV === 'development'
+const isDev = process.env.NODE_ENV !== 'production'
 
 mongoose.Promise = global.Promise
 
