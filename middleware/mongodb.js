@@ -2,9 +2,11 @@ const plugin = require('fastify-plugin')
 const mongoose = require('mongoose')
 const util = require('util')
 const { devUrl, proUrl, username, password } = require('../config/mongodb')
+const { putFileSchema } = require('../models/upload')
+
+const isDev = process.env.NODE_ENV === 'development'
 
 mongoose.Promise = global.Promise
-const isDev = process.env.NODE_ENV === 'development'
 
 function connectMongodb (fastify, option, next) {
   const mongoUrl = util.format(proUrl, username, password)
@@ -20,18 +22,8 @@ function connectMongodb (fastify, option, next) {
     //   password: { type: String },
     //   token: { type: String }
     // }))
-    // fastify.decorate('dbGoods', db.model('goods', {}))
-
     // new
-      fastify.decorate('dbUpload', db.model('upload', {
-        name: String,
-        hash: String,
-        bucket: String,
-        createTime: {
-          type: Date,
-          default: new Date().getTime()
-        }
-      }, 'Upload'))
+      fastify.decorate('dbUpload', db.model('upload', putFileSchema, 'Upload'))
 
       next()
     })
