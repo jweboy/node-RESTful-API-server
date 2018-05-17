@@ -7,10 +7,10 @@ const fastify = require('fastify')({
 const jwt = require('fastify-jwt')
 const formbody = require('fastify-formbody')
 const multipart = require('fastify-multipart')
-// const leveldb = require('fastify-leveldb')
 const auth = require('fastify-auth')
 const accepts = require('fastify-accepts')
 const CreateError = require('http-errors')
+const signale = require('signale')
 
 const routes = require('./route')
 const mongodb = require('./middleware/mongodb')
@@ -59,7 +59,7 @@ fastify.register(multipart)
 fastify.register(mongodb)
   .after(err => {
     if (err) { throw err }
-    console.log('Mongodb connect success!')
+    signale.success('Mongodb registration successful.')
   })
 // routes register
 fastify
@@ -74,17 +74,27 @@ fastify
   .register(routes, { prefix: 'api' })
   .after(err => {
     if (err) { throw err }
-    console.log('Routes register success!')
+    signale.success('Routes registration successful.')
   })
 
 // start server
 fastify.listen(process.env.PORT || 3000)
   .then(() => {
+    const Signale = signale.Signale
+    const custom = new Signale({
+      types: {
+        wow: {
+          badge: '🎅 ',
+          color: 'blue',
+          label: 'Wow'
+        }
+      }
+    })
     // const { address, port } = fastify.server.address()
-    console.log(`Server is running at ${protocol}:${host}:${port}`)
+    custom.wow(`Server is running at ${protocol}:${host}:${port}.`)
   })
   .catch(err => {
-    console.log(`Error starting server:${err}`)
+    signale.error(`Error starting server:${err}.`)
     process.exit(1)
   })
 

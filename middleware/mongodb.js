@@ -1,5 +1,6 @@
 const plugin = require('fastify-plugin')
 const mongoose = require('mongoose')
+const signale = require('signale')
 const util = require('util')
 const { devUrl, proUrl, username, password } = require('../config/mongodb')
 const { putFileSchema } = require('../models/upload')
@@ -16,7 +17,7 @@ function connectMongodb (fastify, option, next) {
   mongoose
     .connect(isDev ? devUrl : mongoUrl)
     .then((db) => {
-      console.log('😁 数据库连接成功')
+      signale.complete('Mongodb connection succeeded.')
     // fastify.decorate('dbUser', db.model('users', {
     //   username: { type: String },
     //   password: { type: String },
@@ -28,7 +29,7 @@ function connectMongodb (fastify, option, next) {
       next()
     })
     .catch(err => {
-      console.log('😿 数据库连接失败')
+      signale.error('Mongodb connection failed.')
       throw err
     })
 }
