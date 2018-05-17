@@ -1,18 +1,26 @@
-const { putFile, getFiles, deleteFile } = require('./controller')
+const { putFile, getFile, deleteFile } = require('./controller')
+const Mongodb = require('../../util/mongodb')
 
+/**
+ * (...args) 路由参数说明
+ * @param {Object} fastify - fastify实例
+ * @param {Object} opts - fastify配置项
+ * @param {Function} next -
+ */
 module.exports = function (fastify, opts, next) {
+  const db = new Mongodb(fastify.dbUpload)
   fastify
     .put('/upload', {
       schema: {
         querystring: 'putFileQuery#',
         response: { 200: 'putFileSuccess#' }
       }
-    }, putFile(fastify))
+    }, putFile(db))
     .delete('/upload/picture/:fileKey', deleteFile)
-    .get('/upload/picture/list', {
+    .get('/upload/list', {
       schema: {
-        querystring: 'getFilesQuery#',
-        response: { 200: 'getFilesSuccess#' }
+        querystring: 'getFileQuery#',
+        response: { 200: 'getFileSuccess#' }
       }
-    }, getFiles)
+    }, getFile(db))
 }

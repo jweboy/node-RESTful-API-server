@@ -1,10 +1,11 @@
 const CreateError = require('http-errors')
+const signale = require('signale')
 const Qiniu = require('../../util/qiniu')
-const Mongodb = require('../../util/mongodb')
 
+// 文件上传，基于七牛云。
+// 文件信息保存mongo数据库，七牛云作为单纯存储库。
 const qiniu = new Qiniu()
-
-const putFile = (fastify) => (req, reply) => {
+const putFile = db => (req, reply) => {
   // FIXME:目前不做bucket限制,提供默认值
   const bucket = req.query.bucket || 'our-future'
 
@@ -20,7 +21,7 @@ const putFile = (fastify) => (req, reply) => {
     if (err) {
       reply.send(err)
     }
-    console.log('🙈 Upload completed!')
+    signale.success('🙈 Upload completed!')
   })
 
   /**
@@ -35,7 +36,6 @@ const putFile = (fastify) => (req, reply) => {
     .uploadFile(fileStream, fileName, { bucket })
       .then(async ({ data }) => {
         try {
-          const db = new Mongodb(fastify.dbUpload)
           const result = await db.insertOne(data)
 
           // TODO: 如果data是null, 实际返回的data是 {}, JSON Schema 导致的差异,需要优化
@@ -59,31 +59,24 @@ const putFile = (fastify) => (req, reply) => {
   }
 }
 
-async function getFiles (req, reply) {
-  console.log(req.query)
+// 从mongodb获取文件列表
+const getFile = db => async (req, reply) => {
+  const query = req.query
   try {
-    const query = { ...req.query }
-    const result = await qiniu.getFiles(query)
-    const finalData = result.respBody.items.reduce(function (arr, { key, hash, putTime }) {
-      arr.push({ name: key, id: hash, putTime })
-      return arr
-    }, [])
-    // console.log(result.respBody.marker)
-    reply
-      .code(result.statusCode)
-      // TODO: 这里需要对header进行正确的处理
-      // .header('Content-type', 'application/json; charset=utf-8')
-      .send({
-        statusCode: result.statusCode,
-        message: '文件列表获取成功',
-        data: {
-          items: finalData,
-          total: finalData.length
-        }
-      })
+    const count = await db.count()
+    const data = await db.pageQuery(query)
+    reply.send({
+      statusCode: 200,
+      message: '文件列表获取成功',
+      data: {
+        items: data,
+        total: count
+      }
+    })
   } catch (err) {
-    throw err
+    reply.send(new CreateError(500, err))
   }
+  // TODO: 这里需要对header进行正确的处理
 }
 
 // FIXME: 请求的时候fileKey需要encode
@@ -106,6 +99,6 @@ async function deleteFile (req, reply) {
 
 module.exports = {
   putFile,
-  getFiles,
+  getFile,
   deleteFile
 }

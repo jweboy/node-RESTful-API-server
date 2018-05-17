@@ -1,5 +1,5 @@
-exports.getFilesSuccess = {
-  $id: 'getFilesSuccess',
+exports.getFileSuccess = {
+  $id: 'getFileSuccess',
   type: 'object',
   properties: {
     statusCode: { type: 'number' },
@@ -14,7 +14,7 @@ exports.getFilesSuccess = {
             properties: {
               name: { type: 'string' },
               id: { type: 'string' },
-              putTime: { type: 'number' }
+              createTime: { type: 'number' }
             }
           }
         },
@@ -24,8 +24,8 @@ exports.getFilesSuccess = {
   }
 }
 
-exports.getFilesQuery = {
-  $id: 'getFilesQuery',
+exports.getFileQuery = {
+  $id: 'getFileQuery',
   type: 'object',
   properties: {
     page: { type: 'number' },

@@ -8,45 +8,53 @@ class Mongodb {
   constructor (db) {
     this.db = db
   }
-  find (obj, limit = null) {
-    return new Promise((resolve, reject) => {
-      this.db
-        .find(obj)
-        .limit(limit)
-        .then(data => resolve(data))
-        .catch(err => reject(new Error(err)))
-    })
-  }
+  // find (obj, limit = null) {
+  //   return new Promise((resolve, reject) => {
+  //     this.db
+  //       .find(obj)
+  //       .limit(limit)
+  //       .then(data => resolve(data))
+  //       .catch(err => reject(new Error(err)))
+  //   })
+  // }
+  /**
+   * 获取列表总数
+   *
+   * @returns 指定列表的长度
+   * @memberof Mongodb
+   */
   count () {
     // 数据量超大时候 count性能有问题 这是一个可持续优化的点
     // 参考 https://cnodejs.org/topic/559a0bf493cb46f578f0a601
     return new Promise((resolve, reject) => this.db.count()
       .then(count => resolve(count))
-      .catch(err => reject(new Error(err)))
+      .catch(err => reject(new CreateErrors(500, err)))
     )
   }
   /**
+   * 数据库分页查找
    *
-   * @param {page} Number
-   * @param {size} Number
+   * @param {Object} query - 分页对象
+   * @param {Number} query.page - 页码
+   * @param {Number} query.size - 页数
+   * @returns
+   * @memberof Mongodb
    */
-  page ({
-    page = 1,
-    size = 10
-  }) {
+  pageQuery ({ page = 1, size = 10 }) {
     return new Promise((resolve, reject) => this.db.find()
-      .skip(size * (page - 1)) // skip在数据量大的时候会有性能问题
+      .skip(size * (page - 1)) // TODO: skip在数据量大的时候会有性能问题
       .limit(size)
       .exec(function (err, data) {
-        if (err) reject(new Error(err))
-
+        if (err) {
+          return reject(new CreateErrors(500, err))
+        }
         resolve(data)
       }))
   }
   /**
    * 数据库中查找对应项
    *
-   * @param {Object} body 查找对象
+   * @param {Object} body - 查找对象
    * @returns {Promise}
    * @memberof Mongodb
    */
@@ -62,7 +70,7 @@ class Mongodb {
   /**
    * 数据库插入对应项
    *
-   * @param {Object} body 插入对象
+   * @param {Object} body - 插入对象
    * @returns {Promise}
    * @memberof Mongodb
    */

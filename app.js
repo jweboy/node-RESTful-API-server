@@ -29,7 +29,7 @@ fastify.addHook('preHandler', function (req, reply, next) {
   // fastify.util(req, 'timestamp', new Date())
   // 设置cors,支持跨域
   reply.header('Access-Control-Allow-Origin', '*')
-  reply.header('Access-Control-Allow-Methods', 'GET,POST,DELETE')
+  reply.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
   next()
 })
 fastify.addHook('onClose', function (fastify, done) {
