@@ -2,7 +2,7 @@ const { putFile, getFiles, deleteFile } = require('./controller')
 
 module.exports = function (fastify, opts, next) {
   fastify
-    .put('/upload/picture', {
+    .put('/upload', {
       schema: {
         querystring: 'putFileQuery#',
         response: { 200: 'putFileSuccess#' }
