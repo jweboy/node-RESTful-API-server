@@ -32,8 +32,7 @@ const putFile = db => (req, reply) => {
    * @param {String} mimetype 文件类型
    */
   function handler (fieldName, fileStream, fileName, encoding, mimetype) {
-    qiniu
-    .uploadFile(fileStream, fileName, { bucket })
+    qiniu.uploadFile(fileStream, fileName, { bucket })
       .then(async ({ data }) => {
         try {
           const result = await db.insertOne(data)
@@ -81,20 +80,17 @@ const getFile = db => async (req, reply) => {
 
 // 从mongodb删除指定文件
 const deleteFile = db => (req, reply) => {
-  // const { fileKey } = req.params
-  // try {
-  //   const result = await qiniu.deleteFile(decodeURI(fileKey))
-  //   reply
-  //     .code(result.statusCode)
-  //     .send(Object.assign(
-  //       result,
-  //       result.statusCode === 200 && {
-  //         message: '文件删除成功'
-  //       }
-  //     ))
-  // } catch (err) {
-  //   throw err
-  // }
+  const { id } = req.params
+  db.findOneAndDelete({ _id: id })
+    .then(async (data) => {
+      try {
+        await qiniu.deleteFile(data.name)
+        reply.code(204).send()
+      } catch (err) {
+        throw err
+      }
+    })
+    .catch(err => reply.send(err))
 }
 
 module.exports = {
