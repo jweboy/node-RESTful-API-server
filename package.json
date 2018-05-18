@@ -30,14 +30,9 @@
     "formidable": "^1.2.1",
     "http-errors": "^1.6.3",
     "jsonwebtoken": "^8.1.0",
-    "koa": "^2.4.1",
     "koa-body": "^2.5.0",
     "koa-jwt": "^3.3.0",
-    "koa-logger": "^3.1.0",
-    "koa-router": "^7.3.0",
-    "logrocket": "^0.6.11",
     "mongodb": "^3.0.4",
-    "mongolass": "^3.1.5",
     "mongoose": "^5.0.10",
     "pandora": "^1.8.15",
     "pump": "^3.0.0",
@@ -46,10 +41,7 @@
     "shortid": "^2.2.8",
     "signale": "^1.0.1",
     "snazzy": "^7.0.0",
-    "split2": "^2.2.0",
-    "supertest": "^3.0.0",
-    "uuid": "^3.1.0",
-    "winston": "^3.0.0-rc1"
+    "split2": "^2.2.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -61,10 +53,8 @@
     "mocha": "^5.1.1",
     "mocha-lcov-reporter": "^1.3.0",
     "nodemon": "^1.17.3",
-    "nyc": "^11.3.0",
     "pre-commit": "^1.2.2",
-    "standard": "^10.0.3",
-    "tap": "^11.1.5"
+    "standard": "^10.0.3"
   },
   "scripts": {
     "pm2:dev": "pm2 start ecosystem.config.js --env development",
