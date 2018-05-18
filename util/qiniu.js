@@ -83,7 +83,6 @@ module.exports = class Qiniu {
           error.message = statusCode[status]
           reject(error)
         }
-        // console.log('upload respBody', respError, respBody, respInfo)
         resolve({
           statusCode: respInfo.statusCode,
           data: respBody
@@ -99,69 +98,76 @@ module.exports = class Qiniu {
   *   }]
    * @returns {Promise}
    */
-  getFiles ({ page, size, prefix }) {
-    return new Promise((resolve, reject) => {
-      const opts = {
-        limit: size,
-        prefix: prefix || '',
-        marker: this[tempMap].get('marker')
-      }
-      if (!this[tempMap].has('page')) {
-        this[tempMap].set('page', {
-          prev: 1,
-          next: page
-        })
-      } else {
-        const currPos = this[tempMap].get('page')
-        currPos.prev = currPos.next
-        currPos.next = page
-        this[tempMap].set('page', currPos)
-      }
-      // 获取bucket
-      const bucketManager = Qiniu.getBucketManager()
-      // 获取指定bucket里的所有文件
-      bucketManager.listPrefix(this.bucket, opts, (respError, respBody, respInfo) => {
-        if (respError) {
-          reject(respError)
-        }
-        const nextMarker = respBody.marker
-        const pagePos = this[tempMap].get('page')
-        console.log('pagePos', nextMarker, pagePos.prev !== pagePos.next)
-        if (nextMarker && (pagePos.prev !== pagePos.next)) {
-          this[tempMap].set('marker', nextMarker)
-          console.log(this[tempMap])
-        }
-        // else {
-        //   const currMarker = this[tempMap].get('marker')
-        //   this[tempMap].set('marker', currMarker)
-        // }
-        resolve({
-          statusCode: respInfo.statusCode,
-          error: (respBody && respBody.error) ? respBody.error : null,
-          respBody
-        })
-      })
-    })
-  }
+  // getFiles ({ page, size, prefix }) {
+  //   return new Promise((resolve, reject) => {
+  //     const opts = {
+  //       limit: size,
+  //       prefix: prefix || '',
+  //       marker: this[tempMap].get('marker')
+  //     }
+  //     if (!this[tempMap].has('page')) {
+  //       this[tempMap].set('page', {
+  //         prev: 1,
+  //         next: page
+  //       })
+  //     } else {
+  //       const currPos = this[tempMap].get('page')
+  //       currPos.prev = currPos.next
+  //       currPos.next = page
+  //       this[tempMap].set('page', currPos)
+  //     }
+  //     // 获取bucket
+  //     const bucketManager = Qiniu.getBucketManager()
+  //     // 获取指定bucket里的所有文件
+  //     bucketManager.listPrefix(this.bucket, opts, (respError, respBody, respInfo) => {
+  //       if (respError) {
+  //         reject(respError)
+  //       }
+  //       const nextMarker = respBody.marker
+  //       const pagePos = this[tempMap].get('page')
+  //       console.log('pagePos', nextMarker, pagePos.prev !== pagePos.next)
+  //       if (nextMarker && (pagePos.prev !== pagePos.next)) {
+  //         this[tempMap].set('marker', nextMarker)
+  //         console.log(this[tempMap])
+  //       }
+  //       // else {
+  //       //   const currMarker = this[tempMap].get('marker')
+  //       //   this[tempMap].set('marker', currMarker)
+  //       // }
+  //       resolve({
+  //         statusCode: respInfo.statusCode,
+  //         error: (respBody && respBody.error) ? respBody.error : null,
+  //         respBody
+  //       })
+  //     })
+  //   })
+  // }
   /**
    * 删除指定空间的文件
    *
    * @param {String} fileKey 文件名
    * @returns {Promise}
    */
-  deleteFile (fileKey) {
+  deleteFile (key) {
     return new Promise((resolve, reject) => {
       // 获取bucket
       const bucketManager = Qiniu.getBucketManager()
       // 删除指定bucket的文件
-      bucketManager.delete(this.bucket, fileKey, function (respError, respBody, respInfo) {
-        // console.log(respError, respInfo, respBody)
+      bucketManager.delete(this.bucket, key, function (respError, respBody, respInfo) {
+        const { statusCode: status, data } = respInfo
         if (respError) {
           reject(respError)
         }
+        if (status !== 200) {
+          const error = new Error()
+          error.error = data.error
+          error.statusCode = status
+          error.message = statusCode[status]
+          reject(error)
+        }
         resolve({
           statusCode: respInfo.statusCode,
-          error: (respBody && respBody.error) ? respBody.error : null
+          data: respBody
         })
       })
     })

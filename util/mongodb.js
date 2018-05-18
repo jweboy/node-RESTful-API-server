@@ -8,15 +8,6 @@ class Mongodb {
   constructor (db) {
     this.db = db
   }
-  // find (obj, limit = null) {
-  //   return new Promise((resolve, reject) => {
-  //     this.db
-  //       .find(obj)
-  //       .limit(limit)
-  //       .then(data => resolve(data))
-  //       .catch(err => reject(new Error(err)))
-  //   })
-  // }
   /**
    * 获取列表总数
    *
@@ -26,7 +17,8 @@ class Mongodb {
   count () {
     // 数据量超大时候 count性能有问题 这是一个可持续优化的点
     // 参考 https://cnodejs.org/topic/559a0bf493cb46f578f0a601
-    return new Promise((resolve, reject) => this.db.count()
+    return new Promise((resolve, reject) => this.db
+      .count()
       .then(count => resolve(count))
       .catch(err => reject(new CreateErrors(500, err)))
     )
@@ -41,7 +33,8 @@ class Mongodb {
    * @memberof Mongodb
    */
   pageQuery ({ page = 1, size = 10 }) {
-    return new Promise((resolve, reject) => this.db.find()
+    return new Promise((resolve, reject) => this.db
+      .find()
       .skip(size * (page - 1)) // TODO: skip在数据量大的时候会有性能问题
       .limit(size)
       .exec(function (err, data) {
@@ -74,7 +67,7 @@ class Mongodb {
    * @returns {Promise}
    * @memberof Mongodb
    */
-  async insertOne (body) {
+  insertOne (body) {
     return new Promise(async (resolve, reject) => {
       try {
         const findResult = await this.findOne(body)
@@ -89,6 +82,26 @@ class Mongodb {
         reject(new CreateErrors(500, err))
       }
     })
+  }
+  /**
+   * 数据库删除指定项
+   *
+   * @param {Object} body - 删除对象
+   * @returns {Promise}
+   * @memberof Mongodb
+   */
+  findOneAndDelete (body) {
+    return new Promise(async (resolve, reject) => this.db
+      .findOneAndDelete(body, function (err, data) {
+        if (err) {
+          return reject(new CreateErrors(500, err))
+        }
+        // 查询项不存在
+        if (data === null) {
+          reject(new CreateErrors.NotFound())
+        }
+        resolve(data)
+      }))
   }
 }
 

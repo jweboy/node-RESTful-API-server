@@ -16,7 +16,11 @@ module.exports = function (fastify, opts, next) {
         response: { 200: 'putFileSuccess#' }
       }
     }, putFile(db))
-    .delete('/upload/picture/:fileKey', deleteFile)
+    .delete('/upload/:id', {
+      schema: {
+        params: 'deleteFileParam#'
+      }
+    }, deleteFile(db))
     .get('/upload/list', {
       schema: {
         querystring: 'getFileQuery#',
