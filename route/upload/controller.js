@@ -79,22 +79,22 @@ const getFile = db => async (req, reply) => {
   // TODO: 这里需要对header进行正确的处理
 }
 
-// FIXME: 请求的时候fileKey需要encode
-async function deleteFile (req, reply) {
-  const { fileKey } = req.params
-  try {
-    const result = await qiniu.deleteFile(decodeURI(fileKey))
-    reply
-      .code(result.statusCode)
-      .send(Object.assign(
-        result,
-        result.statusCode === 200 && {
-          message: '文件删除成功'
-        }
-      ))
-  } catch (err) {
-    throw err
-  }
+// 从mongodb删除指定文件
+const deleteFile = db => (req, reply) => {
+  // const { fileKey } = req.params
+  // try {
+  //   const result = await qiniu.deleteFile(decodeURI(fileKey))
+  //   reply
+  //     .code(result.statusCode)
+  //     .send(Object.assign(
+  //       result,
+  //       result.statusCode === 200 && {
+  //         message: '文件删除成功'
+  //       }
+  //     ))
+  // } catch (err) {
+  //   throw err
+  // }
 }
 
 module.exports = {
