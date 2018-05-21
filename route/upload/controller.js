@@ -82,20 +82,16 @@ const getFile = db => async (req, reply) => {
 // 从mongodb删除指定文件
 const deleteFile = db => (req, reply) => {
   const { id } = req.params
-  /* eslint-disable */
-  if (!!mongoose.Types.ObjectId.isValid(id)) { 
-    return db.findOneAndDelete({ _id: id })
-      .then(async (data) => {
-        try {
-          await qiniu.deleteFile(data.name)
-          reply.code(204).send()
-        } catch (err) {
-          throw err
-        }
-      })
-      .catch(err => reply.send(err))
-  }
-  return reply.send(new CreateError.BadRequest('无效的id'))
+  db.findOneAndDelete({ _id: id })
+    .then(async (data) => {
+      try {
+        await qiniu.deleteFile(data.name)
+        reply.code(204).send()
+      } catch (err) {
+        throw err
+      }
+    })
+    .catch(err => reply.send(err))
 }
 
 module.exports = {

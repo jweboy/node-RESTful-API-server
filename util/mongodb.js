@@ -1,4 +1,5 @@
 const CreateErrors = require('http-errors')
+const mongoose = require('mongoose')
 const statusCode = require('../config/statusCode')
 
 /**
@@ -7,6 +8,13 @@ const statusCode = require('../config/statusCode')
 class Mongodb {
   constructor (db) {
     this.db = db
+  }
+  /**
+   * 验证id是否是ObjectID类型
+   * @param {String} id - 在数据库中查询的id
+   */
+  static validIsObjectId (id) {
+    return mongoose.Types.ObjectId.isValid(id)
   }
   /**
    * 获取列表总数
@@ -91,17 +99,23 @@ class Mongodb {
    * @memberof Mongodb
    */
   findOneAndDelete (body) {
-    return new Promise(async (resolve, reject) => this.db
-      .findOneAndDelete(body, function (err, data) {
-        if (err) {
-          return reject(new CreateErrors(500, err))
-        }
-        // 查询项不存在
-        if (data === null) {
-          reject(new CreateErrors.NotFound())
-        }
-        resolve(data)
-      }))
+    return new Promise(async (resolve, reject) => {
+      const validResult = Mongodb.validIsObjectId(body._id)
+      if (!validResult) {
+        reject(new CreateErrors.BadRequest('无效的id'))
+      }
+      this.db
+        .findOneAndDelete(body, function (err, data) {
+          if (err) {
+            return reject(new CreateErrors(500, err))
+          }
+          // 查询项不存在
+          if (data === null) {
+            reject(new CreateErrors.NotFound())
+          }
+          resolve(data)
+        })
+    })
   }
 }
 
