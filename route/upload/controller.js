@@ -1,5 +1,4 @@
 const CreateError = require('http-errors')
-const mongoose = require('mongoose')
 const signale = require('signale')
 const Qiniu = require('../../util/qiniu')
 
