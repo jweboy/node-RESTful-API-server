@@ -68,3 +68,14 @@
 //       next()
 //     })
 // }
+
+// const { signin } = require('./controller')
+// const Mongodb = require('../../util/mongodb')
+
+// module.exports = function (fastify, opts, next) {
+//   // const db = new Mongodb(fastify.dbUser)
+//   fastify
+//     .post('/signin', {
+//       // schema:
+//     }, signin(db))
+// }
