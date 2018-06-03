@@ -6,8 +6,22 @@
 //  * @param {*} request
 //  * @param {*} reply
 //  */
-// async function signup (fastify, request, reply) {
-//   const body = request.body
+const signup = () => (req, reply) => {
+  // const body = req.body
+  reply.send('signup is ok')
+}
+//       const result = await signup(fastify, request, reply)
+//       reply.send({
+//         code: 201,
+//         message: '成功创建新用户',
+//         data: result
+//       })
+//       next()
+//     })
+//     .get('/signup', function (request, reply) {
+//       reply.header('Content-Type', 'application/json')
+//       reply.send('用户注册接口只有POST方法')
+//       next()
 //   // if (!body.username || !body.password) {
 //   //   const err = new Error()
 //   //   err.statusCode = 400
@@ -34,8 +48,6 @@
 //       }
 //       // create token
 //       fastify.jwt.sign(body, onToken)
-//     }
-
 //     async function onToken (err, token) {
 //       if (err) {
 //         throw err
@@ -56,7 +68,7 @@
 
 // }
 
-// module.exports = {
-//   signup,
+module.exports = {
+  signup
 //   signin
-// }
+}

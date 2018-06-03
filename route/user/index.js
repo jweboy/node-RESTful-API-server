@@ -1,4 +1,4 @@
-// const { signup, signin } = require('./controller')
+const { signup } = require('./controller')
 
 // const schema = {
 //   body: {
@@ -36,23 +36,9 @@
 //   }
 // }
 
-// module.exports = function (fastify, option, next) {
-//   fastify
-//     .post('/signup', { schema }, async function (request, reply) {
-//       const result = await signup(fastify, request, reply)
-//       reply.send({
-//         code: 201,
-//         message: '成功创建新用户',
-//         data: result
-//       })
-//       next()
-//     })
-//     .get('/signup', function (request, reply) {
-//       reply.header('Content-Type', 'application/json')
-//       reply.send('用户注册接口只有POST方法')
-//       next()
-//     })
-
+module.exports = function (fastify, option, next) {
+  fastify
+    .post('/signup', signup())
 //   fastify
 //     .post('/signin', {
 //       signinSchema,
@@ -67,7 +53,7 @@
 //       reply.send('用户登陆接口只有POST方法')
 //       next()
 //     })
-// }
+}
 
 // const { signin } = require('./controller')
 // const Mongodb = require('../../util/mongodb')
