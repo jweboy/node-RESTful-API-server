@@ -1,4 +1,5 @@
-const { signup } = require('./controller')
+const { signin } = require('./controller')
+const Mongodb = require('../../util/mongodb')
 
 // const schema = {
 //   body: {
@@ -25,20 +26,14 @@ const { signup } = require('./controller')
 //   }
 // }
 
-// const signinSchema = {
-//   body: {
-//     type: 'object',
-//     properties: {
-//       username: { type: 'string' },
-//       password: { type: 'string' }
-//     },
-//     required: ['username', 'password']
-//   }
-// }
-
 module.exports = function (fastify, option, next) {
+  const db = new Mongodb(fastify.dbUser)
   fastify
-    .post('/signup', signup())
+    .post('/signin', {
+      schema: {
+        body: 'postSigninBody#'
+      }
+    }, signin(db))
 //   fastify
 //     .post('/signin', {
 //       signinSchema,
@@ -55,13 +50,3 @@ module.exports = function (fastify, option, next) {
 //     })
 }
 
-// const { signin } = require('./controller')
-// const Mongodb = require('../../util/mongodb')
-
-// module.exports = function (fastify, opts, next) {
-//   // const db = new Mongodb(fastify.dbUser)
-//   fastify
-//     .post('/signin', {
-//       // schema:
-//     }, signin(db))
-// }

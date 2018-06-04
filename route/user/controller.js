@@ -1,4 +1,4 @@
-// const Mongodb = require('../../util/mongodb')
+const CreateErrors = require('http-errors')
 
 // /**
 //  * 注册
@@ -6,10 +6,11 @@
 //  * @param {*} request
 //  * @param {*} reply
 //  */
-const signup = () => (req, reply) => {
-  // const body = req.body
-  reply.send('signup is ok')
-}
+// const signup = () => (req, reply) => {
+//   const body = req.body
+//   console.log(body)
+//   reply.send('signup is ok')
+// }
 //       const result = await signup(fastify, request, reply)
 //       reply.send({
 //         code: 201,
@@ -63,12 +64,22 @@ const signup = () => (req, reply) => {
 //     throw err
 //   }
 // }
+const signin = (db) => async (req, reply) => {
+  console.log(req.body)
+  const body = req.body
+  try {
+    const result = await db.findOne(body)
+    console.log(result)
+    if (result === null) {
+      return reply.send(new CreateErrors.NotFound())
+    }
+    reply.send('signin')
+  } catch (err) {
 
-// async function signin (fastify, request, reply) {
-
-// }
+  }
+}
 
 module.exports = {
-  signup
-//   signin
+  // signup
+  signin
 }
