@@ -25,6 +25,7 @@ function connectMongodb (fastify, option, next) {
     // }))
     // new
       fastify.decorate('dbUpload', db.model('upload', putFileSchema, 'Upload'))
+      fastify.decorate('dbUser', db.model('user', {}, 'User'))
 
       next()
     })

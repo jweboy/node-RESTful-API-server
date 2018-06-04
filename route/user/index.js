@@ -1,4 +1,5 @@
-// const { signup, signin } = require('./controller')
+const { signin } = require('./controller')
+const Mongodb = require('../../util/mongodb')
 
 // const schema = {
 //   body: {
@@ -25,34 +26,14 @@
 //   }
 // }
 
-// const signinSchema = {
-//   body: {
-//     type: 'object',
-//     properties: {
-//       username: { type: 'string' },
-//       password: { type: 'string' }
-//     },
-//     required: ['username', 'password']
-//   }
-// }
-
-// module.exports = function (fastify, option, next) {
-//   fastify
-//     .post('/signup', { schema }, async function (request, reply) {
-//       const result = await signup(fastify, request, reply)
-//       reply.send({
-//         code: 201,
-//         message: '成功创建新用户',
-//         data: result
-//       })
-//       next()
-//     })
-//     .get('/signup', function (request, reply) {
-//       reply.header('Content-Type', 'application/json')
-//       reply.send('用户注册接口只有POST方法')
-//       next()
-//     })
-
+module.exports = function (fastify, option, next) {
+  const db = new Mongodb(fastify.dbUser)
+  fastify
+    .post('/signin', {
+      schema: {
+        body: 'postSigninBody#'
+      }
+    }, signin(db))
 //   fastify
 //     .post('/signin', {
 //       signinSchema,
@@ -67,15 +48,4 @@
 //       reply.send('用户登陆接口只有POST方法')
 //       next()
 //     })
-// }
-
-// const { signin } = require('./controller')
-// const Mongodb = require('../../util/mongodb')
-
-// module.exports = function (fastify, opts, next) {
-//   // const db = new Mongodb(fastify.dbUser)
-//   fastify
-//     .post('/signin', {
-//       // schema:
-//     }, signin(db))
-// }
+}
