@@ -4,6 +4,7 @@ const signale = require('signale')
 const util = require('util')
 const { devUrl, proUrl, username, password } = require('../config/mongodb')
 const { putFileSchema } = require('../models/upload')
+const { signupSchema } = require('../models/user')
 
 const isDev = process.env.NODE_ENV === 'development'
 
@@ -25,7 +26,7 @@ function connectMongodb (fastify, option, next) {
     // }))
     // new
       fastify.decorate('dbUpload', db.model('upload', putFileSchema, 'Upload'))
-      fastify.decorate('dbUser', db.model('user', {}, 'User'))
+      fastify.decorate('dbUser', db.model('user', signupSchema, 'User'))
 
       next()
     })

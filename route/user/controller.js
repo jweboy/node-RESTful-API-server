@@ -1,69 +1,40 @@
 const CreateErrors = require('http-errors')
+const bcrypt = require('bcrypt')
 
-// /**
-//  * 注册
-//  * @param {*} fastify
-//  * @param {*} request
-//  * @param {*} reply
-//  */
-// const signup = () => (req, reply) => {
-//   const body = req.body
-//   console.log(body)
-//   reply.send('signup is ok')
-// }
-//       const result = await signup(fastify, request, reply)
-//       reply.send({
-//         code: 201,
-//         message: '成功创建新用户',
-//         data: result
-//       })
-//       next()
-//     })
-//     .get('/signup', function (request, reply) {
-//       reply.header('Content-Type', 'application/json')
-//       reply.send('用户注册接口只有POST方法')
-//       next()
-//   // if (!body.username || !body.password) {
-//   //   const err = new Error()
-//   //   err.statusCode = 400
-//   //   err.message = '参数不正确,请检查请求参数是否完整!'
-//   //   throw err
-//   // }
-//   // error just break next step
-//   const db = new Mongodb(fastify.dbUser)
-//   const { username, password } = body
-//   try {
-//     const person = await db.findOne({ username })
-//     if (person) {
-//       const err = new Error()
-//       err.statusCode = 400
-//       err.message = '用户已存在!'
-//       throw err
-//     }
-//     // put user into level
-//     fastify.level.put(username, password, onPut)
+const PWDLEN = 6
 
-//     function onPut (err) {
-//       if (err) {
-//         throw err
-//       }
-//       // create token
-//       fastify.jwt.sign(body, onToken)
-//     async function onToken (err, token) {
-//       if (err) {
-//         throw err
-//       }
-//       // insert user into db
-//       const result = await db.insertOne({
-//         ...body,
-//         token
-//       })
-//       return result
-//     }
-//   } catch (err) {
-//     throw err
-//   }
-// }
+const signup = (db) => (req, reply) => {
+  const body = req.body
+  const { username, password } = body
+  bcrypt.hash(password, PWDLEN)
+    .then(async (hash) => {
+      try {
+        const user = await db.findOne({ username })
+        /* eslint-disable */
+        if (!!user) { 
+          // 数据库已经存在该用户
+          reply.send(new CreateErrors(409, '当前用户已注册'))
+        } else {
+          const { password, ...otherProps } = await db.insertOne({
+            username,
+            password: hash
+          })
+          reply.code(201).send({
+            code: 201,
+            message: '成功创建新用户',
+            data: otherProps
+          })
+        }
+      } catch (err) {
+        reply.send(new CreateErrors.InternalServerError(err))
+      }
+    })
+    .catch(err => {
+      // hash password failed
+      reply.send(new CreateErrors(err))
+    })
+}
+
 const signin = (db) => async (req, reply) => {
   console.log(req.body)
   const body = req.body
@@ -71,7 +42,7 @@ const signin = (db) => async (req, reply) => {
     const result = await db.findOne(body)
     console.log(result)
     if (result === null) {
-      return reply.send(new CreateErrors.NotFound())
+      return reply.send(new CreateErrors.InternalServerError('登陆失败,当前用户未注册'))
     }
     reply.send('signin')
   } catch (err) {
@@ -80,6 +51,6 @@ const signin = (db) => async (req, reply) => {
 }
 
 module.exports = {
-  // signup
+  signup,
   signin
 }
