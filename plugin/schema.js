@@ -8,5 +8,6 @@ module.exports = function schma (fastify, opts, next) {
 
   // user
   fastify.addSchema(require('../schema/user/signin').postSigninBody)
+  fastify.addSchema(require('../schema/user/signup').postSignupBody)
   next()
 }
