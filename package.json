@@ -29,7 +29,6 @@
     "fastify-swagger": "^0.8.3",
     "formidable": "^1.2.1",
     "http-errors": "^1.6.3",
-    "jsonwebtoken": "^8.1.0",
     "koa": "^2.4.1",
     "koa-body": "^2.5.0",
     "koa-jwt": "^3.3.0",

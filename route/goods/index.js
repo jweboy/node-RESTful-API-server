@@ -13,10 +13,10 @@ const schema = {
 
 module.exports = function (fastify, opts, next) {
   fastify.get('/goods', {
-    schema,
-    beforeHandler: fastify.auth([
-      fastify.verifyJWTandLevel
-    ])
+    schema
+    // beforeHandler: fastify.auth([
+    //   fastify.verifyJWTandLevel
+    // ])
   }, async function (request, reply) {
     const db = new Mongodb(fastify.dbGoods)
     const query = request.query
