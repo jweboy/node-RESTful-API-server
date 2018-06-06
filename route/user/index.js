@@ -16,5 +16,5 @@ module.exports = function (fastify, option, next) {
       // beforeHandler: fastify.auth([
       //   fastify.verifyUserAndPassword
       // ])
-    }, signup(db))
+    }, signup(db, fastify.jwt))
 }
