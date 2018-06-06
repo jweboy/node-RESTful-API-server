@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt')
 
 const PWDLEN = 6
 
-const signup = (db) => (req, reply) => {
+const signup = (db, jwt) => (req, reply) => {
   const body = req.body
   const { username, password } = body
   bcrypt.hash(password, PWDLEN)
@@ -17,7 +17,8 @@ const signup = (db) => (req, reply) => {
         } else {
           const { password, ...otherProps } = await db.insertOne({
             username,
-            password: hash
+            password: hash,
+            token: jwt.sign(body),
           })
           reply.code(201).send({
             code: 201,
@@ -41,7 +42,7 @@ const signin = (db) => async (req, reply) => {
   try {
     const result = await db.findOne(body)
     console.log(result)
-    if (result === null) {
+    if (result == null) {
       return reply.send(new CreateErrors.InternalServerError('登陆失败,当前用户未注册'))
     }
     reply.send('signin')

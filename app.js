@@ -7,7 +7,7 @@ const fastify = require('fastify')({
 const jwt = require('fastify-jwt')
 const formbody = require('fastify-formbody')
 const multipart = require('fastify-multipart')
-const auth = require('fastify-auth')
+// const auth = require('fastify-auth')
 const accepts = require('fastify-accepts')
 const CreateError = require('http-errors')
 const signale = require('signale')
@@ -15,7 +15,6 @@ const signale = require('signale')
 const routes = require('./route')
 const mongodb = require('./middleware/mongodb')
 const authCfg = require('./config/auth')
-const authUtil = require('./util/auth')
 const schema = require('./plugin/schema')
 
 const port = process.env.PORT || 3000
@@ -46,8 +45,6 @@ fastify.setErrorHandler(function (err, req, reply) {
 })
 
 // decorate
-fastify.decorate('verifyJWTandLevel', authUtil.verifyJWTandLevel)
-fastify.decorate('verifyUserAndPassword', authUtil.verifyUserAndPassword)
 
 // accepts register
 fastify.register(accepts)
@@ -63,13 +60,8 @@ fastify.register(mongodb)
   })
 // routes register
 fastify
-  .register(jwt, {
-    secret: authCfg.jwtSecret
-  })
-  // .register(leveldb, {
-  //   name: authCfg.leveldbName
-  // })
-  .register(auth)
+  .register(jwt, { secret: authCfg.jwtSecret })
+  // .register(auth)
   .register(schema)
   .register(routes, { prefix: 'api' })
   .after(err => {

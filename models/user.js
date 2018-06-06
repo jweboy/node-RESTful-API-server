@@ -6,7 +6,8 @@ const signupSchema = new Schema({
   createTime: {
     type: Number,
     default: new Date().getTime()
-  }
+  },
+  token: String
 })
 
 module.exports = {
