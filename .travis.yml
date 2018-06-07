@@ -13,11 +13,11 @@ after_success:
  - npm run coveralls
 
 notifications:
-  email:
-    recipients:
-      - jweboy0630@gmail.com
-    on_success: never
-    on_failure: always
+  # email:
+  #   recipients:
+  #     - jweboy0630@gmail.com
+  #   on_success: never
+  #   on_failure: always
   slack: 
     rooms:
       - jweboytm:woLS6D9oasTaWyC1Ks4zqCne
