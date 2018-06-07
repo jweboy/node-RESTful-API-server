@@ -8,13 +8,10 @@ module.exports = function (fastify, option, next) {
       schema: {
         body: 'postSigninBody#'
       }
-    }, signin(db))
+    }, signin(db, fastify.jwt))
     .post('/signup', {
       schema: {
         body: 'postSignupBody#'
       }
-      // beforeHandler: fastify.auth([
-      //   fastify.verifyUserAndPassword
-      // ])
     }, signup(db, fastify.jwt))
 }
