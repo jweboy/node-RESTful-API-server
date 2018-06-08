@@ -6,12 +6,14 @@ module.exports = function (fastify, option, next) {
   fastify
     .post('/signin', {
       schema: {
-        body: 'postSigninBody#'
+        body: 'postSigninBody#',
+        response: { 200: 'postSigninSuccess#' }
       }
-    }, signin(db, fastify.jwt))
+    }, signin(db))
     .post('/signup', {
       schema: {
-        body: 'postSignupBody#'
+        body: 'postSignupBody#',
+        response: { 201: 'postSignupSuccess#' }
       }
-    }, signup(db, fastify.jwt))
+    }, signup(db))
 }
