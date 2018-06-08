@@ -60,13 +60,15 @@ class Mongodb {
    * @memberof Mongodb
    */
   findOne (body) {
-    return new Promise((resolve, reject) => this.db
-      .findOne(body, function (err, data) {
-        if (err) {
-          return reject(new CreateErrors(500, err))
-        }
-        resolve(data)
-      }))
+    return new Promise((resolve, reject) => {
+      this.db
+        .findOne(body, function (err, data) {
+          if (err) {
+            reject(err)
+          }
+          resolve(data)
+        })
+    })
   }
   /**
    * 数据库插入对应项
