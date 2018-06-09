@@ -7,13 +7,11 @@ cache:
   directories:
     - node_modules
 
-install: travis_wait 30
-
 script:
  - make test
 
-after_success:
- - npm run coveralls
+# after_success:
+#  - npm run coveralls
 
 notifications:
   # email:
