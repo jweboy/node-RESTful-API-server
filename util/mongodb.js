@@ -109,10 +109,10 @@ class Mongodb {
       this.db
         .findOneAndDelete(body, function (err, data) {
           if (err) {
-            return reject(new CreateErrors(500, err))
+            reject(new CreateErrors.InternalServerError(err))
           }
           // 查询项不存在
-          if (data === null) {
+          if (data == null) {
             reject(new CreateErrors.NotFound())
           }
           resolve(data)
