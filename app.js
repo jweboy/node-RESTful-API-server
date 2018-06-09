@@ -37,7 +37,11 @@ fastify.addHook('onClose', function (fastify, done) {
 
 // notFoundHandler
 fastify.setNotFoundHandler(function (req, reply) {
-  reply.send(new CreateError.NotFound())
+  reply.code(404).send({
+    statusCode: 404,
+    message: '资源不存在',
+    error: null
+  })
 })
 // errorHandler
 fastify.setErrorHandler(function (err, req, reply) {

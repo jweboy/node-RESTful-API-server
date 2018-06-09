@@ -6,7 +6,7 @@ const { devUrl, proUrl, username, password } = require('../config/mongodb')
 const { putFileSchema } = require('../models/upload')
 const { signupSchema } = require('../models/user')
 
-const isDev = process.env.NODE_ENV === 'development'
+const isDev = process.env.NODE_ENV !== 'production'
 
 mongoose.Promise = global.Promise
 
@@ -18,12 +18,8 @@ function connectMongodb (fastify, option, next) {
   mongoose
     .connect(isDev ? devUrl : mongoUrl)
     .then((db) => {
-      signale.complete('Mongodb connection succeeded.')
-    // fastify.decorate('dbUser', db.model('users', {
-    //   username: { type: String },
-    //   password: { type: String },
-    //   token: { type: String }
-    // }))
+      signale.complete(`Mongodb connection succeeded. Connect address is ${isDev ? devUrl : mongoUrl}`)
+
     // new
       fastify.decorate('dbUpload', db.model('upload', putFileSchema, 'Upload'))
       fastify.decorate('dbUser', db.model('user', signupSchema, 'User'))

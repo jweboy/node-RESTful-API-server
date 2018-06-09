@@ -7,7 +7,7 @@ cache:
   directories:
     - node_modules
 script:
- - make test
+ - npm run test
 
 after_success:
  - npm run coveralls

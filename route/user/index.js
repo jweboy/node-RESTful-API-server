@@ -4,13 +4,13 @@ const Mongodb = require('../../util/mongodb')
 module.exports = function (fastify, option, next) {
   const db = new Mongodb(fastify.dbUser)
   fastify
-    .post('/signin', {
+    .post('/user/signin', {
       schema: {
         body: 'postSigninBody#',
         response: { 200: 'postSigninSuccess#' }
       }
     }, signin(db))
-    .post('/signup', {
+    .post('/user/signup', {
       schema: {
         body: 'postSignupBody#',
         response: { 201: 'postSignupSuccess#' }
