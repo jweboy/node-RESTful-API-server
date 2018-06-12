@@ -5,7 +5,7 @@ module.exports = {
    */
   apps: [
     {
-      name: 'node-fastify-resful-api',
+      name: 'node-server',
       script: 'app.js',
       watch: true,
       ignore_watch: [

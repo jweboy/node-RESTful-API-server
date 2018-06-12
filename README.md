@@ -6,7 +6,7 @@
 
 ## Introduction
 
-> 项目基于nodejs v8.0.0及以上,并结合轻量的服务端框架fastify实现的一个node server端。项目内容是对RESTful API规范、架构的理解与实践。采用fastify作为基础框架，不仅因为它性能好,还因为它原生内置了JSON Schema的validation和serialization,这一点对于熟悉Schema的开发者来说相对比较友好, 而且它的serialization甚至可以做到 2x faster than JSON.stringify()。
+> 项目基于nodejs v8.0.0及以上,并结合轻量的服务端框架fastify实现的一个node server端。项目内容是对RESTful API规范、架构的理解与实践。采用fastify作为基础框架，不仅因为它性能好,还因为它原生内置了JSON Schema的validation和serialization,这一点对于熟悉Schema的开发者来说相对比较友好, 而且它的serialization甚至可以做到 2x faster than JSON.stringify()。
 
 ## Documentation
 
@@ -20,9 +20,11 @@
 
 | method  | url | description |
 | --------| ----|------------ |
-|   POST  |  /upload/picture  | 图片上传  |
-|   POST  |  /upload/picture/{fileKey}  | 图片删除  |
-|   POST  |  /upload/picture/list  | 图片列表  |
+| POST | /user/signup | 用户注册 |
+| POST | /user/signin | 用户登录 |
+| POST | /upload/picture | 图片上传 |
+| POST | /upload/picture/{fileKey} | 图片删除 |
+| POST | /upload/picture/list | 图片列表 |
 
 ## License
 
