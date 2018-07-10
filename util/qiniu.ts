@@ -3,31 +3,32 @@ import * as qiniu from 'qiniu'
 import request from './request'
 const config = require('../config/qiniu')
 
-const accessKey = config.accessKey || process.env.QINIU_ACCESS_KEY
-const secretKey = config.secretKey || process.env.QINIU_SECRET_KEY
-
-// https://www.npmjs.com/package/http-errors
-
-export default class Qianiu {
+export default class Qiniu {
+    private accessKey: string
+    private secretKey: string
+    private mac: qiniu.auth.digest.Mac
     constructor(accessKey: string, secretKey: string) {
-        console.log(accessKey, secretKey)
+        this.accessKey = config.accessKey || process.env.QINIU_ACCESS_KEY
+        this.secretKey = config.secretKey || process.env.QINIU_SECRET_KEY
+        // 上传客户端
+        this.mac = new qiniu.auth.digest.Mac(this.accessKey, this.secretKey)
     }
     /**
      * create
      */
-    public create() {
-        return new Qianiu(accessKey, secretKey)
+    static create() {
+        return new Qiniu(config.accessKey, config.secretKey)
     }
-    public getUploadToken(bucket?: string) {
+    getUploadToken(bucket?: string) {
         const opts = {
             scope: bucket,
             expires: 7200 // 有效期2小时
         }
         const putPolicy = new qiniu.rs.PutPolicy(opts)
-        const token = putPolicy.uploadToken()
+        const token = putPolicy.uploadToken(this.mac)
         return token
     }
-    public getAccessToken() {
+    getAccessToken() {
         return request({
             method: 'POST',
             uri: 'https://acc.qbox.me/oauth2/token',

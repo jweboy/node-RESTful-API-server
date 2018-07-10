@@ -3,10 +3,9 @@ import { IncomingMessage, ServerResponse } from 'http'
 import Qiniu from '../../util/qiniu'
 
 export default async function postAccessToken(req: fastify.FastifyRequest<IncomingMessage>, reply: fastify.FastifyReply<ServerResponse>) {
-    const qiniu = new Qiniu('1', '3')
+    const qiniu = Qiniu.create()
     try{
         const token = await qiniu.getAccessToken()
-        console.log('token');
         reply.send(token)
     } catch(err) {
         reply.send(err)
