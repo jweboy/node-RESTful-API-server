@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "rootDir": "route",
+        "module": "commonjs",
+        "target": "es5",
+        "lib": ["es6"],
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "noUnusedLocals": true
+    },
+    "exclude": [
+        "node_modules",
+        "config"
+    ]
+}

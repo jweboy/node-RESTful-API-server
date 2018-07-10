@@ -12,5 +12,8 @@ module.exports = function schma (fastify, opts, next) {
   fastify.addSchema(require('../schema/user/signup').postSignupBody)
   fastify.addSchema(require('../schema/user/signup').postSignupSuccess)
 
+  // qiniu
+  fastify.addSchema(require('../schema/qiniu/bucket').postBucket)
+
   next()
 }
