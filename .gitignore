@@ -5,6 +5,7 @@
 .nyc_output
 
 *.log
+*.lock
 
 node_modules/
 
