@@ -10,7 +10,7 @@ const accepts = require('fastify-accepts')
 const formbody = require('fastify-formbody')
 const multipart = require('fastify-multipart')
 const { postAccessToken, postCreateBucket, getBucketList } = require('./route/qiniu')
-// const schema = require('./plugin/schema')
+const schema = require('./plugin/schema')
 // const routes = require('./route')
 // const fastify = require('fastify')({
 //     // http2目前还没有完全支持 node >= 8.8.1
@@ -90,14 +90,14 @@ server.register(require('fastify-url-data'))
 // server
 // .register(jwt, { secret: authCfg.jwtSecret })
 // .register(auth)
-// .register(schema)
+.register(schema)
 // .register(routes)
 // .after((err: Error) => {
 //   if (err) { throw err }
 //   signale.success('Routes registration successful.')
 // })
 server.post('/api/qiniu/access-token', postAccessToken)
-server.post('/api/qiniu/bucket', postCreateBucket)
+server.post('/api/qiniu/bucket', { schema: { body: 'postBucket#' } }, postCreateBucket)
 server.get('/api/qiniu/bucket', getBucketList)
 server.delete('/api/qiniu/bucket', deleteBucket)
 // server.register(routes, { prefix: '/api' })

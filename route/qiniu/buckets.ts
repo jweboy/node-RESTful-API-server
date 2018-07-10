@@ -6,9 +6,8 @@ const qiniu = Qiniu.create()
 
 async function postCreateBucket(req: fastify.FastifyRequest<IncomingMessage>, reply: fastify.FastifyReply<ServerResponse>) {
     const body = req.body
-    console.log(body);
     try{
-        const data = await qiniu.postBucket('test02-jianglei')
+        const data = await qiniu.postBucket(body.name)
         console.log('data', data)
         reply.send('create')
         // reply.send(data)
