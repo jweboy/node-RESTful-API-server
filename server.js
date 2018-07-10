@@ -1,6 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const fastify = require("fastify");
+'use strict'
+Object.defineProperty(exports, '__esModule', { value: true })
+const fastify = require('fastify')
 // const fastify = require('fastify')({
 //     // http2目前还没有完全支持 node >= 8.8.1
 //     // issue https://github.com/fastify/fastify/issues/181
@@ -13,15 +13,15 @@ const fastify = require("fastify");
 //   // const auth = require('fastify-auth')
 //   const accepts = require('fastify-accepts')
 //   const CreateError = require('http-errors')
-const signale = require('signale');
+const signale = require('signale')
 //   const routes = require('./route')
 // //   const mongodb = require('./middleware/mongodb')
 //   const authCfg = require('./config/auth')
 //   const schema = require('./plugin/schema')
-const port = process.env.PORT || 3000;
-const host = process.env.HOST || '127.0.0.1';
-const protocol = process.env.PROTOCOL || 'http';
-const server = fastify();
+const port = process.env.PORT || 3000
+const host = process.env.HOST || '127.0.0.1'
+const protocol = process.env.PROTOCOL || 'http'
+const server = fastify()
 //   // process.env.NODE_ENV = 'development'
 //   // TODO: next没有定义类型
 //   // hooks
@@ -72,20 +72,20 @@ const server = fastify();
 //     })
 // start server
 server.listen(3000, (err) => {
-    if (!!err) {
-        signale.error(`Error starting server:${err}.`);
-        process.exit(1);
+  if (err) {
+    signale.error(`Error starting server:${err}.`)
+    process.exit(1)
+  }
+  const Signale = signale.Signale
+  const custom = new Signale({
+    types: {
+      wow: {
+        badge: '🎅 ',
+        color: 'blue',
+        label: 'Wow'
+      }
     }
-    const Signale = signale.Signale;
-    const custom = new Signale({
-        types: {
-            wow: {
-                badge: '🎅 ',
-                color: 'blue',
-                label: 'Wow'
-            }
-        }
-    });
-    custom.wow(`Server is running at ${protocol}:${host}:${port}.`);
-});
-module.exports = server;
+  })
+  custom.wow(`Server is running at ${protocol}:${host}:${port}.`)
+})
+module.exports = server

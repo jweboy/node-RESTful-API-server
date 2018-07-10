@@ -11,11 +11,12 @@ interface ErrorException extends Error {
 }
 
 interface RequestOptions {
-    method: string,
+    method?: string,
     uri: string,
-    json: boolean,
+    json?: boolean,
     body?: Object,
-    form?: Object
+    form?: Object,
+    headers?: Object
 }
     
 function request(opts: RequestOptions) {
@@ -27,11 +28,20 @@ function request(opts: RequestOptions) {
         .then((body: ServerResponse) => body)
         .catch(function(err: ErrorException) {
             console.log('err', err.message, err.statusCode);
+            if(!err.statusCode) {
+                throw new CreateError.InternalServerError(err.message)
+            }
             if (err.statusCode === 400) {
                 throw new CreateError.BadRequest(err.message)
             }
+            if (err.statusCode === 401) {
+                throw new CreateError.Unauthorized(err.message)
+            }
             if(err.statusCode === 500) {
                 throw new CreateError.InternalServerError(err.message)
+            }
+            if(err.statusCode > 500) {
+                throw err
             }
         })
 }

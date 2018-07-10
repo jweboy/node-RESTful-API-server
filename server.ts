@@ -8,7 +8,7 @@ import * as CreateError from 'http-errors'
 const accepts = require('fastify-accepts')
 const formbody = require('fastify-formbody')
 const multipart = require('fastify-multipart')
-const { postAccessToken } = require('./route/qiniu')
+const { postAccessToken, postCreateBucket, getBucketList } = require('./route/qiniu')
 // const schema = require('./plugin/schema')
 // const routes = require('./route')
 // const fastify = require('fastify')({
@@ -53,9 +53,21 @@ server.setNotFoundHandler(function (req: fastify.FastifyRequest<IncomingMessage>
   })
 })
 
+interface ErrorException extends Error {
+  statusCode: number,
+  message: string,
+  stack: string
+}
+
+// TODO: ErrorException公共抽离、自定义error抽象
 // errorHandler
-server.setErrorHandler(function (err: Error, req: fastify.FastifyRequest<IncomingMessage>, reply: fastify.FastifyReply<ServerResponse>) {
-  reply.send(CreateError(500, err))
+server.setErrorHandler(function (err: ErrorException, req: fastify.FastifyRequest<IncomingMessage>, reply: fastify.FastifyReply<ServerResponse>) {
+  if(err.statusCode > 500) {
+    throw err
+  } else {
+    const errMsg = err.message
+    reply.send(new CreateError.InternalServerError(errMsg))
+  }
 })
 
 // decorate
@@ -84,6 +96,8 @@ server.register(require('fastify-url-data'))
 //   signale.success('Routes registration successful.')
 // })
 server.post('/api/qiniu/access-token', postAccessToken)
+server.post('/api/qiniu/bucket', postCreateBucket)
+server.get('/api/qiniu/bucket', getBucketList)
 // server.register(routes, { prefix: '/api' })
 
 
