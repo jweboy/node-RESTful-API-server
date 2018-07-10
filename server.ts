@@ -2,6 +2,7 @@ import * as fastify from 'fastify'
 import { Server, IncomingMessage, ServerResponse } from 'http'
 import * as signale from 'signale'
 import * as CreateError from 'http-errors'
+import { deleteBucket } from 'route/qiniu';
 
 
 // const urlData = require('fastify-url-data')
@@ -98,6 +99,7 @@ server.register(require('fastify-url-data'))
 server.post('/api/qiniu/access-token', postAccessToken)
 server.post('/api/qiniu/bucket', postCreateBucket)
 server.get('/api/qiniu/bucket', getBucketList)
+server.delete('/api/qiniu/bucket', deleteBucket)
 // server.register(routes, { prefix: '/api' })
 
 

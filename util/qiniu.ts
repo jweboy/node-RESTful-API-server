@@ -66,4 +66,15 @@ export default class Qiniu {
             }
         }) 
     }
+    deleteBucket(bucketName: string) {
+        const uri = 'https://rs.qiniu.com'
+        const fullUri = url.resolve(uri, `/drop/${bucketName}`)
+        return request({
+            method: 'POST',
+            uri: fullUri,
+            headers: {
+                Authorization: this.getAccessToken(fullUri)
+            }
+        })
+    }
 }

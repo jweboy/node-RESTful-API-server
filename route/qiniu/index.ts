@@ -1,8 +1,9 @@
 import postAccessToken from './token'
-import { postCreateBucket, getBucketList } from './buckets'
+import { postCreateBucket, getBucketList, deleteBucket } from './buckets'
 
 export {
     postAccessToken,
     postCreateBucket,
     getBucketList,
+    deleteBucket
 }
