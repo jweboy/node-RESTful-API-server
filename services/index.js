@@ -4,11 +4,11 @@ const { getBucketList, postCreateBucket, deleteBucket } = require('./qiniu')
   // server.post('/api/qiniu/access-token', postAccessToken)
 // }
 
-module.exports =  function services(fastify, opts, next) {
+module.exports = function services (fastify, opts, next) {
   fastify.get('/', (request, reply) => {
     reply.send('fastify RESTful API')
   })
-  
+
   // qiniu
   fastify
     .get('/qiniu/bucket', getBucketList)
