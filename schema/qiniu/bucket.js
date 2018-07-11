@@ -1,15 +1,15 @@
 exports.postBucket = {
-    $id: 'postBucket',
-    type: 'object',
-    properties: {
-        name: { type: 'string' }
-    }
+  $id: 'postBucket',
+  type: 'object',
+  properties: {
+    name: { type: 'string' }
+  }
 }
 
 exports.deleteBucket = {
-    $id: 'deleteBucket',
-    type: 'object',
-    properties: {
-        name: { type: 'string' }
-    }
+  $id: 'deleteBucket',
+  type: 'object',
+  properties: {
+    name: { type: 'string' }
+  }
 }

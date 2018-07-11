@@ -2,10 +2,11 @@ import * as fastify from 'fastify'
 import { Server, IncomingMessage, ServerResponse } from 'http'
 import * as signale from 'signale'
 import * as CreateError from 'http-errors'
-import { deleteBucket } from 'route/qiniu';
+import { deleteBucket } from 'route/qiniu'
 
 
 // const urlData = require('fastify-url-data')
+// const autoload = require('fastify-autoload')
 const accepts = require('fastify-accepts')
 const formbody = require('fastify-formbody')
 const multipart = require('fastify-multipart')
