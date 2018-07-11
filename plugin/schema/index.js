@@ -1,4 +1,4 @@
-module.exports = function addSchema(fastify, opts, next) {
+module.exports = function addSchema (fastify, opts, next) {
   // upload
   fastify.addSchema(require('./upload/getFile').getFileQuery)
   fastify.addSchema(require('./upload/getFile').getFileSuccess)
