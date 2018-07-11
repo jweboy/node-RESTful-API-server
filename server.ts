@@ -2,17 +2,18 @@ import * as fastify from 'fastify'
 import { Server, IncomingMessage, ServerResponse } from 'http'
 import * as signale from 'signale'
 import * as CreateError from 'http-errors'
-import { deleteBucket } from 'route/qiniu';
-
+// import * as services from './services'
+// import * as path from 'path'
 
 // const urlData = require('fastify-url-data')
+// const autoload = require('fastify-autoload')
 const accepts = require('fastify-accepts')
 const formbody = require('fastify-formbody')
 const multipart = require('fastify-multipart')
-const { postAccessToken, postCreateBucket, getBucketList } = require('./route/qiniu')
 const schema = require('./plugin/schema')
-// const routes = require('./route')
+const services = require('./services')
 // const fastify = require('fastify')({
+  // const { postAccessToken, postCreateBucket, getBucketList } = require('./route/qiniu')
 //     // http2目前还没有完全支持 node >= 8.8.1
 //     // issue https://github.com/fastify/fastify/issues/181
 //     // http2: true
@@ -74,33 +75,40 @@ server.setErrorHandler(function (err: ErrorException, req: fastify.FastifyReques
 // decorate
   
 // accepts register
-server.register(accepts)
+// server.register(accepts)
 // form body register => parse x-www-form-urlencoded bodies
-server.register(formbody)
+// server.register(formbody)
 // form-data register
-server.register(multipart)
+// server.register(multipart)
 // mongodb register
 // fastify.register(mongodb)
 // .after((err: Error) => {
 //   if (err) { throw err }
 //   signale.success('Mongodb registration successful.')
 // })
-// routes register
-server.register(require('fastify-url-data'))
+// services register
+server
+  // .register(require('fastify-url-data'))
+  .register(accepts)
+  .register(formbody) // form body register => parse x-www-form-urlencoded bodies
+  .register(multipart) // form-data register
+  .register(schema)
+  .register(services, { prefix: 'api' })
+  // .register(autoload, {
+  //   dir: path.join(__dirname, 'services'),
+  //   options: { prefix: '/api' }
+  // })
 // server
 // .register(jwt, { secret: authCfg.jwtSecret })
 // .register(auth)
-.register(schema)
-// .register(routes)
 // .after((err: Error) => {
 //   if (err) { throw err }
 //   signale.success('Routes registration successful.')
 // })
-server.post('/api/qiniu/access-token', postAccessToken)
-server.post('/api/qiniu/bucket', { schema: { body: 'postBucket#' } }, postCreateBucket)
-server.get('/api/qiniu/bucket', getBucketList)
-server.delete('/api/qiniu/bucket', deleteBucket)
-// server.register(routes, { prefix: '/api' })
+// server.post('/api/qiniu/access-token', postAccessToken)
+// server.post('/api/qiniu/bucket', { schema: { body: 'postBucket#' } }, postCreateBucket)
+// server.get('/api/qiniu/bucket', getBucketList)
+// server.delete('/api/qiniu/bucket/:name', { schema: { params: 'deleteBucket#' } }, deleteBucket)
 
 
 

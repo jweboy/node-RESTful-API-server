@@ -27,6 +27,7 @@
     "fastify": "^1.7.0",
     "fastify-accepts": "^0.5.0",
     "fastify-auth": "^0.2.0",
+    "fastify-autoload": "^0.4.0",
     "fastify-formbody": "^2.0.0",
     "fastify-jwt": "^0.2.1",
     "fastify-mongodb": "^0.5.0",

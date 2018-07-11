@@ -8,9 +8,7 @@ async function postCreateBucket(req: fastify.FastifyRequest<IncomingMessage>, re
     const body = req.body
     try{
         const data = await qiniu.postBucket(body.name)
-        console.log('data', data)
-        reply.send('create')
-        // reply.send(data)
+        reply.code(204).send(data)
     } catch(err) {
         reply.send(err)
     }
@@ -26,8 +24,9 @@ async function getBucketList(req: fastify.FastifyRequest<IncomingMessage>, reply
 }
 
 async function deleteBucket(req: fastify.FastifyRequest<IncomingMessage>, reply: fastify.FastifyReply<ServerResponse>) {
+    const params = req.params
     try {
-        const result = await qiniu.deleteBucket('test02')
+        const result = await qiniu.deleteBucket(params.name)
         reply.send(result)
     } catch(err) {
         reply.send(err)
