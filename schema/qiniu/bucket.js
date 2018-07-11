@@ -5,3 +5,11 @@ exports.postBucket = {
         name: { type: 'string' }
     }
 }
+
+exports.deleteBucket = {
+    $id: 'deleteBucket',
+    type: 'object',
+    properties: {
+        name: { type: 'string' }
+    }
+}

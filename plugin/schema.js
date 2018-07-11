@@ -14,6 +14,7 @@ module.exports = function schma (fastify, opts, next) {
 
   // qiniu
   fastify.addSchema(require('../schema/qiniu/bucket').postBucket)
+  fastify.addSchema(require('../schema/qiniu/bucket').deleteBucket)
 
   next()
 }

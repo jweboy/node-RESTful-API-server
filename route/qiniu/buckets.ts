@@ -26,8 +26,10 @@ async function getBucketList(req: fastify.FastifyRequest<IncomingMessage>, reply
 }
 
 async function deleteBucket(req: fastify.FastifyRequest<IncomingMessage>, reply: fastify.FastifyReply<ServerResponse>) {
+    console.log(req.params);
+    const params = req.params
     try {
-        const result = await qiniu.deleteBucket('test02')
+        const result = await qiniu.deleteBucket(params.name)
         reply.send(result)
     } catch(err) {
         reply.send(err)

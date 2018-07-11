@@ -99,7 +99,7 @@ server.register(require('fastify-url-data'))
 server.post('/api/qiniu/access-token', postAccessToken)
 server.post('/api/qiniu/bucket', { schema: { body: 'postBucket#' } }, postCreateBucket)
 server.get('/api/qiniu/bucket', getBucketList)
-server.delete('/api/qiniu/bucket', deleteBucket)
+server.delete('/api/qiniu/bucket/:name', { schema: { params: 'deleteBucket#' } }, deleteBucket)
 // server.register(routes, { prefix: '/api' })
 
 
