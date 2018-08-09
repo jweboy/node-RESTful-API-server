@@ -1,7 +1,7 @@
 import * as fastify from 'fastify'
-import { Server, IncomingMessage, ServerResponse } from 'http'
-import * as signale from 'signale'
+import { IncomingMessage, Server, ServerResponse } from 'http'
 import * as CreateError from 'http-errors'
+import * as signale from 'signale'
 // import * as services from './services'
 // import * as path from 'path'
 
@@ -34,7 +34,11 @@ const server: fastify.FastifyInstance<Server, IncomingMessage, ServerResponse> =
   
 // TODO: next没有定义类型
 // hooks
-server.addHook('preHandler', function (req: fastify.FastifyRequest<IncomingMessage>, reply: fastify.FastifyReply<ServerResponse>, next) {
+server.addHook('preHandler', function preHandler(
+  req: fastify.FastifyRequest<IncomingMessage>,
+  reply: fastify.FastifyReply<ServerResponse>,
+  next,
+) {
   // 设置cors,支持跨域
   reply.header('Access-Control-Allow-Origin', '*')
   reply.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
@@ -47,24 +51,31 @@ server.addHook('preHandler', function (req: fastify.FastifyRequest<IncomingMessa
 //   })
   
 //  notFoundHandler
-server.setNotFoundHandler(function (req: fastify.FastifyRequest<IncomingMessage>, reply: fastify.FastifyReply<ServerResponse>) {
+server.setNotFoundHandler(function setNotFoundHandler(
+  req: fastify.FastifyRequest<IncomingMessage>,
+  reply: fastify.FastifyReply<ServerResponse>,
+) {
   reply.code(404).send({
-    statusCode: 404,
+    error: null,
     message: '资源不存在',
-    error: null
+    statusCode: 404,
   })
 })
 
 interface ErrorException extends Error {
-  statusCode: number,
-  message: string,
-  stack: string
+  statusCode: number;
+  message: string;
+  stack: string;
 }
 
 // TODO: ErrorException公共抽离、自定义error抽象
 // errorHandler
-server.setErrorHandler(function (err: ErrorException, req: fastify.FastifyRequest<IncomingMessage>, reply: fastify.FastifyReply<ServerResponse>) {
-  if(err.statusCode > 500) {
+server.setErrorHandler(function setErrorHandler(
+  err: ErrorException,
+  req: fastify.FastifyRequest<IncomingMessage>,
+  reply: fastify.FastifyReply<ServerResponse>,
+) {
+  if (err.statusCode > 500) {
     throw err
   } else {
     const errMsg = err.message
@@ -110,11 +121,9 @@ server
 // server.get('/api/qiniu/bucket', getBucketList)
 // server.delete('/api/qiniu/bucket/:name', { schema: { params: 'deleteBucket#' } }, deleteBucket)
 
-
-
 // start server
 server.listen(3000, (err: Error) => {
-  if(!!err) {
+  if (!!err) {
     signale.error(`Error starting server:${err}.`)
     process.exit(1)
   }
@@ -125,12 +134,11 @@ server.listen(3000, (err: Error) => {
       wow: {
         badge: '🎅 ',
         color: 'blue',
-        label: 'Wow'
-      }
-    }
+        label: 'Wow',
+      },
+    },
   })
   custom.wow(`Server is running at ${protocol}:${host}:${port}.`)
 })
   
 export default server
-  
