@@ -1,8 +1,8 @@
 import * as qiniu from 'qiniu'
 import * as url from 'url'
 import * as base64Url from 'base64-url'
-import request from './request'
-import config from '../config/qiniu'
+import request from 'util/request'
+import config from 'config/qiniu'
 
 // process.env.QINIU_ACCESS_KEY
 // process.env.QINIU_SECRET_KEY
@@ -22,11 +22,14 @@ export default class Qiniu {
     }
     public getBucket() {
         const uri = 'https://rs.qbox.me/buckets'
-        return request({
+        request({
             uri,
             headers: {
-                Authorization: this.getAccessToken(uri)
+                authorization: this.getAccessToken(uri),
             },
+        })
+        .then((data) => {
+            console.dir(data)
         })
     }
     public deleteBucket(bucketName: string) {
@@ -36,7 +39,7 @@ export default class Qiniu {
             method: 'POST',
             uri: fullUri,
             headers: {
-                Authorization: this.getAccessToken(fullUri),
+                authorization: this.getAccessToken(fullUri),
             },
         })
     }
@@ -70,7 +73,7 @@ export default class Qiniu {
             method: 'POST',
             uri: fullUri,
             headers: {
-                Authorization: this.getAccessToken(fullUri),
+                authorization: this.getAccessToken(fullUri),
             },
         })
     }

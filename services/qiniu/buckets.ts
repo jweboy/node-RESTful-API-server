@@ -1,4 +1,4 @@
-import Qiniu from 'util/qiniu'
+import Qiniu from 'middleware/qiniu'
 import Fastify from 'interface/fastify'
 
 const qiniu = Qiniu.create()
@@ -22,6 +22,16 @@ async function getBucketList(
 ) {
     try {
         const list = await qiniu.getBucket()
+        // let combList = []
+        // for (const [key] of object) {
+            
+        // }
+        // const combList = list.map(function combine(arr: string[], item: string) {
+        //     // arr.push({
+        //     //     name: item,
+        //     // })
+        //     return arr
+        // }, [])
         reply.send(list)
     } catch (err) {
         reply.send(err)

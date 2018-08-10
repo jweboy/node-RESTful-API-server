@@ -1,8 +1,6 @@
-interface Headers {
-    'content-type'?: string;
-    'user-agent'?: string;
-    Authorization?: string;
-}
+import { IncomingHttpHeaders } from 'http'
+
+// TODO: 這裡可以繼承HTTP
 
 interface RequestOptions {
     method?: string;
@@ -10,7 +8,7 @@ interface RequestOptions {
     json?: boolean;
     body?: object;
     form?: object;
-    headers?: Headers;
+    headers?: IncomingHttpHeaders;
 }
 
 export default RequestOptions
