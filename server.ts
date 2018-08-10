@@ -1,8 +1,10 @@
 import * as fastify from 'fastify'
-import { IncomingMessage, Server, ServerResponse } from 'http'
 import * as CreateError from 'http-errors'
 import * as signale from 'signale'
-// import * as services from './services'
+import ErrorException from 'interface/error'
+import services from 'services'
+import Fastify from 'interface/fastify'
+
 // import * as path from 'path'
 
 // const urlData = require('fastify-url-data')
@@ -11,7 +13,6 @@ const accepts = require('fastify-accepts')
 const formbody = require('fastify-formbody')
 const multipart = require('fastify-multipart')
 const schema = require('./plugin/schema')
-const services = require('./services')
 // const fastify = require('fastify')({
   // const { postAccessToken, postCreateBucket, getBucketList } = require('./route/qiniu')
 //     // http2目前还没有完全支持 node >= 8.8.1
@@ -28,16 +29,15 @@ const services = require('./services')
 const port = process.env.PORT || 3000
 const host = process.env.HOST || '127.0.0.1'
 const protocol = process.env.PROTOCOL || 'http'
-const server: fastify.FastifyInstance<Server, IncomingMessage, ServerResponse> = fastify({})
-  
+const server: Fastify['server'] = fastify({})
+
 // process.env.NODE_ENV = 'development'
   
-// TODO: next没有定义类型
 // hooks
 server.addHook('preHandler', function preHandler(
-  req: fastify.FastifyRequest<IncomingMessage>,
-  reply: fastify.FastifyReply<ServerResponse>,
-  next,
+  req: Fastify['request'],
+  reply: Fastify['reply'],
+  next: Fastify['next'],
 ) {
   // 设置cors,支持跨域
   reply.header('Access-Control-Allow-Origin', '*')
@@ -52,8 +52,8 @@ server.addHook('preHandler', function preHandler(
   
 //  notFoundHandler
 server.setNotFoundHandler(function setNotFoundHandler(
-  req: fastify.FastifyRequest<IncomingMessage>,
-  reply: fastify.FastifyReply<ServerResponse>,
+  req: Fastify['request'],
+  reply: Fastify['reply'],
 ) {
   reply.code(404).send({
     error: null,
@@ -62,29 +62,20 @@ server.setNotFoundHandler(function setNotFoundHandler(
   })
 })
 
-interface ErrorException extends Error {
-  statusCode: number;
-  message: string;
-  stack: string;
-}
-
-// TODO: ErrorException公共抽离、自定义error抽象
 // errorHandler
 server.setErrorHandler(function setErrorHandler(
   err: ErrorException,
-  req: fastify.FastifyRequest<IncomingMessage>,
-  reply: fastify.FastifyReply<ServerResponse>,
+  req: Fastify['request'],
+  reply: Fastify['reply'],
 ) {
   if (err.statusCode > 500) {
     throw err
   } else {
-    const errMsg = err.message
-    reply.send(new CreateError.InternalServerError(errMsg))
+    reply.send(new CreateError.InternalServerError(err.message))
   }
 })
 
 // decorate
-  
 // accepts register
 // server.register(accepts)
 // form body register => parse x-www-form-urlencoded bodies
@@ -104,7 +95,8 @@ server
   .register(formbody) // form body register => parse x-www-form-urlencoded bodies
   .register(multipart) // form-data register
   .register(schema)
-  .register(services, { prefix: 'api' })
+  .register(services)
+  // .register(services, { prefix: 'api' })
   // .register(autoload, {
   //   dir: path.join(__dirname, 'services'),
   //   options: { prefix: '/api' }

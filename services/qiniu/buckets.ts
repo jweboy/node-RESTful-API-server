@@ -1,34 +1,52 @@
-import * as fastify from "fastify";
-import { ServerResponse, IncomingMessage } from "http";
-import Qiniu from '../../util/qiniu'
+import Qiniu from 'middleware/qiniu'
+import Fastify from 'interface/fastify'
 
 const qiniu = Qiniu.create()
 
-async function postCreateBucket(req: fastify.FastifyRequest<IncomingMessage>, reply: fastify.FastifyReply<ServerResponse>) {
+async function postCreateBucket(
+    req: Fastify['request'],
+    reply: Fastify['reply'],
+) {
     const body = req.body
-    try{
+    try {
         const data = await qiniu.postBucket(body.name)
         reply.code(204).send(data)
-    } catch(err) {
+    } catch (err) {
         reply.send(err)
     }
 }
 
-async function getBucketList(req: fastify.FastifyRequest<IncomingMessage>, reply: fastify.FastifyReply<ServerResponse>) {
+async function getBucketList(
+    req: Fastify['request'],
+    reply: Fastify['reply'],
+) {
     try {
         const list = await qiniu.getBucket()
+        // let combList = []
+        // for (const [key] of object) {
+            
+        // }
+        // const combList = list.map(function combine(arr: string[], item: string) {
+        //     // arr.push({
+        //     //     name: item,
+        //     // })
+        //     return arr
+        // }, [])
         reply.send(list)
-    } catch(err) {
+    } catch (err) {
         reply.send(err)
     }
 }
 
-async function deleteBucket(req: fastify.FastifyRequest<IncomingMessage>, reply: fastify.FastifyReply<ServerResponse>) {
+async function deleteBucket(
+    req: Fastify['request'],
+    reply: Fastify['reply'],
+) {
     const params = req.params
     try {
         const result = await qiniu.deleteBucket(params.name)
         reply.send(result)
-    } catch(err) {
+    } catch (err) {
         reply.send(err)
     }
 }
@@ -36,5 +54,5 @@ async function deleteBucket(req: fastify.FastifyRequest<IncomingMessage>, reply:
 export {
     postCreateBucket,
     getBucketList,
-    deleteBucket
+    deleteBucket,
 }
