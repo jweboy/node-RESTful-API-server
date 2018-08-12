@@ -8,5 +8,6 @@
 *.lock
 
 node_modules/
+refactor/dist/
 
 export/
