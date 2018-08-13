@@ -1,3 +1,4 @@
 export interface Bucket {
-  name: number;
+  name: string;
+  id: string;
 }

@@ -1,7 +1,7 @@
 import { Module, NestModule, MiddlewareConsumer, HttpModule } from '@nestjs/common';
 import { BucketController } from './bucket.controller';
 import { BucketService } from './bucket.service';
-// import { BucketRequestMiddlware } from './bucket.middleware';
+import { BucketRequestMiddlware } from './bucket.middleware';
 
 // 组织应用程序结构
 
@@ -12,9 +12,8 @@ import { BucketService } from './bucket.service';
 })
 export class BucketModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {
-    // consumer
-    //   .apply(BucketRequestMiddlware)
-    //   .with('https://rs.qbox.me/buckets')
-    //   .forRoutes(BucketController);
+    consumer
+      .apply(BucketRequestMiddlware)
+      .forRoutes(BucketController);
   }
 }
