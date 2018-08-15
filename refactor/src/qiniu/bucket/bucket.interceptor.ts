@@ -11,10 +11,7 @@ export class BucketInterceptor implements NestInterceptor {
   ): Observable<any> {
     return call$.pipe(map((data): Bucket[] => {
       return data.reduce((arr: Bucket[], item: string, index: string) => {
-        arr.push({
-          name: item,
-          id: `bucket_${index}`,
-        });
+        arr.push({ name: item, id: `bucket_${index}` });
         return arr;
       }, []);
     }));
