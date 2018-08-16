@@ -1,7 +1,7 @@
 import { Module, NestModule, MiddlewareConsumer, HttpModule } from '@nestjs/common';
 import { BucketController } from './bucket.controller';
 import { BucketService } from './bucket.service';
-import { BucketRequestMiddlware } from './bucket.middleware';
+import { LoggerMiddleware } from '../../common/middlewares/logger.middleware';
 
 // 组织应用程序结构
 
@@ -13,7 +13,8 @@ import { BucketRequestMiddlware } from './bucket.middleware';
 export class BucketModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(BucketRequestMiddlware)
+      .apply(LoggerMiddleware)
+      .with('BucketController')
       .forRoutes(BucketController);
   }
 }
