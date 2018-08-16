@@ -9,13 +9,7 @@ import { ForbiddenException } from '../../common/exceptions/forbidden.exception'
 export class BucketService {
   constructor(private readonly httpService: HttpService) {}
   create(bucket: Bucket) {
-    // if (!bucket.name) {
-    //   throw new HttpException({
-    //     status: HttpStatus.FORBIDDEN,
-    //     error: 'This is a custom message',
-    //   }, 403);
-    // }
-    return 'ok';
+    return bucket;
   }
   findAll(uri: string, token: string): Observable<AxiosResponse<string[]>> {
     return this.httpService.get(uri, {

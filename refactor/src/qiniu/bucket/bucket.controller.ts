@@ -15,11 +15,10 @@ const { getUri } = (config as any);
 export class BucketController {
   constructor(private readonly bucketService: BucketService) {}
   @Post()
-  // @UseFilters(HttpExceptionFilter)
+  @UseFilters(HttpExceptionFilter)
   @UsePipes(ValidationPipe)
   create(@Body() createBucket: CreateBucketDto) {
     return this.bucketService.create(createBucket);
-    // throw new ForbiddenException();
   }
 
   @UseInterceptors(BucketInterceptor)
