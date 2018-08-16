@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseFilters, UseInterceptors, HttpException, ForbiddenException } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseFilters, UseInterceptors, HttpException, ForbiddenException, UsePipes } from '@nestjs/common';
 import { HttpExceptionFilter } from '../../common/exceptions/http-exception.filter';
 import { BucketService } from './bucket.service';
 import { AccessToken } from '../common/decorators/access-token.decorator';
@@ -6,6 +6,7 @@ import * as config from './config.json';
 import { BucketInterceptor } from './bucket.interceptor';
 import { CreateBucketDto } from './dto/bucket.dto';
 import { BadRequestException } from '../../common/exceptions/bad-request.exception';
+import { ValidationPipe } from '../../common/pipes/validation.pipe';
 
 const { getUri } = (config as any);
 
@@ -14,14 +15,11 @@ const { getUri } = (config as any);
 export class BucketController {
   constructor(private readonly bucketService: BucketService) {}
   @Post()
-  @UseFilters(new HttpExceptionFilter())
+  // @UseFilters(HttpExceptionFilter)
+  @UsePipes(ValidationPipe)
   create(@Body() createBucket: CreateBucketDto) {
-    console.log(2, createBucket);
-    // if (!createBucket || (!!createBucket && !createBucket.name)) {
-    //   throw new BadRequestException();
-    // }
-    // return this.bucketService.create(createBucket);
-    throw new ForbiddenException();
+    return this.bucketService.create(createBucket);
+    // throw new ForbiddenException();
   }
 
   @UseInterceptors(BucketInterceptor)
