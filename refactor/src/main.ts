@@ -1,5 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from 'app.module';
+import { HttpExceptionFilter} from './common/exceptions/http-exception.filter';
+import { ErrorFilter } from './common/exceptions/error.filter';
 // import { FastifyAdapter } from '@nestjs/core/adapters';
 
 async function startService() {
@@ -12,6 +14,9 @@ async function startService() {
 
   // 设置路由前缀
   app.setGlobalPrefix('api');
+
+  // 异常处理
+  app.useGlobalFilters(new ErrorFilter());
 
   // 监听默认端口
   await app.listen(3000);
