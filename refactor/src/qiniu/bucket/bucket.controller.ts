@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseInterceptors, UsePipes } from '@nestjs/common';
+import { Controller, Get, Post, Body, Delete, Param, HttpCode, UseInterceptors, UsePipes } from '@nestjs/common';
 import { BucketService } from './bucket.service';
 import { AccessToken } from '../common/decorators/access-token.decorator';
 import { BucketInterceptor } from './bucket.interceptor';
@@ -11,6 +11,8 @@ import * as qiniu from 'qiniu';
 import * as data from '../common/decorators/config.json';
 
 const { getUri, postUri } = (config as any);
+
+// TODO: AccessToken需要封装传参公有化
 
 // 控制器层负责处理传入的请求, 并返回对客户端的响应。
 @Controller('bucket')
@@ -31,11 +33,24 @@ export class BucketController {
 
   @UseInterceptors(BucketInterceptor)
   @Get()
-  async findAll(@AccessToken(getUri) token: string) {
-    return await this.bucketService
+  findAll(@AccessToken(getUri) token: string) {
+    return this.bucketService
       .findAll(getUri, token)
       .toPromise()
       .then(({ data }) => data)
+      .catch(err => { throw err; });
+  }
+
+  @Delete(':name')
+  @HttpCode(204)
+  delete(@Param() params) {
+    const name = params.name || '';
+    const fullUri = url.resolve(postUri, `/drop/${name}`);
+    const token = qiniu.util.generateAccessToken(data as any, fullUri);
+    return this.bucketService
+      .delete(fullUri, token)
+      .toPromise()
+      .then(() => '')
       .catch(err => { throw err; });
   }
 }

@@ -20,4 +20,11 @@ export class BucketService {
       },
     });
   }
+  delete(uri: string, token: string): Observable<AxiosResponse<string>> {
+    return this.httpService.post(uri, {}, {
+      headers: {
+        authorization: token,
+      },
+    });
+  }
 }
