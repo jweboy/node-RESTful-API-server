@@ -1,6 +1,5 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from 'app.module';
-import { HttpExceptionFilter} from './common/exceptions/http-exception.filter';
 import { ErrorFilter } from './common/exceptions/error.filter';
 // import { FastifyAdapter } from '@nestjs/core/adapters';
 

@@ -1,7 +1,7 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
-import { AppController } from 'app.controller';
+import { AppController } from './app.controller';
 import { QiniuModule } from './qiniu/qiniu.module';
-import { AppService } from 'app.service';
+import { AppService } from './app.service';
 
 @Module({
   imports: [QiniuModule],
