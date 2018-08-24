@@ -8,7 +8,6 @@ export class FileController {
     @Post()
     @UseInterceptors(FileInterceptor('file'))
     upload(@UploadedFile() file) {
-        console.log(file);
-        // return this.fileService.upload();
+        return this.fileService.upload(file);
     }
 }
