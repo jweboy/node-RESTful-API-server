@@ -40,20 +40,20 @@
 //     return bucketManager
 //   }
 //   // 生成上传的token
-//   static generateToken (bucket) {
-//     // 配置项目
-//     const options = {
-//       scope: bucket,
-//       returnBody: `{
-//         "name":"$(key)",
-//         "hash": "$(etag)",
-//         "bucket":"$(bucket)"
-//       }`
-//     }
-//     const putPolicy = new qiniu.rs.PutPolicy(options)
-//     // 生成token
-//     return putPolicy.uploadToken()
-//   }
+// //   static generateToken (bucket) {
+// //     // 配置项目
+// //     const options = {
+// //       scope: bucket,
+// //       returnBody: `{
+// //         "name":"$(key)",
+// //         "hash": "$(etag)",
+// //         "bucket":"$(bucket)"
+// //       }`
+// //     }
+// //     const putPolicy = new qiniu.rs.PutPolicy(options)
+// //     // 生成token
+// //     return putPolicy.uploadToken()
+// //   }
 //   /**
 //    * 文件数据流上传
 //    * @param {Object} readableStream 可读取的文件流
@@ -98,50 +98,50 @@
 //   *   }]
 //    * @returns {Promise}
 //    */
-//   // getFiles ({ page, size, prefix }) {
-//   //   return new Promise((resolve, reject) => {
-//   //     const opts = {
-//   //       limit: size,
-//   //       prefix: prefix || '',
-//   //       marker: this[tempMap].get('marker')
-//   //     }
-//   //     if (!this[tempMap].has('page')) {
-//   //       this[tempMap].set('page', {
-//   //         prev: 1,
-//   //         next: page
-//   //       })
-//   //     } else {
-//   //       const currPos = this[tempMap].get('page')
-//   //       currPos.prev = currPos.next
-//   //       currPos.next = page
-//   //       this[tempMap].set('page', currPos)
-//   //     }
-//   //     // 获取bucket
-//   //     const bucketManager = Qiniu.getBucketManager()
-//   //     // 获取指定bucket里的所有文件
-//   //     bucketManager.listPrefix(this.bucket, opts, (respError, respBody, respInfo) => {
-//   //       if (respError) {
-//   //         reject(respError)
-//   //       }
-//   //       const nextMarker = respBody.marker
-//   //       const pagePos = this[tempMap].get('page')
-//   //       console.log('pagePos', nextMarker, pagePos.prev !== pagePos.next)
-//   //       if (nextMarker && (pagePos.prev !== pagePos.next)) {
-//   //         this[tempMap].set('marker', nextMarker)
-//   //         console.log(this[tempMap])
-//   //       }
-//   //       // else {
-//   //       //   const currMarker = this[tempMap].get('marker')
-//   //       //   this[tempMap].set('marker', currMarker)
-//   //       // }
-//   //       resolve({
-//   //         statusCode: respInfo.statusCode,
-//   //         error: (respBody && respBody.error) ? respBody.error : null,
-//   //         respBody
-//   //       })
-//   //     })
-//   //   })
-//   // }
+//   getFiles ({ page, size, prefix }) {
+//     return new Promise((resolve, reject) => {
+//       const opts = {
+//         limit: size,
+//         prefix: prefix || '',
+//         marker: this[tempMap].get('marker')
+//       }
+//       if (!this[tempMap].has('page')) {
+//         this[tempMap].set('page', {
+//           prev: 1,
+//           next: page
+//         })
+//       } else {
+//         const currPos = this[tempMap].get('page')
+//         currPos.prev = currPos.next
+//         currPos.next = page
+//         this[tempMap].set('page', currPos)
+//       }
+//       // 获取bucket
+//       const bucketManager = Qiniu.getBucketManager()
+//       // 获取指定bucket里的所有文件
+//       bucketManager.listPrefix(this.bucket, opts, (respError, respBody, respInfo) => {
+//         if (respError) {
+//           reject(respError)
+//         }
+//         const nextMarker = respBody.marker
+//         const pagePos = this[tempMap].get('page')
+//         console.log('pagePos', nextMarker, pagePos.prev !== pagePos.next)
+//         if (nextMarker && (pagePos.prev !== pagePos.next)) {
+//           this[tempMap].set('marker', nextMarker)
+//           console.log(this[tempMap])
+//         }
+//         // else {
+//         //   const currMarker = this[tempMap].get('marker')
+//         //   this[tempMap].set('marker', currMarker)
+//         // }
+//         resolve({
+//           statusCode: respInfo.statusCode,
+//           error: (respBody && respBody.error) ? respBody.error : null,
+//           respBody
+//         })
+//       })
+//     })
+//   }
 //   /**
 //    * 删除指定空间的文件
 //    *
