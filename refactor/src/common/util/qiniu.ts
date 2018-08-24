@@ -1,5 +1,6 @@
 import * as qiniu from 'qiniu';
 import * as data from '../config.json';
+import { streamifier } from './streamifier';
 
 const { accessKey, secretKey } = (data as any);
 
@@ -39,24 +40,31 @@ export default class Qiniu {
         const defaultOptions = {
             scope: '',
             expires: 7200,
-            returnBody: `{"name":"$(key)","hash": "$(etag)","bucket":"$(bucket)}`,
+            // returnBody: `{"name":"$(key)","hash": "$(etag)","bucket":"$(bucket)}`,
         };
         const mac = this.mac();
         const putPolicy = new qiniu.rs.PutPolicy({
             ...defaultOptions,
             ...options,
         });
+        console.log({
+            ...defaultOptions,
+            ...options,
+        });
         const uploadToken = putPolicy.uploadToken(mac);
         return uploadToken;
     }
-    uploadFile(bucket, readableStream) {
+    uploadFile(bucket, file) {
         const config = this.config();
         const uploadToken = this.uploadToken({ scope: bucket });
         const formUploader = new qiniu.form_up.FormUploader(config);
         const putExtra = new qiniu.form_up.PutExtra();
-
-        formUploader.putStream(uploadToken, 'test', readableStream, putExtra, (respError, respBody) => {
-            console.log(respError, respBody);
+        const readstream = streamifier.createReadStream(file.buffer);
+        formUploader.putStream(uploadToken, 'file', readstream, putExtra, (respErr, respBody, respInfo) => {
+            console.log(respErr, respBody, respInfo.statusCode);
+            if (respErr) {
+                throw respErr;
+              }
         });
     }
 }
