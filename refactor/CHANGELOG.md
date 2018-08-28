@@ -6,3 +6,7 @@
 
 # 2018-08-22
 - 增加root节点的测试用例
+
+# 2018-08-28
+- 增加mysql基础配置
+- 将Qiniu公用类的callback提取到services逻辑层次
