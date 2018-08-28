@@ -54,17 +54,19 @@ export default class Qiniu {
         const uploadToken = putPolicy.uploadToken(mac);
         return uploadToken;
     }
-    uploadFile(bucket, file) {
+    /**
+     * 文件上传
+     * @param bucket
+     * @param file
+     */
+    // TODO: 请求参数增加验证类型
+    uploadFile(bucket: string, file: object, cb: (respErr, respBody, respInfo) => void) {
         const config = this.config();
         const uploadToken = this.uploadToken({ scope: bucket });
         const formUploader = new qiniu.form_up.FormUploader(config);
         const putExtra = new qiniu.form_up.PutExtra();
         const readstream = streamifier.createReadStream(file.buffer);
-        formUploader.putStream(uploadToken, 'file', readstream, putExtra, (respErr, respBody, respInfo) => {
-            console.log(respErr, respBody, respInfo.statusCode);
-            if (respErr) {
-                throw respErr;
-              }
-        });
+
+        formUploader.putStream(uploadToken, 'file', readstream, putExtra, cb);
     }
 }
