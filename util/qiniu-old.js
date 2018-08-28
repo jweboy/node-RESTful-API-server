@@ -39,21 +39,6 @@
 //     const bucketManager = new qiniu.rs.BucketManager(this.mac, this.config)
 //     return bucketManager
 //   }
-//   // 生成上传的token
-// //   static generateToken (bucket) {
-// //     // 配置项目
-// //     const options = {
-// //       scope: bucket,
-// //       returnBody: `{
-// //         "name":"$(key)",
-// //         "hash": "$(etag)",
-// //         "bucket":"$(bucket)"
-// //       }`
-// //     }
-// //     const putPolicy = new qiniu.rs.PutPolicy(options)
-// //     // 生成token
-// //     return putPolicy.uploadToken()
-// //   }
 //   /**
 //    * 文件数据流上传
 //    * @param {Object} readableStream 可读取的文件流

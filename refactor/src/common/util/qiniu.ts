@@ -33,7 +33,7 @@ export default class Qiniu {
         return config;
     }
     /**
-     *
+     * 通用上传token
      * @param options
      */
     uploadToken(options: UploadOptions) {
@@ -54,7 +54,12 @@ export default class Qiniu {
         const uploadToken = putPolicy.uploadToken(mac);
         return uploadToken;
     }
-    uploadFile(bucket, file) {
+    /**
+     * 文件上传
+     * @param bucket
+     * @param readableStream
+     */
+    uploadFile(bucket, readableStream) {
         const config = this.config();
         const uploadToken = this.uploadToken({ scope: bucket });
         const formUploader = new qiniu.form_up.FormUploader(config);
