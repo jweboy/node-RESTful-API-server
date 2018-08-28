@@ -59,7 +59,8 @@ export default class Qiniu {
      * @param bucket
      * @param file
      */
-    uploadFile(bucket, file, cb) {
+    // TODO: 请求参数增加验证类型
+    uploadFile(bucket: string, file: object, cb: (respErr, respBody, respInfo) => void) {
         const config = this.config();
         const uploadToken = this.uploadToken({ scope: bucket });
         const formUploader = new qiniu.form_up.FormUploader(config);
