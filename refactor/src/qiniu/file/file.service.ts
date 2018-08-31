@@ -8,6 +8,11 @@ export class FileService {
        this.qiniu = new Qiniu();
     }
     upload(file) {
-        this.qiniu.uploadFile('our-future', file);
+        this.qiniu.uploadFile('our-future', file, (respErr, respBody, respInfo) => {
+            console.log(respErr, respBody, respInfo.statusCode);
+            if (respErr) {
+                throw respErr;
+              }
+        });
     }
 }
