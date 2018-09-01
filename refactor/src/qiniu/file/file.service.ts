@@ -11,4 +11,7 @@ export class FileService {
     upload(bucket: string, @UploadedFile() file) {
         return this.qiniu.uploadFile(bucket, file);
     }
+    getAll(query) {
+        return this.qiniu.getFiles(query);
+    }
 }

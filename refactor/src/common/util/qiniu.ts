@@ -1,6 +1,8 @@
 import * as qiniu from 'qiniu';
 import * as data from '../config.json';
 import { streamifier } from './streamifier';
+import { resolve } from 'dns';
+import { reject } from 'bluebird';
 
 const { accessKey, secretKey } = (data as any);
 
@@ -52,6 +54,10 @@ export default class Qiniu {
 
         return config;
     }
+    bucketManager() {
+        const bucketManager = new qiniu.rs.BucketManager(this.mac(), this.config());
+        return bucketManager;
+    }
     /**
      * 通用上传token
      * @param options
@@ -76,8 +82,9 @@ export default class Qiniu {
      * @param bucket
      * @param file
      */
+    // TODO: 需要增加数据库
     uploadFile(bucket: string, file: File) {
-        const { buffer ,fieldname } = file;
+        const { buffer, fieldname } = file;
         const config = this.config();
         const uploadToken = this.uploadToken({ scope: bucket });
         const formUploader = new qiniu.form_up.FormUploader(config);
@@ -86,6 +93,20 @@ export default class Qiniu {
 
         return new Promise((resolve, reject) => {
             formUploader.putStream(uploadToken, fieldname, readstream, putExtra,
+                (respErr, respBody, respInfo) => responseHandler(resolve, reject, {respErr, respBody, respInfo }));
+        });
+    }
+    /**
+     * 获取指定bucket的文件列表
+     * @param opts
+     */
+    // TODO: 需要增加保存数据库并分页
+    getFiles(opts) {
+        const bucketManager = this.bucketManager();
+        const { bucket, ...otherProps } = opts;
+
+        return new Promise((resolve, reject) => {
+            bucketManager.listPrefix(bucket, otherProps,
                 (respErr, respBody, respInfo) => responseHandler(resolve, reject, {respErr, respBody, respInfo }));
         });
     }

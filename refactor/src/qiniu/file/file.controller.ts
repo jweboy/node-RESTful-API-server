@@ -1,4 +1,4 @@
-import { Controller, Post, UploadedFile, UseInterceptors, FileInterceptor, Body, UsePipes } from '@nestjs/common';
+import { Controller, Post, UploadedFile, UseInterceptors, FileInterceptor, Body, UsePipes, Get, Query } from '@nestjs/common';
 import { FileService } from './file.service';
 import { UploadFileDto } from './dto/file.dto';
 import { ValidationPipe } from '../../common/pipes/validation.pipe';
@@ -14,5 +14,10 @@ export class FileController {
         const { bucket } = body;
 
         return this.fileService.upload(bucket, file);
+    }
+    @Get()
+    getAll(@Query() query) {
+        console.log(query);
+        return this.fileService.getAll(query);
     }
 }

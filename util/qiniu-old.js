@@ -40,42 +40,6 @@
 //     return bucketManager
 //   }
 //   /**
-//    * 文件数据流上传
-//    * @param {Object} readableStream 可读取的文件流
-//    * @param {String} fileKey 上传到七牛云之后的文件名,默认原文件名
-//    */
-//   uploadFile (readableStream, fileKey, opts) {
-//     return new Promise((resolve, reject) => {
-//       // 获取存储空间名
-//       const getBucketName = opts.bucket
-
-//       // 生成空间对应token
-//       const getBucketToken = Qiniu.generateToken(getBucketName)
-
-//       // 获取上传method
-//       const formUploader = new qiniu.form_up.FormUploader(this.config)
-//       const putExtra = new qiniu.form_up.PutExtra()
-
-//       formUploader.putStream(getBucketToken, fileKey, readableStream, putExtra, function (respError, respBody, respInfo) {
-//         const { statusCode: status, data } = respInfo
-//         if (respError) {
-//           reject(respError)
-//         }
-//         if (status !== 200) {
-//           const error = new Error()
-//           error.error = data.error
-//           error.statusCode = status
-//           error.message = statusCode[status]
-//           reject(error)
-//         }
-//         resolve({
-//           statusCode: respInfo.statusCode,
-//           data: respBody
-//         })
-//       })
-//     })
-//   }
-//   /**
 //    * 获取指定空间的文件列表
 //    *
 //    * @param {Object} [opts={
