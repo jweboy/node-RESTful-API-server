@@ -3,6 +3,7 @@ import { ExceptionFilter, Catch, HttpException, ArgumentsHost, HttpStatus } from
 const extendedStatusHashTable = {
   631: '指定空间不存在',
   614: '目标资源已存在',
+  612: '指定资源不存在或已被删除',
 };
 
 @Catch()
@@ -35,6 +36,17 @@ export class ErrorFilter implements ExceptionFilter {
             statusCode: 631,
             message: extendedStatusHashTable['631'],
             error: 'The specified space does not exist',
+            timestamp: new Date().toISOString(),
+            path: request.url,
+          });
+      }
+      if (~error.message.indexOf('612')) {
+        response
+          .status(612)
+          .json({
+            statusCode: 612,
+            message: extendedStatusHashTable['612'],
+            error: 'The specified resource does not exist or has been deleted',
             timestamp: new Date().toISOString(),
             path: request.url,
           });
