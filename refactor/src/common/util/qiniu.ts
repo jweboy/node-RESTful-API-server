@@ -4,6 +4,18 @@ import { streamifier } from './streamifier';
 
 const { accessKey, secretKey } = (data as any);
 
+function responseHandler(resolve, reject, { respErr, respBody, respInfo }) {
+    if (respErr) {
+        reject(respErr);
+    } else if (respInfo.statusCode !== 200) {
+        const err = new Error();
+        err.message = `${respInfo.statusCode} error`;
+        reject(err);
+    } else {
+        resolve(respBody);
+    }
+}
+
 // 密钥串
 // qiniu.conf.ACCESS_KEY = accessKey;
 // qiniu.conf.SECRET_KEY = secretKey;
@@ -12,6 +24,14 @@ interface UploadOptions {
     scope: string;
     expires?: number;
     returnBody?: string;
+}
+
+interface File{
+    fieldname: string;
+    originalname: string;
+    encoding: string;
+    mimetype: string;
+    buffer: Buffer;
 }
 
 export default class Qiniu {
@@ -36,6 +56,7 @@ export default class Qiniu {
      * 通用上传token
      * @param options
      */
+    // TODO: token根据时间来判断 不需要每次都生成
     uploadToken(options: UploadOptions) {
         const defaultOptions = {
             scope: '',
@@ -47,10 +68,6 @@ export default class Qiniu {
             ...defaultOptions,
             ...options,
         });
-        console.log({
-            ...defaultOptions,
-            ...options,
-        });
         const uploadToken = putPolicy.uploadToken(mac);
         return uploadToken;
     }
@@ -59,14 +76,17 @@ export default class Qiniu {
      * @param bucket
      * @param file
      */
-    // TODO: 请求参数增加验证类型
-    uploadFile(bucket: string, file: object, cb: (respErr, respBody, respInfo) => void) {
+    uploadFile(bucket: string, file: File) {
+        const { buffer ,fieldname } = file;
         const config = this.config();
         const uploadToken = this.uploadToken({ scope: bucket });
         const formUploader = new qiniu.form_up.FormUploader(config);
         const putExtra = new qiniu.form_up.PutExtra();
-        const readstream = streamifier.createReadStream(file.buffer);
+        const readstream = streamifier.createReadStream(buffer);
 
-        formUploader.putStream(uploadToken, 'file', readstream, putExtra, cb);
+        return new Promise((resolve, reject) => {
+            formUploader.putStream(uploadToken, fieldname, readstream, putExtra,
+                (respErr, respBody, respInfo) => responseHandler(resolve, reject, {respErr, respBody, respInfo }));
+        });
     }
 }

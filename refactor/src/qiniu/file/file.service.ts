@@ -1,4 +1,4 @@
-import { Injectable  } from '@nestjs/common';
+import { Injectable, UploadedFile  } from '@nestjs/common';
 import Qiniu from '../../common/util/qiniu';
 
 @Injectable()
@@ -7,12 +7,8 @@ export class FileService {
     constructor() {
        this.qiniu = new Qiniu();
     }
-    upload(file) {
-        this.qiniu.uploadFile('our-future', file, (respErr, respBody, respInfo) => {
-            console.log(respErr, respBody, respInfo.statusCode);
-            if (respErr) {
-                throw respErr;
-              }
-        });
+    // TODO: return的Promise需要一个泛型
+    upload(bucket: string, @UploadedFile() file) {
+        return this.qiniu.uploadFile(bucket, file);
     }
 }
