@@ -5,3 +5,12 @@ export class UploadFileDto {
     readonly bucket: string;
 
 }
+
+export class DeleteFileDto {
+    @IsString()
+    readonly name: string;
+
+    @IsString()
+    readonly bucket: string;
+
+}

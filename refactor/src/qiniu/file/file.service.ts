@@ -14,4 +14,7 @@ export class FileService {
     getAll(query) {
         return this.qiniu.getFiles(query);
     }
+    delete(name: string, bucket: string) {
+        return this.qiniu.deleteFile(name, bucket);
+    }
 }

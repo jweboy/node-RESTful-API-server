@@ -110,4 +110,17 @@ export default class Qiniu {
                 (respErr, respBody, respInfo) => responseHandler(resolve, reject, {respErr, respBody, respInfo }));
         });
     }
+    /**
+     * 删除指定镜像空间中的文件
+     * @param name 需要删除的文件名称
+     * @param bucket 文件保存的镜像空间名称
+     */
+    deleteFile(name: string, bucket: string) {
+        const bucketManager = this.bucketManager();
+
+        return new Promise((resolve, reject) => {
+            bucketManager.delete(bucket, name,
+                (respErr, respBody, respInfo) => responseHandler(resolve, reject, {respErr, respBody, respInfo }));
+        });
+    }
 }

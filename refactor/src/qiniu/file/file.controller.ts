@@ -1,6 +1,6 @@
-import { Controller, Post, UploadedFile, UseInterceptors, FileInterceptor, Body, UsePipes, Get, Query } from '@nestjs/common';
+import { Controller, Post, UploadedFile, UseInterceptors, FileInterceptor, Body, UsePipes, Get, Query, Delete } from '@nestjs/common';
 import { FileService } from './file.service';
-import { UploadFileDto } from './dto/file.dto';
+import { UploadFileDto, DeleteFileDto } from './dto/file.dto';
 import { ValidationPipe } from '../../common/pipes/validation.pipe';
 
 @Controller('qiniu/file')
@@ -17,7 +17,13 @@ export class FileController {
     }
     @Get()
     getAll(@Query() query) {
-        console.log(query);
         return this.fileService.getAll(query);
+    }
+    @Delete()
+    @UsePipes(ValidationPipe)
+    delete(@Body() body: DeleteFileDto) {
+        const { name, bucket } = body;
+
+        return this.fileService.delete(name, bucket);
     }
 }
