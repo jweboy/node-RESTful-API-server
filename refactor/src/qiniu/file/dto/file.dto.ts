@@ -1,16 +1,16 @@
-// import { IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 
-// export class UploadFileDto {
-//     @IsString()
-//     readonly fieldname: string;
+export class UploadFileDto {
+    @IsString()
+    readonly bucket: string;
 
-//     @IsString()
-//     readonly originalname: string;
+}
 
-//     @IsString()
-//     readonly encoding: string;
+export class DeleteFileDto {
+    @IsString()
+    readonly name: string;
 
-//     @IsString()
-//     readonly mimetype: string;
+    @IsString()
+    readonly bucket: string;
 
-// }
+}
