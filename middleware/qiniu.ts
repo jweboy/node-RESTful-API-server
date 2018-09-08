@@ -1,7 +1,6 @@
 import * as qiniu from 'qiniu'
 import * as url from 'url'
 import * as base64Url from 'base64-url'
-import request from 'util/request'
 import config from 'config/qiniu'
 
 // process.env.QINIU_ACCESS_KEY

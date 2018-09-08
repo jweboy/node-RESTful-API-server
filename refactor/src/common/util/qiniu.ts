@@ -1,8 +1,6 @@
 import * as qiniu from 'qiniu';
 import * as data from '../config.json';
 import { streamifier } from './streamifier';
-import { resolve } from 'dns';
-import { reject } from 'bluebird';
 
 const { accessKey, secretKey } = (data as any);
 
@@ -28,7 +26,7 @@ interface UploadOptions {
     returnBody?: string;
 }
 
-interface File{
+interface File {
     fieldname: string;
     originalname: string;
     encoding: string;
@@ -67,7 +65,7 @@ export default class Qiniu {
         const defaultOptions = {
             scope: '',
             expires: 7200,
-            // returnBody: `{"name":"$(key)","hash": "$(etag)","bucket":"$(bucket)}`,
+            returnBody: '{"name":"$(key)","hash":"$(etag)","size":$(fsize),"bucket":"$(bucket)"}',
         };
         const mac = this.mac();
         const putPolicy = new qiniu.rs.PutPolicy({
@@ -83,16 +81,18 @@ export default class Qiniu {
      * @param file
      */
     // TODO: 需要增加数据库
+    // TODO: 需要限制文件大小
     uploadFile(bucket: string, file: File) {
-        const { buffer, fieldname } = file;
+        const { buffer, originalname } = file;
         const config = this.config();
         const uploadToken = this.uploadToken({ scope: bucket });
         const formUploader = new qiniu.form_up.FormUploader(config);
         const putExtra = new qiniu.form_up.PutExtra();
         const readstream = streamifier.createReadStream(buffer);
+        const encodeFileName = encodeURI(originalname);
 
         return new Promise((resolve, reject) => {
-            formUploader.putStream(uploadToken, fieldname, readstream, putExtra,
+            formUploader.putStream(uploadToken, encodeFileName, readstream, putExtra,
                 (respErr, respBody, respInfo) => responseHandler(resolve, reject, {respErr, respBody, respInfo }));
         });
     }
