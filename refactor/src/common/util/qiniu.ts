@@ -80,7 +80,6 @@ export default class Qiniu {
      * @param bucket
      * @param file
      */
-    // TODO: 需要增加数据库
     // TODO: 需要限制文件大小
     uploadFile(bucket: string, file: File) {
         const { buffer, originalname } = file;
