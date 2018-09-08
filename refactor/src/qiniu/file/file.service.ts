@@ -38,7 +38,7 @@ export class FileService {
     }
     async getAll(query) {
         const test = await this.fileRepository.find();
-        console.log(test);
+        // console.log(test);
         return this.qiniu.getFiles(query);
     }
     delete(name: string, bucket: string) {

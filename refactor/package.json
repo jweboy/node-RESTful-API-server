@@ -38,6 +38,7 @@
     "@types/supertest": "^2.0.4",
     "jest": "^21.2.1",
     "nodemon": "^1.14.1",
+    "pre-commit": "^1.2.2",
     "prettier": "^1.11.1",
     "supertest": "^3.0.0",
     "ts-jest": "^21.2.4",
@@ -61,5 +62,6 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "coverageDirectory": "../coverage"
-  }
+  },
+  "pre-commit": ["format"]
 }
