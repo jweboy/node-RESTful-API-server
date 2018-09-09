@@ -1,4 +1,4 @@
-import { Controller, Post, UploadedFile, UseInterceptors, FileInterceptor, Body, UsePipes, Get, Query, Delete } from '@nestjs/common';
+import { Controller, Post, UploadedFile, UseInterceptors, FileInterceptor, Body, UsePipes, Get, Query, Delete, HttpCode } from '@nestjs/common';
 import { FileService } from './file.service';
 import { UploadFileDto, DeleteFileDto } from './dto/file.dto';
 import { ValidationPipe } from '../../common/pipes/validation.pipe';
@@ -19,6 +19,8 @@ export class FileController {
     getAll(@Query() query) {
         return this.fileService.getAll(query);
     }
+
+    @HttpCode(204)
     @Delete()
     @UsePipes(ValidationPipe)
     delete(@Body() body: DeleteFileDto) {

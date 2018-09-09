@@ -41,7 +41,13 @@ export class FileService {
         // console.log(test);
         return this.qiniu.getFiles(query);
     }
-    delete(name: string, bucket: string) {
-        return this.qiniu.deleteFile(name, bucket);
+    async delete(name: string, bucket: string): Promise<string> {
+        return this.qiniu
+            .deleteFile(name, bucket)
+            .then(async () => {
+                const data = await this.fileRepository.findOne({ name });
+                await this.fileRepository.remove(data);
+                return '';
+            });
     }
 }
