@@ -6,7 +6,7 @@ import { AxiosResponse } from 'axios';
 @Injectable()
 export class BucketService {
   constructor(private readonly httpService: HttpService) {}
-  create(uri: string, token: string): Observable<AxiosResponse<string>> {
+  createOne(uri: string, token: string): Observable<AxiosResponse<string>> {
     return this.httpService.post(uri, {}, {
       headers: {
         authorization: token,

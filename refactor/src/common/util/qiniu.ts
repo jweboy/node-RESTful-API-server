@@ -1,5 +1,5 @@
 import * as qiniu from 'qiniu';
-import * as data from '../config.json';
+import * as data from '../config/qiniu-key.json';
 import { streamifier } from './streamifier';
 
 const { accessKey, secretKey } = (data as any);
@@ -99,7 +99,6 @@ export default class Qiniu {
      * 获取指定bucket的文件列表
      * @param opts
      */
-    // TODO: 需要增加保存数据库并分页
     getFiles(opts) {
         const bucketManager = this.bucketManager();
         const { bucket, ...otherProps } = opts;
