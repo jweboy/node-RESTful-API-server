@@ -15,7 +15,7 @@ export class FileService {
     ) {
         this.qiniu = new Qiniu();
     }
-    async upload(bucket: string, @UploadedFile() file): Promise<File> {
+    async postOne(bucket: string, @UploadedFile() file): Promise<File> {
         const fileJson = (respJson: File) => {
             const { name, ...restProps } = respJson;
             return {
@@ -23,12 +23,14 @@ export class FileService {
                 ...restProps,
             };
         };
+
         return this.qiniu
             .uploadFile(bucket, file)
             .then(async (data: File) => {
                 const existData = await this.fileRepository
                     .createQueryBuilder('file')
                     .where('file.hash = :hash', { hash: data.hash })
+                    .andWhere('file.bucket = :bucket', { bucket })
                     .getOne();
 
                 // 数据已入库直接返回
@@ -37,11 +39,17 @@ export class FileService {
                 }
 
                 // 插入新数据
-                const result = await this.fileRepository
+                await this.fileRepository
                     .createQueryBuilder('file')
                     .insert()
                     .values([data])
-                    .select('file.hash')
+                    .execute();
+
+                // 查找出刚刚存入的数据
+                const result = await this.fileRepository
+                    .createQueryBuilder('file')
+                    .where('file.hash = :hash', { hash: data.hash })
+                    .andWhere('file.bucket = :bucket', { bucket })
                     .getOne();
 
                 return fileJson(result);
@@ -51,6 +59,7 @@ export class FileService {
         const { offset, limit } = pagination(query.page, query.size);
         const [data, total] =  await this.fileRepository
             .createQueryBuilder('file')
+            .where('file.bucket = :bucket', { bucket: query.bucket })
             .skip(offset)
             .take(limit)
             .getManyAndCount();
@@ -59,7 +68,7 @@ export class FileService {
             totalCount: total,
         };
     }
-    async delete(name: string, bucket: string): Promise<string> {
+    async deleteOne(name: string, bucket: string): Promise<string> {
         return this.qiniu
             .deleteFile(name, bucket)
             .then(async () => {
