@@ -26,14 +26,24 @@ export class FileService {
         return this.qiniu
             .uploadFile(bucket, file)
             .then(async (data: File) => {
-                const existData = await this.fileRepository.findOne({ name: data.name });
+                const existData = await this.fileRepository
+                    .createQueryBuilder('file')
+                    .where('file.hash = :hash', { hash: data.hash })
+                    .getOne();
+
                 // 数据已入库直接返回
                 if (!!existData) {
                     return fileJson(existData);
                 }
 
                 // 插入新数据
-                const result = await this.fileRepository.save(data);
+                const result = await this.fileRepository
+                    .createQueryBuilder('file')
+                    .insert()
+                    .values([data])
+                    .select('file.hash')
+                    .getOne();
+
                 return fileJson(result);
             });
     }
@@ -53,8 +63,12 @@ export class FileService {
         return this.qiniu
             .deleteFile(name, bucket)
             .then(async () => {
-                const data = await this.fileRepository.findOne({ name });
-                await this.fileRepository.remove(data);
+                await this.fileRepository
+                    .createQueryBuilder('file')
+                    .delete()
+                    .where('name = :name', { name })
+                    .execute();
+
                 return '';
             });
     }
