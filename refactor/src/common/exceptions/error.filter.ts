@@ -15,7 +15,7 @@ export class ErrorFilter implements ExceptionFilter {
     const status = (error instanceof HttpException) ? error.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
 
     // FIXME: 暂时针对七牛云拓展的状态码的解决方案
-    console.log('qiniu status:', status, error);
+    console.log('qiniu status:', status, error.message);
 
     if (status === HttpStatus.INTERNAL_SERVER_ERROR) {
       if (~error.message.indexOf('614')) {
