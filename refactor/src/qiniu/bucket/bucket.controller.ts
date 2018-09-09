@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Delete, Param, HttpCode, UseInterceptors, 
 import { BucketService } from './bucket.service';
 import { AccessToken, getAccessToken } from '../common/decorators/access-token.decorator';
 import { BucketInterceptor } from './bucket.interceptor';
-import { CreateBucketDto } from './dto/bucket.dto';
+import { CreateBucketDto, DeleteBucketDto } from './dto/bucket.dto';
 import { ValidationPipe } from '../../common/pipes/validation.pipe';
 import { encode } from '../../common/util/base64-url';
 import * as config from './config.json';
@@ -40,8 +40,8 @@ export class BucketController {
 
   @Delete(':name')
   @HttpCode(204)
-  delete(@Param() params) {
-    const name = params.name || '';
+  delete(@Param() params: DeleteBucketDto) {
+    const name = params.name;
     const fullUri = url.resolve(postUri, `/drop/${name}`);
     const token = getAccessToken(fullUri);
     return this.bucketService

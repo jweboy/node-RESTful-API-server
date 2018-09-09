@@ -19,6 +19,7 @@
   "dependencies": {
     "@nestjs/common": "^5.0.0",
     "@nestjs/core": "^5.0.0",
+    "@nestjs/swagger": "^2.5.1",
     "@nestjs/typeorm": "^5.2.0",
     "axios": "^0.18.0",
     "class-transformer": "^0.1.9",
@@ -63,5 +64,7 @@
     },
     "coverageDirectory": "../coverage"
   },
-  "pre-commit": ["format"]
+  "pre-commit": [
+    "format"
+  ]
 }
