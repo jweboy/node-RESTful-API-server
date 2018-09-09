@@ -1,9 +1,10 @@
 import { Injectable, UploadedFile  } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import Qiniu from '../../common/util/qiniu';
 import { FileEntity } from './file.entity';
 import { File } from './interface/file.interface';
+import Qiniu from '../../common/util/qiniu';
+import { pagination } from '../../common/util/pagination';
 
 @Injectable()
 export class FileService {
@@ -37,9 +38,16 @@ export class FileService {
             });
     }
     async getAll(query) {
-        const test = await this.fileRepository.find();
-        // console.log(test);
-        return this.qiniu.getFiles(query);
+        const { offset, limit } = pagination(query.page, query.size);
+        const [data, total] =  await this.fileRepository
+            .createQueryBuilder('file')
+            .skip(offset)
+            .take(limit)
+            .getManyAndCount();
+        return {
+            list: data,
+            totalCount: total,
+        };
     }
     async delete(name: string, bucket: string): Promise<string> {
         return this.qiniu
