@@ -5,27 +5,29 @@ module.exports = {
    */
   apps: [
     {
-      name: 'node-server',
-      script: 'app.js',
+      name: 'node-api-server',
+      script: 'npm',
+      args: 'start',
+      error: './logs/error.log',
+      log_type: 'json',
+      log_date_format: 'YYYY-MM-DD HH:mm',
+      exec_mode: 'cluster',
+      instances: 'max',
       watch: true,
       ignore_watch: [
         'node_modules'
       ],
-      exec_mode: 'cluster',
-      instances: 2,
-      // out_file: './logs/out.log',
-      // log_date_format: 'YYYY-MM-DD HH:mm Z',
-      env: {
-        PORT: 3000,
-        NODE_ENV: 'development',
-        HOST: '127.0.0.1',
-        COMMON_VARIABLE: true
-      },
       env_production: {
-        PORT: 3001,
+        PORT: 3000,
         NODE_ENV: 'production',
         HOST: '118.24.155.105'
-      }
+      },
+      // env: {
+      //   PORT: 3000,
+      //   NODE_ENV: 'development',
+      //   HOST: '127.0.0.1',
+      //   COMMON_VARIABLE: true
+      // },
     }
   ],
   /**
@@ -34,15 +36,16 @@ module.exports = {
    */
   deploy: {
     production: {
+      key: '~/.ssh',
       user: 'root',
-      host: '118.24.155.105',
+      host: ['118.24.155.105'],
       ref: 'origin/master',
-      repo: 'git@github.com:jweboy/node-resful-server.git',
-      path: '/home/www/service/node-resful-server',
+      repo: 'git@github.com:jweboy/node-RESTful-API-server.git',
+      path: '/home/www/node-api-server',
       ssh_options: 'StrictHostKeyChecking=no',
-      'pre-deploy-local': "echo 'pm2部署测试'",
+      'pre-deploy-local': 'echo "pm2部署"',
       'pre-deploy': 'git fetch && git pull origin master',
-      'post-deploy': 'yarn && yarn run pm2:pro',
+      'post-deploy': 'npm && npm start',
       'env': {
         'NODE_ENV': 'production'
       }
