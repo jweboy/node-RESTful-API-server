@@ -9,5 +9,4 @@ import { FileModule } from './file/file.module';
   controllers: [],
   providers: [],
 })
-
-export class QiniuModule{}
+export class QiniuModule {}

@@ -5,11 +5,8 @@ import { QiniuModule } from './qiniu/qiniu.module';
 import { AppService } from './app.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot(),
-    QiniuModule,
-  ],
+  imports: [TypeOrmModule.forRoot(), QiniuModule],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule{}
+export class AppModule {}

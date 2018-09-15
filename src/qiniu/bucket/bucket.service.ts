@@ -1,4 +1,9 @@
-import { Injectable, HttpService, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  HttpService,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { AxiosResponse } from 'axios';
 
@@ -7,24 +12,32 @@ import { AxiosResponse } from 'axios';
 export class BucketService {
   constructor(private readonly httpService: HttpService) {}
   createOne(uri: string, token: string): Observable<AxiosResponse<string>> {
-    return this.httpService.post(uri, {}, {
-      headers: {
-        authorization: token,
+    return this.httpService.post(
+      uri,
+      {},
+      {
+        headers: {
+          authorization: token,
+        },
       },
-    });
+    );
   }
   findAll(uri: string, token: string): Observable<AxiosResponse<string[]>> {
     return this.httpService.get(uri, {
-        headers: {
-          authorization: token,
+      headers: {
+        authorization: token,
       },
     });
   }
   delete(uri: string, token: string): Observable<AxiosResponse<string>> {
-    return this.httpService.post(uri, {}, {
-      headers: {
-        authorization: token,
+    return this.httpService.post(
+      uri,
+      {},
+      {
+        headers: {
+          authorization: token,
+        },
       },
-    });
+    );
   }
 }

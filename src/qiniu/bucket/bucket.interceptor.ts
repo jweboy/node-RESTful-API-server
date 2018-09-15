@@ -9,11 +9,15 @@ export class BucketInterceptor implements NestInterceptor {
     context: ExecutionContext,
     call$: Observable<any>,
   ): Observable<any> {
-    return call$.pipe(map((data): Bucket[] => {
-      return data.reduce((arr: Bucket[], item: string, index: string) => {
-        arr.push({ name: item, id: index + 1 });
-        return arr;
-      }, []);
-    }));
+    return call$.pipe(
+      map(
+        (data): Bucket[] => {
+          return data.reduce((arr: Bucket[], item: string, index: string) => {
+            arr.push({ name: item, id: index + 1 });
+            return arr;
+          }, []);
+        },
+      ),
+    );
   }
 }

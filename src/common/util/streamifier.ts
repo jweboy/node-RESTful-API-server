@@ -23,13 +23,13 @@ MultiStream.prototype._read = function() {
 
 util.inherits(MultiStream, stream.Readable);
 
-interface Options{
+interface Options {
   encoding?: string;
   highWaterMark?: number;
 }
 
 export const streamifier = {
   createReadStream(object, options: Options = {}) {
-    return new MultiStream (object, options);
+    return new MultiStream(object, options);
   },
 };

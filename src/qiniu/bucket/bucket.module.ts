@@ -1,4 +1,9 @@
-import { Module, NestModule, MiddlewareConsumer, HttpModule } from '@nestjs/common';
+import {
+  Module,
+  NestModule,
+  MiddlewareConsumer,
+  HttpModule,
+} from '@nestjs/common';
 import { BucketController } from './bucket.controller';
 import { BucketService } from './bucket.service';
 import { LoggerMiddleware } from '../../common/middlewares/logger.middleware';
@@ -10,7 +15,7 @@ import { LoggerMiddleware } from '../../common/middlewares/logger.middleware';
   controllers: [BucketController],
   providers: [BucketService],
 })
-export class BucketModule implements NestModule{
+export class BucketModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoggerMiddleware)

@@ -6,16 +6,16 @@ import { FileService } from './file.service';
 import { FileEntity } from './file.entity';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([FileEntity])],
-    controllers: [FileController],
-    providers: [FileService],
-    // exports: [FileService],
+  imports: [TypeOrmModule.forFeature([FileEntity])],
+  controllers: [FileController],
+  providers: [FileService],
+  // exports: [FileService],
 })
 export class FileModule implements NestModule {
-    configure(consumer: MiddlewareConsumer) {
-        consumer
-            .apply(LoggerMiddleware)
-            .with('FileController')
-            .forRoutes(FileController);
-    }
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      .with('FileController')
+      .forRoutes(FileController);
+  }
 }
