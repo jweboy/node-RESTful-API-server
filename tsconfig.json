@@ -1,27 +1,24 @@
 {
-    "compilerOptions": {
-        "baseUrl": ".",
-        "rootDir": "services",
-        "outDir": "build",
-        "module": "commonjs",
-        "target": "es5",
-        "lib": ["es6"],
-        "moduleResolution": "node",
-        "sourceMap": false,
-        "forceConsistentCasingInFileNames": true,
-        "noImplicitReturns": true,
-        "noImplicitThis": true,
-        "noImplicitAny": true,
-        "strictNullChecks": true,
-        "suppressImplicitAnyIndexErrors": true,
-        "noUnusedLocals": true,
-        "resolveJsonModule": true
-    },
-    "exclude": [
-        "node_modules",
-        "config"
-    ],
-    "include": [
-        "./**/*.ts"
-    ]
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": false,
+    "noImplicitAny": false,
+    "removeComments": true,
+    "noLib": false,
+    "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "es6",
+    "sourceMap": true,
+    "allowJs": true,
+    "outDir": "./dist",
+    "baseUrl": "./src"
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
 }

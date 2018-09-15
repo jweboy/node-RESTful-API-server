@@ -1,0 +1,93 @@
+{
+  "name": "node-restful-api-server",
+  "version": "0.0.1",
+  "main": "app.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jweboy/node-RESTful-API-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jweboy/node-RESTful-API-server/issues"
+  },
+  "dependencies": {
+    "@types/base64-url": "^2.2.0",
+    "@types/http-errors": "^1.6.1",
+    "@types/node": "^10.5.2",
+    "@types/request": "^2.47.1",
+    "@types/request-promise": "^4.1.41",
+    "@types/signale": "^1.2.0",
+    "base64-url": "^2.2.0",
+    "bcrypt": "^1.0.3",
+    "bcryptjs": "^2.4.3",
+    "chai": "^4.1.2",
+    "chai-http": "^4.0.0",
+    "chai-json-schema": "^1.5.0",
+    "fast-json-stringify": "^1.2.1",
+    "fastify": "^1.7.0",
+    "fastify-accepts": "^0.5.0",
+    "fastify-auth": "^0.2.0",
+    "fastify-autoload": "^0.4.0",
+    "fastify-formbody": "^2.0.0",
+    "fastify-jwt": "^0.2.1",
+    "fastify-mongodb": "^0.5.0",
+    "fastify-multipart": "^0.5.0",
+    "fastify-plugin": "^0.2.2",
+    "fastify-url-data": "^2.0.1",
+    "formidable": "^1.2.1",
+    "http-errors": "^1.6.3",
+    "mongoose": "^5.1.4",
+    "qiniu": "^7.1.3",
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2",
+    "shortid": "^2.2.8",
+    "signale": "^1.2.1",
+    "snazzy": "^7.0.0",
+    "typescript": "^2.9.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "coveralls": "^3.0.1",
+    "cross-env": "^5.1.6",
+    "dumper.js": "^0.1.1",
+    "istanbul": "^1.1.0-alpha.1",
+    "mocha": "^5.2.0",
+    "mocha-lcov-reporter": "^1.3.0",
+    "nodemon": "^1.17.3",
+    "pre-commit": "^1.2.2",
+    "standard": "^10.0.3",
+    "ts-node": "^7.0.0",
+    "tsconfig-paths": "^3.4.2"
+  },
+  "scripts": {
+    "pm2:dev": "pm2 start ecosystem.config.js --env development",
+    "pm2:pro": "pm2 startOrRestart ecosystem.config.js --env production",
+    "pm2:deploy": "pm2 deploy ecosystem.config.js production",
+    "pandora:dev": "pandora dev",
+    "pandora:start": "pandora start",
+    "linter": "standard --fix --verbose | snazzy",
+    "start": "cross-env NODE_ENV=development nodemon server.js",
+    "start:debug": "cross-env NODE_ENV=development nodemon --inspect=0.0.0.0:9229 app.js",
+    "test": "cross-env NODE_ENV=test nodemon --exec make test",
+    "coverage": "istanbul cover --report lcovonly ./node_modules/mocha/bin/_mocha  test/*.spec.js -- -R spec",
+    "coveralls": "npm run coverage && cat ./coverage/lcov.info | coveralls",
+    "compile": "tsc server.ts --target es6 --module commonjs",
+    "dev": "npm run compile && npm start"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "standard": {
+    "ignore": [
+      ".history",
+      ".vscode",
+      "node_modules",
+      "test"
+    ]
+  },
+  "pre-commit": [
+    "linter"
+  ]
+}

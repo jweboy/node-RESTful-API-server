@@ -1,13 +1,7 @@
-.history
-
 .vscode
 
-.nyc_output
-
-*.log
-*.lock
-
 node_modules/
-refactor/dist/
+dist/
 
-export/
+*.lock
+*.log
