@@ -8,7 +8,7 @@
     "dev": "nodemon",
     "prod": "pm2 start",
     "format": "prettier --write \"**/*.ts\"",
-    "start:prod": "node dist/main.js",
+    "start:prod": "cd dist && node main.js",
     "start:dev": "ts-node -r tsconfig-paths/register src/main.ts",
     "predeploy:prod": "pm2 deploy production startup",
     "deploy:prod": "npm run predeploy:prod",

@@ -1,11 +1,14 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { BucketModule } from './bucket/bucket.module';
-import { FileModule } from './file/file.module';
+// import { FileModule } from './file/file.module';
 
 // 组织应用程序结构
 
 @Module({
-  imports: [BucketModule, FileModule],
+  imports: [
+    BucketModule,
+    // FileModule,
+  ],
   controllers: [],
   providers: [],
 })
