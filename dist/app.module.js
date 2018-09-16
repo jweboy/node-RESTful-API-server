@@ -15,10 +15,7 @@ let AppModule = class AppModule {
 };
 AppModule = __decorate([
     common_1.Module({
-        imports: [
-            typeorm_1.TypeOrmModule.forRoot(),
-            qiniu_module_1.QiniuModule,
-        ],
+        imports: [typeorm_1.TypeOrmModule.forRoot(), qiniu_module_1.QiniuModule],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })
