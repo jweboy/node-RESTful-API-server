@@ -11,8 +11,8 @@ module.exports = {
       error: './logs/error.log',
       log_type: 'json',
       log_date_format: 'YYYY-MM-DD HH:mm',
-      exec_mode: 'cluster',
-      instances: 'max',
+      // exec_mode: 'cluster',
+      // instances: 'max',
       watch: true,
       ignore_watch: [
         'node_modules'
@@ -40,12 +40,12 @@ module.exports = {
       user: 'root',
       host: ['118.24.155.105'],
       ref: 'origin/master',
-      repo: 'git@github.com:jweboy/node-RESTful-API-server.git',
+      repo: 'https://github.com/jweboy/node-RESTful-API-server.git',
       path: '/home/www/node-api-server',
       ssh_options: 'StrictHostKeyChecking=no',
       'pre-deploy-local': 'echo "pm2部署"',
       'pre-deploy': 'git fetch && git pull origin master',
-      'post-deploy': 'npm && npm start',
+      'post-deploy': 'npm install && npm start',
       'env': {
         'NODE_ENV': 'production'
       }
