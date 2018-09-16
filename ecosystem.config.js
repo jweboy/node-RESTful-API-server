@@ -6,8 +6,7 @@ module.exports = {
   apps: [
     {
       name: 'node-api-server',
-      script: 'npm',
-      args: 'start',
+      script: 'dist/main.js',
       error: './logs/error.log',
       log_type: 'json',
       log_date_format: 'YYYY-MM-DD HH:mm',
