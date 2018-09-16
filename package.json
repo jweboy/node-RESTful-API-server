@@ -1,5 +1,5 @@
 {
-  "name": "hello-world",
+  "name": "node-api-server",
   "version": "0.0.1",
   "description": "description",
   "author": "",
@@ -9,14 +9,14 @@
     "start": "ts-node -r tsconfig-paths/register src/main.ts",
     "start:dev": "nodemon",
     "prestart:prod": "rm -rf dist && tsc",
-    "start:prod": "node dist/main.js",
+    "start:prod": "pm2 ecosystem.config.js --env production",
+    "predeploy:prod": "pm2 deploy production startup",
+    "deploy:prod": "npm run prestart:prod && npm run predeploy:prod",
     "start:hmr": "node dist/server",
     "test": "jest",
     "test:cov": "jest --coverage",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "webpack": "webpack --config webpack.config.js",
-    "deploy": "pm2 deploy production startup",
-    "restart": "pm2 startOrRestart ecosystem.config.js --env production"
+    "webpack": "webpack --config webpack.config.js"
   },
   "dependencies": {
     "@nestjs/common": "^5.0.0",

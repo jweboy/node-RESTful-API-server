@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from 'app.module';
+import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ErrorFilter } from './common/exceptions/error.filter';
 // import { FastifyAdapter } from '@nestjs/core/adapters';
