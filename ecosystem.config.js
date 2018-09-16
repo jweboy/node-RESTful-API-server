@@ -6,7 +6,8 @@ module.exports = {
   apps: [
     {
       name: 'node-api-server',
-      script: 'dist/main.js',
+      script: 'npm',
+      args: 'run start:dev',
       error: './logs/error.log',
       log_type: 'json',
       log_date_format: 'YYYY-MM-DD HH:mm',
@@ -44,7 +45,7 @@ module.exports = {
       ssh_options: 'StrictHostKeyChecking=no',
       'pre-setup':'echo "pm2 deploy"',
       'pre-deploy': 'git fetch && git pull origin master',
-      'post-deploy': 'yarn && yarn start:dev',
+      'post-deploy': 'yarn && yarn start:prod',
       'env': {
         'NODE_ENV': 'production'
       }
