@@ -36,3 +36,5 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+// "prestart:prod": "rm -rf dist && tsc",
+
