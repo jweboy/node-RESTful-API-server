@@ -43,9 +43,9 @@ module.exports = {
       repo: 'https://github.com/jweboy/node-RESTful-API-server.git',
       path: '/home/www/node-api-server',
       ssh_options: 'StrictHostKeyChecking=no',
-      'pre-deploy-local': 'echo "pm2部署"',
+      'pre-setup':'echo "pm2 deploy"',
       'pre-deploy': 'git fetch && git pull origin master',
-      'post-deploy': 'npm install && npm start',
+      'post-deploy': 'npm install && pm2 startOrRestart',
       'env': {
         'NODE_ENV': 'production'
       }
