@@ -11,7 +11,7 @@
     "prestart:prod": "rm -rf dist && tsc",
     "start:prod": "pm2 ecosystem.config.js --env production",
     "predeploy:prod": "pm2 deploy production startup",
-    "deploy:prod": "npm run prestart:prod && npm run predeploy:prod",
+    "deploy:prod": "npm run predeploy:prod",
     "start:hmr": "node dist/server",
     "test": "jest",
     "test:cov": "jest --coverage",
