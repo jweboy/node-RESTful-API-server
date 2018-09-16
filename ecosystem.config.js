@@ -44,7 +44,7 @@ module.exports = {
       ssh_options: 'StrictHostKeyChecking=no',
       'pre-setup':'echo "pm2 deploy"',
       'pre-deploy': 'git fetch && git pull origin master',
-      'post-deploy': 'yarn && yarn start:prod',
+      'post-deploy': 'yarn && yarn prod',
       'env': {
         'NODE_ENV': 'production'
       }
