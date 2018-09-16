@@ -6,7 +6,7 @@ import { AppService } from './app.service';
 
 @Module({
   imports: [
-    // TypeOrmModule.forRoot(),
+    TypeOrmModule.forRoot(),
     QiniuModule,
   ],
   controllers: [AppController],
