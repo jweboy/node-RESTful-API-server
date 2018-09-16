@@ -15,7 +15,8 @@
     "test:cov": "jest --coverage",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "webpack": "webpack --config webpack.config.js",
-    "deploy": "pm2 deploy production startup"
+    "deploy": "pm2 deploy production startup",
+    "restart": "pm2 startOrRestart ecosystem.config.js --env production"
   },
   "dependencies": {
     "@nestjs/common": "^5.0.0",
