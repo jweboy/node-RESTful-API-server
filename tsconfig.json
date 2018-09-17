@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "target": "es6",
     "declaration": false,
     "noImplicitAny": false,
     "removeComments": true,
@@ -8,9 +9,10 @@
     "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es6",
     "sourceMap": true,
     "allowJs": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "outDir": "./dist",
     "baseUrl": "./src"
   },

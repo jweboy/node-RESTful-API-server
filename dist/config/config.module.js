@@ -5,22 +5,26 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("@nestjs/common");
-const app_controller_1 = require("./app.controller");
-const app_service_1 = require("./app.service");
-const qiniu_module_1 = require("./qiniu/qiniu.module");
-const config_module_1 = require("./config/config.module");
-let AppModule = class AppModule {
+const path_1 = __importDefault(require("path"));
+const config_service_1 = require("./config.service");
+const envFile = path_1.default.join(__dirname, `../common/env/${process.env.NODE_ENV}.env`);
+let ConfigModule = class ConfigModule {
 };
-AppModule = __decorate([
+ConfigModule = __decorate([
     common_1.Module({
-        imports: [
-            qiniu_module_1.QiniuModule, config_module_1.ConfigModule
+        providers: [
+            {
+                provide: config_service_1.ConfigService,
+                useValue: new config_service_1.ConfigService(envFile),
+            },
         ],
-        controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
+        exports: [config_service_1.ConfigService],
     })
-], AppModule);
-exports.AppModule = AppModule;
-//# sourceMappingURL=app.module.js.map
+], ConfigModule);
+exports.ConfigModule = ConfigModule;
+//# sourceMappingURL=config.module.js.map

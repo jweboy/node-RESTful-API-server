@@ -11,18 +11,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
-const url = require("url");
+const url = __importStar(require("url"));
 const bucket_service_1 = require("./bucket.service");
 const access_token_decorator_1 = require("../../common/decorators/access-token.decorator");
 const bucket_interceptor_1 = require("./bucket.interceptor");
 const bucket_dto_1 = require("./dto/bucket.dto");
 const validation_pipe_1 = require("../../common/pipes/validation.pipe");
 const base64_url_1 = require("../../common/util/base64-url");
-const config = require("../../common/config/qiniu-bucket.json");
-const { getUri, postUri } = config;
+const getUri = 'https://rs.qbox.me/buckets';
+const postUri = 'https://rs.qiniu.com';
 let BucketController = class BucketController {
     constructor(bucketService) {
         this.bucketService = bucketService;

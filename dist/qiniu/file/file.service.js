@@ -28,12 +28,15 @@ var __rest = (this && this.__rest) || function (s, e) {
             t[p[i]] = s[p[i]];
     return t;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const file_entity_1 = require("./file.entity");
-const qiniu_1 = require("../../common/util/qiniu");
+const qiniu_1 = __importDefault(require("../../common/util/qiniu"));
 const pagination_1 = require("../../common/util/pagination");
 let FileService = class FileService {
     constructor(fileRepository) {

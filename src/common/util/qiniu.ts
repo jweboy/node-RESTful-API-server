@@ -1,8 +1,7 @@
 import * as qiniu from 'qiniu';
-import * as data from '../config/qiniu-key.json';
+import * as path from 'path';
 import { streamifier } from './streamifier';
-
-const { accessKey, secretKey } = data as any;
+import { ConfigService } from '../../config/config.service';
 
 function responseHandler(resolve, reject, { respErr, respBody, respInfo }) {
   if (respErr) {
@@ -34,14 +33,21 @@ interface File {
   buffer: Buffer;
 }
 
+const envDir = path.join(__dirname, '../env/qiniu.env');
+const configService = new ConfigService(envDir);
+
 export default class Qiniu {
-  constructor() //     private readonly accessKey: string,
-  {}
+  constructor(
+    private readonly accessKey: string = configService.envConfig
+      .QINIU_ACCESSKEY,
+    private readonly secretKey: string = configService.envConfig
+      .QINIU_SECRETKEY,
+  ) {}
   /**
    * 鉴权对象
    */
   mac() {
-    return new qiniu.auth.digest.Mac(accessKey, secretKey);
+    return new qiniu.auth.digest.Mac(this.accessKey, this.secretKey);
   }
   config() {
     const config = new qiniu.conf.Config();
