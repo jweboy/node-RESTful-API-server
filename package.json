@@ -9,7 +9,7 @@
     "compile:prod": "rm -rf dist && tsc",
     "copyfiles": "node --experimental-modules tools/copy-files",
     "prestart:prod": "npm-run-all --serial compile:prod copyfiles",
-    "preview:prod": "node dist/main.js",
+    "preview:prod": "npm run prestart:prod &&　cross-env NODE_ENV=production nodemon dist/main.js",
     "tests": "pm2 start",
     "start:prod": "cross-env NODE_ENV=production npm run tests",
     "deploy:prod": "pm2 deploy production startup",

@@ -12,7 +12,6 @@ const fs = __importStar(require("fs"));
 class ConfigService {
     constructor(filePath) {
         this.envConfig = this.parse(filePath);
-        console.log(filePath, this.envConfig);
     }
     get(key) {
         return this.envConfig[key];
