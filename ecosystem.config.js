@@ -7,7 +7,7 @@ module.exports = {
     {
       name: 'node-api-server',
       script: 'npm',
-      args: 'run start:dev',
+      args: 'run start:prod',
       error: './logs/error.log',
       log_type: 'json',
       log_date_format: 'YYYY-MM-DD HH:mm',

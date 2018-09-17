@@ -1,7 +1,14 @@
 "use strict";
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const util = require("util");
-const stream = require("stream");
+const util = __importStar(require("util"));
+const stream = __importStar(require("stream"));
 const MultiStream = function (object, options) {
     if (object instanceof Buffer || typeof object === 'string') {
         options = options || {};

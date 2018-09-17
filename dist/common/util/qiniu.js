@@ -8,11 +8,18 @@ var __rest = (this && this.__rest) || function (s, e) {
             t[p[i]] = s[p[i]];
     return t;
 };
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const qiniu = require("qiniu");
-const data = require("../config/qiniu-key.json");
+const qiniu = __importStar(require("qiniu"));
+const path = __importStar(require("path"));
 const streamifier_1 = require("./streamifier");
-const { accessKey, secretKey } = data;
+const config_service_1 = require("../../config/config.service");
 function responseHandler(resolve, reject, { respErr, respBody, respInfo }) {
     if (respErr) {
         reject(respErr);
@@ -26,10 +33,15 @@ function responseHandler(resolve, reject, { respErr, respBody, respInfo }) {
         resolve(respBody);
     }
 }
+const envDir = path.join(__dirname, '../env/qiniu.env');
+const configService = new config_service_1.ConfigService(envDir);
 class Qiniu {
-    constructor() { }
+    constructor(accessKey = configService.envConfig.QINIU_ACCESSKEY, secretKey = configService.envConfig.QINIU_SECRETKEY) {
+        this.accessKey = accessKey;
+        this.secretKey = secretKey;
+    }
     mac() {
-        return new qiniu.auth.digest.Mac(accessKey, secretKey);
+        return new qiniu.auth.digest.Mac(this.accessKey, this.secretKey);
     }
     config() {
         const config = new qiniu.conf.Config();

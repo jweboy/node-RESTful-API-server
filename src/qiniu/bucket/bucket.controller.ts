@@ -20,9 +20,9 @@ import { BucketInterceptor } from './bucket.interceptor';
 import { CreateBucketDto, DeleteBucketDto } from './dto/bucket.dto';
 import { ValidationPipe } from '../../common/pipes/validation.pipe';
 import { encode } from '../../common/util/base64-url';
-import * as config from '../../common/config/qiniu-bucket.json';
 
-const { getUri, postUri } = config as any;
+const getUri = 'https://rs.qbox.me/buckets';
+const postUri = 'https://rs.qiniu.com';
 
 // 控制器层负责处理传入的请求, 并返回对客户端的响应。
 
@@ -45,7 +45,6 @@ export class BucketController {
       .createOne(fullUri, token)
       .toPromise()
       .then(() => '');
-    // .catch(err => { throw err; });
   }
 
   @UseInterceptors(BucketInterceptor)
@@ -55,7 +54,6 @@ export class BucketController {
       .findAll(getUri, token)
       .toPromise()
       .then(({ data }) => data);
-    // .catch(err => { throw err; });
   }
 
   @Delete(':name')
@@ -68,6 +66,5 @@ export class BucketController {
       .delete(fullUri, token)
       .toPromise()
       .then(() => '');
-    // .catch(err => { throw err; });
   }
 }
