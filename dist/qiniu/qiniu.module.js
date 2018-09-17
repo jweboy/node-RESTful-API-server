@@ -8,13 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const common_1 = require("@nestjs/common");
 const bucket_module_1 = require("./bucket/bucket.module");
+const file_module_1 = require("./file/file.module");
 let QiniuModule = class QiniuModule {
 };
 QiniuModule = __decorate([
     common_1.Module({
-        imports: [
-            bucket_module_1.BucketModule,
-        ],
+        imports: [bucket_module_1.BucketModule, file_module_1.FileModule],
         controllers: [],
         providers: [],
     })

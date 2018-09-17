@@ -36,7 +36,9 @@ function responseHandler(resolve, reject, { respErr, respBody, respInfo }) {
 const envDir = path.join(__dirname, '../env/qiniu.env');
 const configService = new config_service_1.ConfigService(envDir);
 class Qiniu {
-    constructor(accessKey = configService.envConfig.QINIU_ACCESSKEY, secretKey = configService.envConfig.QINIU_SECRETKEY) {
+    constructor(accessKey = configService.envConfig
+        .QINIU_ACCESSKEY, secretKey = configService.envConfig
+        .QINIU_SECRETKEY) {
         this.accessKey = accessKey;
         this.secretKey = secretKey;
     }

@@ -6,7 +6,7 @@ export class ConfigService {
 
   constructor(filePath: string) {
     this.envConfig = this.parse(filePath);
-    console.log(filePath, this.envConfig);
+    // console.log(filePath, this.envConfig);
   }
 
   get(key: string): string {
