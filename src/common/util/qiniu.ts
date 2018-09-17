@@ -38,8 +38,10 @@ const configService = new ConfigService(envDir);
 
 export default class Qiniu {
   constructor(
-    private readonly accessKey: string = configService.envConfig.QINIU_ACCESSKEY,
-    private readonly secretKey: string = configService.envConfig.QINIU_SECRETKEY,
+    private readonly accessKey: string = configService.envConfig
+      .QINIU_ACCESSKEY,
+    private readonly secretKey: string = configService.envConfig
+      .QINIU_SECRETKEY,
   ) {}
   /**
    * 鉴权对象

@@ -8,7 +8,9 @@ import { ConfigModule } from './config/config.module';
 @Module({
   imports: [
     // TypeOrmModule.forRoot(),
-    QiniuModule, ConfigModule],
+    QiniuModule,
+    ConfigModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
