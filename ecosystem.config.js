@@ -36,7 +36,6 @@ module.exports = {
    */
   deploy: {
     production: {
-      key: '~/.ssh',
       user: 'root',
       host: ['118.24.155.105'],
       ref: 'origin/master',
