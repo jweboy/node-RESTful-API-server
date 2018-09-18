@@ -6,8 +6,8 @@ module.exports = {
   apps: [
     {
       name: 'node-api-server',
-      script: 'npm',
-      args: 'run start:prod',
+      // script: 'npm',
+      // args: 'run start:prod',
       error: './logs/error.log',
       log_type: 'json',
       log_date_format: 'YYYY-MM-DD HH:mm',
@@ -23,7 +23,7 @@ module.exports = {
         HOST: '118.24.155.105'
       },
       // env: {
-      //   PORT: 3000,
+      //   PORT: 3000, 
       //   NODE_ENV: 'development',
       //   HOST: '127.0.0.1',
       //   COMMON_VARIABLE: true
