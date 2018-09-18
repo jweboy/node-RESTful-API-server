@@ -6,10 +6,10 @@
   "license": "MIT",
   "scripts": {
     "start:dev": "cross-env NODE_ENV=development nodemon",
-    "start:prod": "cross-env NODE_ENV=production pm2 startOrRestart",
-    "preview:prod": "npm run prestart:prod &&　cross-env NODE_ENV=production nodemon dist/main.js",
+    "start:prod": "cross-env NODE_ENV=production nodemon",
+    "preview:prod": "cross-env NODE_ENV=production nodemon dist/main.js",
     "predeploy:prod": "npm-run-all --serial compile:prod copyfiles",
-    "deploy:prod": "pm2 deploy production startup",
+    "deploy:prod": "pm2 deploy production update --force",
     "compile:prod": "rm -rf dist && tsc",
     "copyfiles": "node --experimental-modules tools/copy-files",
     "format": "prettier --write \"**/*.ts\"",

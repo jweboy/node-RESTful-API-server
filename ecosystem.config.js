@@ -6,13 +6,13 @@ module.exports = {
   apps: [
     {
       name: 'node-api-server',
-      // script: 'npm',
-      // args: 'run start:prod',
+      script: 'npm',
+      args: 'run start:prod',
       error: './logs/error.log',
       log_type: 'json',
       log_date_format: 'YYYY-MM-DD HH:mm',
       // exec_mode: 'cluster',
-      // instances: 'max',
+      // instances: 4,
       watch: true,
       ignore_watch: [
         'node_modules'
@@ -42,9 +42,11 @@ module.exports = {
       repo: 'https://github.com/jweboy/node-RESTful-API-server.git',
       path: '/home/www/node-api-server',
       ssh_options: 'StrictHostKeyChecking=no',
-      'pre-setup':'echo "pm2 deploy"',
+      'pre-setup': 'apt-get install git ; ls -la',
+      'post-setup': 'ls -la',
+      'pre-deploy-local': 'echo "This is a local executed command"',
       'pre-deploy': 'git fetch && git pull origin master',
-      'post-deploy': 'yarn && yarn start:prod',
+      'post-deploy': 'yarn install && pm2 startOrRestart ecosystem.config.js',
       'env': {
         'NODE_ENV': 'production'
       }
